@@ -1,0 +1,109 @@
+/* Trong tệp PaymentPage.css */
+.payment-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.left-component {
+  width: 45%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Hiển thị thông tin bổ sung trên nhiều dòng */
+.input-group textarea {
+  height: 100px;
+}
+
+/* Trong tệp PaymentPage.css */
+.right-component {
+  width: 45%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.right-component h2 {
+  font-size: 20px;
+}
+
+.right-component table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.right-component table th,
+.right-component table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.right-component table th {
+  background-color: #f0f0f0;
+}
+
+.payment-options {
+  margin-bottom: 20px;
+}
+
+.payment-options h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.payment-options label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.order-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.order-button:hover {
+  background-color: #0056b3;
+}
+
+/* header */
+
+.header-component {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+}

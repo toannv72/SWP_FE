@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+
+.product .image-gallery-image{
+    max-height: 400px!important;
+}
+.image-gallery-thumbnail-image{
+  height: 80px;
+
+}
+
+.ant-table-container{
+  height: 750px;
+}
+
+
+.ant-modal-footer{
+  display: none!important;
+}
+
+.ant-table-container{
+  height: auto;
+}
+
+.image-gallery-right-nav .image-gallery-svg {
+  height: 60px;
+  width: 60px;
+}
+
+.image-gallery-left-nav .image-gallery-svg {
+  height: 60px;
+  width: 60px;
+  
+}
+.image-gallery-thumbnail-image{
+  object-fit: cover;
+}
+
+.recharts-surface {
+  padding: 5px;
+}
+
