@@ -7,6 +7,7 @@ import TableUser from "./Page/Authenticator/Admin2/TableUser";
 import Home from "./Page/Authenticator/Home/Home";
 import ProductsAll from "./Page/Authenticator/ProductShow/Productsall";
 import Logout from "./Page/Authenticator/Logout/Logout";
+import Product from "./Page/Authenticator/Product/Product";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -21,6 +22,10 @@ export const routers = createBrowserRouter([
     path: "/", 
     element: <Home />, 
   },  
+  { 
+    path: "/artwork/:id", 
+    element: <Product />, 
+  }, 
   { 
     path: "/follow", 
     element: <ProductsAll />, 

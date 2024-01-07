@@ -52,6 +52,12 @@ export default function Home() {
         const user = array.find(item => item._id === userId);
         return user;
     };
+
+    const getLikeById = (array, userId) => {
+        const Like = array.some(item => item.user === userId);
+        return Like;
+    };
+
     useEffect(() => {
         getData('/user', {})
             .then((data) => {
@@ -65,9 +71,9 @@ export default function Home() {
 
     // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
     useEffect(() => {
-        setLikedProducts(new Array(products.length).fill(false));
+        setLikedProducts(new Array(products.length).fill(true));
     }, [products]);
-
+    console.log(likedProducts);
     const handleLike = (index, id_artwork, id_user) => {
         const updatedLikedProducts = [...likedProducts];
         updatedLikedProducts[index] = !updatedLikedProducts[index];
@@ -83,6 +89,7 @@ export default function Home() {
             });
 
     };
+
     return (
         <>
             <ComHeader />
@@ -98,7 +105,7 @@ export default function Home() {
 
                         <div key={index} className=" w-screen bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936] ">
                             <div className="px-2 py-1 flex items-center gap-2">
-                                <img class="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> <p className="text-2xl">{getUserById(allUser, artwork.user)?.name}</p>
+                                <img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> <p className="text-2xl">{getUserById(allUser, artwork.user)?.name}</p>
                                 {/* <button  className="text-[#5a86ff]">Theo dõi</button> */}
                             </div>
 
