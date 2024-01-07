@@ -82,7 +82,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
       const selectedProductIds = checkedList.map((product) => product._id);
       // Lọc ra các sản phẩm không nằm trong danh sách đã chọn
       const updatedCart = cart.filter((product) => !selectedProductIds.includes(product._id));
-      console.log(updatedCart);
+  
       setCart(updatedCart);
       setCheckedList([]); // Bỏ chọn tất cả sau khi xóa
       localStorage.setItem('cart', JSON.stringify(updatedCart)); // Cập nhật dữ liệu trong localStorage
@@ -106,8 +106,6 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
   };
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
-    console.log(1111111111111111,cart);
-    
   }, [cart,check])
 
 
@@ -137,7 +135,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
   }
 
   const handleQuantityChange = (productId, newQuantity) => {
-    console.log(productId);
+ 
 
     // Tìm sản phẩm trong cart có id là productId và cập nhật giá trị quantityCart
     const updatedCart = cart.slice().map(product => {
@@ -146,7 +144,6 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
       }
       return product;
     });
-    console.log(updatedCart);
     setCart(updatedCart);
   };
   function formatCurrency(number) {

@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Upload ,message } from 'antd';
+import { Upload, message } from 'antd';
 import { PlusOutlined } from "@ant-design/icons";
-const ComUpImg = ({onChange,numberImg}) => {
+const ComUpImg = ({ onChange, numberImg }) => {
   const [fileList, setFileList] = useState([]);
-  const maxImages = numberImg||5;
+  const maxImages = numberImg || 5;
   const isImageFile = (file) => {
-    const acceptedFormats = ['.jpg', '.jpeg', '.png', '.gif'];
-    const fileExtension = file.name.toLowerCase().slice(-4); // Lấy phần mở rộng của tệp
-    if (!acceptedFormats.includes(fileExtension)) {
-        message.error('Chỉ cho phép chọn các tệp hình ảnh.');
-        return false; // Ngăn tải lên nếu không phải là hình ảnh
-      }
-      return true;
+    const acceptedFormats = ['.jpeg', '.jpg', '.png', '.gif'];
+    const fileExtension = file.name.toLowerCase();
+  
+    if (!acceptedFormats.some(format => fileExtension.endsWith(format))) {
+      message.error('Chỉ cho phép chọn các tệp hình ảnh.');
+      return false; // Ngăn tải lên nếu không phải là hình ảnh
+    }
+  
+    return true;
   };
+  
 
   // const handleFileChange = ({ fileList }) => {
   //     if (fileList.length > maxImages) {
@@ -42,7 +44,7 @@ const ComUpImg = ({onChange,numberImg}) => {
     <>
       <Upload
         fileList={fileList}
-         listType="picture-card"
+        listType="picture-card"
         onChange={handleFileChange}
         beforeUpload={() => false} // Để tránh tải lên tự động
         accept=".jpg,.jpeg,.png,.gif" // Chỉ cho phép chọn các tệp hình ảnh

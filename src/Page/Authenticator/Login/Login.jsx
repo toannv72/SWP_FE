@@ -115,7 +115,6 @@ export default function Login() {
                                 {...register("username")}
                                 required
                             />
-
                             <ComInput
                                 placeholder={textApp.Login.placeholder.password}
                                 label={textApp.Login.label.password}
@@ -124,7 +123,6 @@ export default function Login() {
                                 {...register("password")}
                                 required
                             />
-
                             <FieldError className="text-red-500 text-center">{Login ? textApp.Login.message.error : ''}</FieldError>
                             <FieldError className="text-red-500 text-center">{LoginError ? textApp.Login.message.error1 : ''}</FieldError>
                             <ComButton

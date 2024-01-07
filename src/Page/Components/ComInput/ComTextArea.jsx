@@ -58,6 +58,7 @@ const ComTextArea = React.forwardRef(
       maxLength,
       search,
       minValue,
+      rows,
       maxValue,
       subLabel,
       decimalLength,
@@ -106,6 +107,7 @@ const ComTextArea = React.forwardRef(
             ref={ref}
             showCount
             size="large"
+            rows={rows}
             {...props}
             value={props.value ?? valueWatch}
             status={error && 'error'}

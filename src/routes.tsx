@@ -6,6 +6,7 @@ import SendCode from "./Page/Authenticator/sendCode/SendCode";
 import TableUser from "./Page/Authenticator/Admin2/TableUser";
 import Home from "./Page/Authenticator/Home/Home";
 import ProductsAll from "./Page/Authenticator/ProductShow/Productsall";
+import Logout from "./Page/Authenticator/Logout/Logout";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -32,5 +33,8 @@ export const routers = createBrowserRouter([
     path: "/SendCode", 
     element: <SendCode />, 
   },
-  
+  { 
+    path: "/logout", 
+    element: <Logout />, 
+  },
 ]); 
