@@ -132,22 +132,22 @@ export default function Artwork() {
                             <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
                                 {artwork?.content}
                             </pre>
-                            {artwork?.comments?.map((comment, i) => (
-                                <div key={i}>
-                                    <div className="px-2 py-1 flex items-center gap-2">
-                                        <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
+                           <div className='h-44 overflow-auto'>
+                                {artwork?.comments?.slice().reverse().map((comment, i) => (
+                                    <div key={i}>
+                                        <div className="px-2 py-1 flex items-center gap-2">
+                                            <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
+                                        </div>
+    
+                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
+                                            {comment.content}
+                                        </pre>
                                     </div>
-
-                                    <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
-                                        {comment.content}
-                                    </pre>
-                                </div>
-                            ))}
+                                ))}
+                           </div>
                             <FormProvider {...methods} >
                                 <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-
                                     <div className='flex items-center flex-col  gap-1'>
-
                                         <ComTextArea
                                             placeholder={"Bạn nghĩ gì?"}
                                             rows={4}
