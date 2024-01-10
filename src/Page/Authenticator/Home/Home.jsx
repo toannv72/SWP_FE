@@ -64,10 +64,6 @@ export default function Home() {
         return user;
     };
 
-    const getLikeById = (array, userId) => {
-        const Like = array.some(item => item.user === userId);
-        return Like;
-    };
 
     useEffect(() => {
         getData('/user', {})

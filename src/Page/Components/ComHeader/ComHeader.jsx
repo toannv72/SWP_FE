@@ -23,7 +23,7 @@ const navigation = {
   pages: [
     { name: textApp.Header.home, href: "/", },
     { name: "Theo dõi", href: "/follow", },
-    { name: "Cửa hàng", href: "/required", },
+    { name: "Cửa hàng", href: "/product", },
   ],
 };
 
@@ -313,6 +313,20 @@ export default function ComHeader({ dataCart, updateCart }) {
                                   )}
                                 >
                                   {routs['/order'].name}
+                                </ComLink>
+
+                              )}
+                            </Menu.Item>
+                            <Menu.Item >
+                              {({ active }) => (
+                                <ComLink
+                                  to="/my/product/table"
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                >
+                                  Sản phẩm của tôi
                                 </ComLink>
 
                               )}
