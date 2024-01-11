@@ -57,9 +57,7 @@ export const textApp = {
         pageTitle: "Tạo sản phẩm",
         label: {
             name: "Tên sản phẩm",
-            price: "Giá tiền gốc",
-            reducedPrice: "Giá tiền giảm",
-            shape: "Hình dáng",
+            price: "Giá tiền",
             quantity: "Số lượng sản phẩm",
             detail: "Chi tiết",
             models: "Mẫu mã",
@@ -181,7 +179,7 @@ export const textApp = {
         },
         page: {
             quantity: "Số lượng",
-            material: "Chất Liệu: ",
+            genre: "Tag: ",
             shape: "Hình Dáng :"
         },
         message: {

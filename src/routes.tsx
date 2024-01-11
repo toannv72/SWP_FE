@@ -11,6 +11,7 @@ import Product from "./Page/Authenticator/Product/Product";
 import ProductSold from "./Page/Authenticator/ProductShow/Productsold";
 import TableProduct from "./Page/Authenticator/Product/TableProduct";
 import Reissue from "./Page/Authenticator/Reissue/Reissue";
+import Payment from "./Page/Authenticator/Payment/Payment";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -40,6 +41,10 @@ export const routers = createBrowserRouter([
   { 
     path: "/product/:slug", 
     element: <Product />, 
+  },
+  { 
+    path: "/payment", 
+    element: <Payment />, 
   },
   {
     path: "/my/product/table", 

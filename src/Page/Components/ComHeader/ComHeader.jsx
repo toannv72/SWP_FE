@@ -135,7 +135,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                             to={page.href}
                             className=" block p-2 font-medium text-gray-900"
                           >
-                            <div className="flex gap-2">
+                            <div className="flex gap-2" style={{ fontFamily: `-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'` }}>
                               {page.icon}
                               {page.name}
                             </div>

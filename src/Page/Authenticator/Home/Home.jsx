@@ -3,7 +3,6 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useEffect, useState } from "react";
 import { getData, postData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { ComLink } from "../../Components/ComLink/ComLink";
 import {
     LikeOutlined,
     CommentOutlined
@@ -12,6 +11,11 @@ import ComPost from "../../Components/ComPost/ComPost";
 import { Image } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
+
+import { CalendarDays } from "lucide-react";
+import { Avatar } from "@material-tailwind/react";
+import ComFooter from "../../Components/ComFooter/ComFooter";
 export default function Home() {
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -96,7 +100,7 @@ export default function Home() {
             });
 
     };
-    
+
     const handleUnLike = (index, id_artwork, id_user) => {
 
         const updatedLikedProducts = [...likedProducts];
@@ -128,11 +132,31 @@ export default function Home() {
                 <div className="grid gap-4 justify-center ">
                     {products.map((artwork, index) => (
                         <div key={index} className=" w-screen bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936] ">
-                            <div className="px-2 py-1 flex items-center gap-2">
-                                <img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> <p className="text-2xl">{getUserById(allUser, artwork.user)?.name}</p>
-                                {/* <button  className="text-[#5a86ff]">Theo dõi</button> */}
+                            <HoverCard>
 
-                            </div>
+                                <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                                    <HoverCardTrigger> <img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> </HoverCardTrigger>
+                                    <HoverCardTrigger><div className="text-2xl">{getUserById(allUser, artwork.user)?.name}</div></HoverCardTrigger>
+                                </div>
+
+                                <HoverCardContent className="relative transform  rounded-lg bg-slate-100 text-left shadow-xl transition-all p-2 z-50 ">
+                                    <div className="flex justify-between space-x-4">
+                                    <img className="inline-block h-12 w-12 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> 
+                                        <div className="space-y-1">
+                                            <h4 className="text-sm font-semibold">{getUserById(allUser, artwork.user)?.name}</h4>
+                                            <p className="text-sm">
+                                                The React Framework – created and maintained by @vercel.
+                                            </p>
+                                            <div className="flex items-center pt-2">
+                                                <CalendarDays className="mr-2 h-4 w-4 opacity-70" />
+                                                <span className="text-xs text-muted-foreground">
+                                                   {getUserById(allUser, artwork.user)?.createdAt}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </HoverCardContent>
+                            </HoverCard>
                             <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
                                 {artwork.content}
                             </pre>
@@ -171,6 +195,7 @@ export default function Home() {
                     ))}
                 </div>
             </InfiniteScroll>
+            <ComFooter/>
         </>
     );
 }

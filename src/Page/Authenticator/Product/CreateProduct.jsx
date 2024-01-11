@@ -15,6 +15,7 @@ import ComSelect from '../../Components/ComInput/ComSelect';
 import ComTextArea from '../../Components/ComInput/ComTextArea';
 import ComButton from '../../Components/ComButton/ComButton';
 import ComUpImg from '../../Components/ComUpImg/ComUpImg';
+import { useStorage } from '../../../hooks/useLocalStorage';
 
 
 const options = [
@@ -36,15 +37,16 @@ export default function CreateProduct() {
     const [disabled, setDisabled] = useState(false);
     const [image, setImages] = useState([]);
     const [api, contextHolder] = notification.useNotification();
+    const [token, setToken] = useStorage("user", {});
 
 
     const CreateProductMessenger = yup.object({
         name: yup.string().required(textApp.CreateProduct.message.name),
-        price: yup.number().min(1, textApp.CreateProduct.message.priceMin).typeError(textApp.CreateProduct.message.price),
+        // price: yup.number().min(1, textApp.CreateProduct.message.priceMin).typeError(textApp.CreateProduct.message.price),
         price1: yup.string().required(textApp.CreateProduct.message.price).min(1, textApp.CreateProduct.message.priceMin).test('no-dots', textApp.CreateProduct.message.priceDecimal, value => !value.includes('.')),
         quantity: yup.number().min(1, textApp.CreateProduct.message.quantityMin).typeError(textApp.CreateProduct.message.quantity).required('Số lượng không được để trống'),
-        shape: yup.string().required(textApp.CreateProduct.message.shape),
-        material: yup.array().required(textApp.CreateProduct.message.material),
+        // shape: yup.string().required(textApp.CreateProduct.message.shape),
+        genre: yup.array().required(textApp.CreateProduct.message.material),
         description: yup.string().required(textApp.CreateProduct.message.description),
     })
     const createProductRequestDefault = {
@@ -58,7 +60,7 @@ export default function CreateProduct() {
             quantity: 1,
             models: "",
             shape: "",
-            material: "",
+            genre: [],
             accessory: "",
             image: [],
             description: "",
@@ -91,7 +93,7 @@ export default function CreateProduct() {
             return
         }
 
-        if (data.material.length === 0) {
+        if (data.genre.length === 0) {
             api["error"]({
                 message: textApp.CreateProduct.Notification.m4.message,
                 description:
@@ -111,14 +113,13 @@ export default function CreateProduct() {
         setDisabled(true)
         firebaseImgs(image)
             .then((dataImg) => {
-                console.log('ảnh nè : ', dataImg);
                 const updatedData = {
                     ...data, // Giữ lại các trường dữ liệu hiện có trong data
                     image: dataImg, // Thêm trường images chứa đường dẫn ảnh
 
                 };
 
-                postData('/product', updatedData, {})
+                postData('/product', {...updatedData,user:token._doc._id}, {})
                     .then((dataS) => {
                         console.log(dataS);
                         setDisabled(false)
@@ -165,9 +166,9 @@ export default function CreateProduct() {
 
     const handleValueChangeSelect = (e, value) => {
         if (value.length === 0) {
-            setValue("material", null, { shouldValidate: true });
+            setValue("genre", null, { shouldValidate: true });
         } else {
-            setValue("material", value, { shouldValidate: true });
+            setValue("genre", value, { shouldValidate: true });
         }
     };
     return (
@@ -229,12 +230,13 @@ export default function CreateProduct() {
                                     style={{
                                         width: '100%',
                                     }}
+                                    mode="tags"
                                     label={textApp.CreateProduct.label.material}
                                     placeholder={textApp.CreateProduct.placeholder.material}
                                     required
                                     onChangeValue={handleValueChangeSelect}
                                     options={options}
-                                    {...register("material")}
+                                    {...register("genre")}
 
                                 />
                             </div>

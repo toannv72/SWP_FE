@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Highlighter from 'react-highlight-words';
 import * as yup from "yup"
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Select, Space, Table, Tooltip, Typography, notification } from 'antd';
+import { Button, Image, Input, Modal, Select, Space, Table, Tooltip, Typography, notification } from 'antd';
 import { textApp } from '../../../TextContent/textApp';
 import { firebaseImgs } from '../../../upImgFirebase/firebaseImgs';
 import { deleteData, getData, putData } from '../../../api/api';
@@ -132,7 +132,7 @@ export default function TableProduct() {
         price1: yup.string().required(textApp.CreateProduct.message.price).min(1, textApp.CreateProduct.message.priceMin).test('no-dots', textApp.CreateProduct.message.priceDecimal, value => !value.includes('.')),
         quantity: yup.number().min(0, textApp.CreateProduct.message.quantityMin).typeError(textApp.CreateProduct.message.quantity),
         shape: yup.string().required(textApp.CreateProduct.message.shape),
-        material: yup.array().required(textApp.CreateProduct.message.material),
+        genre: yup.array().required(textApp.CreateProduct.message.material),
         description: yup.string().required(textApp.CreateProduct.message.description),
     })
 
@@ -143,7 +143,7 @@ export default function TableProduct() {
             price: "",
             quantity: "",
             detail: "",
-            material: [],
+            genre: [],
             models: "",
             accessory: "",
             description: "",
@@ -400,11 +400,22 @@ export default function TableProduct() {
             title: 'Ảnh sản phẩm',
             dataIndex: 'image',
             key: 'img',
+            width: 200,
             fixed: 'left',
             render: (_, record) => (
 
                 <div className='flex items-center justify-center'>
-                    <img src={record.image} className='h-24 object-cover object-center   ' alt={record.image} />
+                    {/* <img src={record.image} className='h-24 object-cover object-center   ' alt={record.image} /> */}
+                    <Image.PreviewGroup 
+                        items={record.image}
+                        
+                    >
+                        <Image
+                            maskClassName="w-full h-full object-cover object-center lg:h-full lg:w-full "
+                            src={record.image}
+                            alt={record.imageAlt}
+                        />
+                    </Image.PreviewGroup>
                 </div>
             )
         },
@@ -437,18 +448,6 @@ export default function TableProduct() {
             )
         },
         {
-            title: 'Giá tiền đã giảm',
-            width: 150,
-            dataIndex: 'reducedPrice',
-            key: 'reducedPrice',
-            sorter: (a, b) => a.reducedPrice - b.reducedPrice,
-            render: (_, record) => (
-
-                <div >
-                    <h1>{formatCurrency(record.reducedPrice)}</h1>
-                </div>
-            )
-        }, {
             title: 'Đã bán',
             width: 100,
             dataIndex: 'sold',
@@ -486,18 +485,7 @@ export default function TableProduct() {
                 </div>
             )
         },
-        {
-            title: 'Chất liệu',
-            dataIndex: 'material',
-            key: 'material',
-            render: (_, record) => (
-                <div className="text-sm text-gray-700 line-clamp-4">
-                    <p>{record.material?.[0]}</p>
-                    <p>{record.material?.[1]}</p>
-                    <p>{record.material?.[2]}</p>
-                </div>
-            )
-        },
+       
         {
             title: 'Chi tiết sản phẩm',
             dataIndex: 'description',
@@ -550,9 +538,9 @@ export default function TableProduct() {
         console.log(value);
         setSelectedMaterials(value);
         if (value.length === 0) {
-            setValue("material", null, { shouldValidate: true });
+            setValue("genre", null, { shouldValidate: true });
         } else {
-            setValue("material", value, { shouldValidate: true });
+            setValue("genre", value, { shouldValidate: true });
 
         }
     };
@@ -560,8 +548,8 @@ export default function TableProduct() {
         <>
             {contextHolder}
             <ComHeader />
-            <ComButton onClick={() => setIsModalOpenAdd(true)} >Thêm sản phẩm </ComButton>
-            <div className='flex p-5 justify-center'>
+            <ComButton className='m-2' onClick={() => setIsModalOpenAdd(true)} >Thêm sản phẩm </ComButton>
+            <div className='flex px-5 justify-center'>
                 <Table
                     rowKey="_id"
                     columns={columns}
@@ -616,33 +604,6 @@ export default function TableProduct() {
                                     />
 
                                 </div>
-                                <div>
-                                    <ComNumber
-                                        label={textApp.CreateProduct.label.reducedPrice}
-                                        placeholder={textApp.CreateProduct.placeholder.reducedPrice}
-                                        min={1000}
-                                        value={productReducedPrice}
-                                        money
-                                        onChangeValue={handleValueChange1}
-                                        {...register("reducedPrice1")}
-                                        required
-                                    />
-
-                                </div>
-                                <div>
-                                    <ComNumber
-                                        label={textApp.CreateProduct.label.quantity}
-                                        placeholder={textApp.CreateProduct.placeholder.quantity}
-                                        min={0}
-                                        value={productQuantity}
-                                        onChangeValue={handleValueChangeQuantity}
-                                        {...register("quantity")}
-                                        required
-                                    />
-
-                                </div>
-
-
                                 <div className="">
                                     <ComSelect
                                         size={"large"}
@@ -655,18 +616,21 @@ export default function TableProduct() {
                                         onChangeValue={handleChange}
                                         value={selectedMaterials}
                                         options={options}
-                                        {...register("material")}
+                                        {...register("genre")}
 
                                     />
                                 </div>
-                                <div className="sm:col-span-2">
-                                    <ComInput
-                                        label={textApp.CreateProduct.label.shape}
-                                        placeholder={textApp.CreateProduct.placeholder.shape}
+                                <div>
+                                    <ComNumber
+                                        label={textApp.CreateProduct.label.quantity}
+                                        placeholder={textApp.CreateProduct.placeholder.quantity}
+                                        min={0}
+                                        value={productQuantity}
+                                        onChangeValue={handleValueChangeQuantity}
+                                        {...register("quantity")}
                                         required
-                                        type="text"
-                                        {...register("shape")}
                                     />
+
                                 </div>
 
                                 <div className="sm:col-span-2">

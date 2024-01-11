@@ -67,7 +67,7 @@ export default function Artwork() {
             .catch((error) => {
                 console.log(error);
             })
-            
+
     }, [id, dataL]);
 
     useEffect(() => {
@@ -84,20 +84,20 @@ export default function Artwork() {
 
 
     const onSubmit = (data) => {
-     
+
         clearTextArea()
         if (!user?._doc?.username) {
             return navigate('/login', { state: location.pathname })
         } else {
             postData(`/artwork/comments/${id}/${token._doc._id}`, { ...data, })
-            .then((r) => {
-                
-                console.log(r);
-            })
-            .catch((error) => {
-                console.log(error);
-                
-            });
+                .then((r) => {
+
+                    console.log(r);
+                })
+                .catch((error) => {
+                    console.log(error);
+
+                });
         }
         setDataL(!dataL)
         setValue('content', '');
@@ -132,19 +132,18 @@ export default function Artwork() {
                             <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
                                 {artwork?.content}
                             </pre>
-                           <div className='h-44 overflow-auto'>
+                            <div className='h-44 overflow-auto'>
                                 {artwork?.comments?.slice().reverse().map((comment, i) => (
-                                    <div key={i}>
+                                    <div key={i} className='bg-slate-200 m-2 rounded-lg'>
                                         <div className="px-2 py-1 flex items-center gap-2">
                                             <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
                                         </div>
-    
-                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
+                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px',marginLeft:10 }}>
                                             {comment.content}
                                         </pre>
                                     </div>
                                 ))}
-                           </div>
+                            </div>
                             <FormProvider {...methods} >
                                 <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                                     <div className='flex items-center flex-col  gap-1'>

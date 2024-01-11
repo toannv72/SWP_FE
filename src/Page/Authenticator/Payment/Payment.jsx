@@ -11,7 +11,7 @@ import ComInput from "../../Components/ComInput/ComInput";
 import ComTextArea from "../../Components/ComInput/ComTextArea";
 import { useLocation, useNavigate } from "react-router-dom";
 import { postData } from "../../../api/api";
-import { Button, notification } from "antd";
+import { Button, Radio, notification } from "antd";
 export default function Payment(props) {
     const [disabled, setDisabled] = useState(false);
     const navigate = useNavigate();
@@ -19,6 +19,10 @@ export default function Payment(props) {
     const [api, contextHolder] = notification.useNotification();
     const dataProduct = location?.state?.dataProduct || null;
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || []);
+    const [checked, setChecked] = useState(1);
+    const onChange = (e) => {
+        setChecked(e.target.value);
+    };
     useEffect(() => {
         if (!user?._doc?.username) {
             navigate(`login`)
@@ -29,7 +33,6 @@ export default function Payment(props) {
         shippingAddress: yup.string().required(textApp.Payment.information.message.address),
         phone: yup.string().required(textApp.Payment.information.message.phone).min(10, "Số điện thoại phải lớn hơn 9 số!").max(11, "Số điện thoại phải nhỏ hơn 12 số!").matches(/^0\d{9,10}$/, "Số điện thoại không hợp lệ"),
         email: yup.string().email(textApp.Payment.information.message.emailError).required(textApp.Payment.information.message.email),
-
     })
     const LoginRequestDefault = {
         // code: "",
@@ -46,26 +49,46 @@ export default function Payment(props) {
     })
     const { handleSubmit, register, setFocus, watch, setValue } = methods
     const onSubmit = (data) => {
-
-        setDisabled(true)
+        // setDisabled(true)
         const ProductPost = dataProduct.map((e, index) => {
             return { ...e, product: e._id, price: e.reducedPrice, quantity: e?.data };
         })
-        const dataPost = { ...data, shippingAddress: data.shippingAddress, description: data.description, email: data.email, products: ProductPost, totalAmount: totalAmount }
-        // console.log(dataPost);
-        postData('/order/user', dataPost)
-            .then((data) => {
-                navigate(`bill/${data._id}`)
-                setDisabled(false)
-            })
-            .catch((error) => {
-                console.log(error.response.data.error);
-                api["error"]({
-                    message: textApp.Payment.error,
-                    description: error.response.data.error
-                });
-                setDisabled(false)
-            })
+        const dataPost = { ...data, amount: totalAmount, bankCode: "", language: 'vn', shippingAddress: data.shippingAddress, description: data.description, email: data.email, products: ProductPost, totalAmount: totalAmount ,}
+       
+        if (checked === 1) {
+            postData('/order/user', {...dataPost,payment:'Cash'})
+                .then((data) => {
+                    navigate(`bill/${data._id}`)
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    api["error"]({
+                        message: textApp.Payment.error,
+                        description: error.response.data.error
+                    });
+                    setDisabled(false)
+                })
+        } else {
+
+            postData('/order/pay', dataPost)
+                .then((data) => {
+                    // navigate(data.url)
+                    window.location.href = data.url;
+                    setDisabled(false)
+                })
+                .catch((error) => {
+                    console.log(error);
+                    api["error"]({
+                        message: textApp.Payment.error,
+                        description: error?.response?.data?.error
+                    });
+                    setDisabled(false)
+                })
+        }
+
+
+
     }
 
     function formatCurrency(number) {
@@ -172,9 +195,12 @@ export default function Payment(props) {
                             <h4 className="mb-3 text-gray-600 text-lg">{textApp.Payment.payments}</h4>
                             <div className="space-y-2">
                                 <div className="flex items-center mb-2">
-                                    <input type="radio" defaultChecked className="form-radio" required value="1" />
-                                    <label className="ml-2">{textApp.Payment.cash}</label>
+                                    <Radio.Group onChange={onChange} value={checked} className="grid ">
+                                        <Radio value={1}>tiền mặt</Radio>
+                                        <Radio value={2}>VNPAY</Radio>
+                                    </Radio.Group>
                                 </div>
+
                             </div>
                             <div>
                                 <Button disabled={disabled}

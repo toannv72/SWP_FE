@@ -131,20 +131,13 @@ export default function ProductSold() {
                                         alt={product.imageAlt}
                                         className="w-full h-full object-cover object-center lg:h-full lg:w-full  absolute "
                                     />
-                                    <div className="relative w-14 h-14 mt-2 ml-2 flex justify-center items-center">
-                                        <img
-                                            src={images.discount}
-                                            alt={product.imageAlt}
-                                            className="w-14 h-14 object-cover object-center absolute"
-                                        />
-                                        <span className="absolute text-white">-{discount(product.price, product.reducedPrice)}%</span>
-                                    </div>
+                            
                                 </div>
                                 <h3 className="mt-4 text-base h-12 ml-2 mr-2 text-gray-700 line-clamp-2">{product.name}</h3>
                                 <div className="">
-                                    <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p>
+                                    {/* <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p> */}
                                     <div className="flex justify-between">
-                                        <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">{formatCurrency(product.reducedPrice)}</p>
+                                        <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">{formatCurrency(product.price)}</p>
                                         <p className="mt-1 mr-2  text-sm font-medium ">Đã bán: {(product.sold)}</p>
                                     </div>
                                 </div>
