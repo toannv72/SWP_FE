@@ -10,6 +10,7 @@ import Artwork from "./Page/Authenticator/Artwork/Artwork";
 import Product from "./Page/Authenticator/Product/Product";
 import ProductSold from "./Page/Authenticator/ProductShow/Productsold";
 import TableProduct from "./Page/Authenticator/Product/TableProduct";
+import Reissue from "./Page/Authenticator/Reissue/Reissue";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -19,6 +20,10 @@ export const routers = createBrowserRouter([
   { 
     path: "/login", 
     element: <Login />, 
+  },
+  { 
+    path: "/reissue", 
+    element: <Reissue />, 
   },
   { 
     path: "/", 
