@@ -15,13 +15,17 @@ import ComTextArea from '../../Components/ComInput/ComTextArea'
 import ComButton from '../../Components/ComButton/ComButton'
 import TextArea from 'antd/es/input/TextArea'
 import { useStorage } from '../../../hooks/useLocalStorage'
-
+import {
+    LikeOutlined,
+    CommentOutlined
+} from '@ant-design/icons';
 
 export default function Artwork() {
     const [artwork, setArtwork] = useState([])
     const [image, setImage] = useState([])
     const [disabled, setDisabled] = useState(false);
     const [dataL, setDataL] = useState(false);
+    const [like, setLike] = useState(false);
     const { id } = useParams();
     const [allUser, setAllUser] = useState([]);
     const [api, contextHolder] = notification.useNotification();
@@ -60,16 +64,38 @@ export default function Artwork() {
 
     useEffect(() => {
         getData(`/artwork/${id}`)
-            .then((product) => {
-                setArtwork(product.data)
-
+            .then((artwork) => {
+                setArtwork(artwork.data)
+                const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
+                setLike(userLikes)
             })
             .catch((error) => {
                 console.log(error);
             })
 
-    }, [id, dataL]);
+    }, [id, dataL, like]);
 
+    const handleLike = (id_artwork, id_user) => {
+        setLike(true);
+        postData(`/artwork/likeArtwork/${id_artwork}/${id_user}`, {})
+            .then((e) => {
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+    };
+    const handleUnLike = (id_artwork, id_user) => {
+        setLike(false);
+
+        postData(`/artwork/unlikeArtwork/${id_artwork}/${id_user}`, {})
+            .then((e) => {
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+    };
     useEffect(() => {
         if (artwork?.image) {
             setImage(artwork?.image.map(image => ({
@@ -82,23 +108,21 @@ export default function Artwork() {
         }
     }, [artwork])
 
-
     const onSubmit = (data) => {
-
-        clearTextArea()
         if (!user?._doc?.username) {
             return navigate('/login', { state: location.pathname })
         } else {
+            console.log(data);
             postData(`/artwork/comments/${id}/${token._doc._id}`, { ...data, })
-                .then((r) => {
-
-                    console.log(r);
-                })
-                .catch((error) => {
-                    console.log(error);
-
-                });
+            .then((r) => {
+                console.log(r);
+            })
+            .catch((error) => {
+                console.log(error);
+                
+            });
         }
+        clearTextArea()
         setDataL(!dataL)
         setValue('content', '');
         return
@@ -138,12 +162,23 @@ export default function Artwork() {
                                         <div className="px-2 py-1 flex items-center gap-2">
                                             <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
                                         </div>
-                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px',marginLeft:10 }}>
+                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px', marginLeft: 10 }}>
                                             {comment.content}
                                         </pre>
                                     </div>
                                 ))}
                             </div>
+                            <div className="flex justify-around mb-1 p-1 gap-10 mt-2 ">
+                                <p>{artwork?.likes?.length} Đã thích</p>
+                                <p>{artwork?.comments?.length} Bình luận</p>
+                            </div>
+                            <button
+                                onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
+                                className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${like ? 'text-[#08c]' : ''}`}
+                            >
+                                {like ? <LikeOutlined style={{ fontSize: '20px' }} /> : <LikeOutlined style={{ fontSize: '20px', }} />}
+                                <p style={like ? { color: '#08c' } : {}}>{like ? 'Đã thích' : 'Thích'}</p>
+                            </button>
                             <FormProvider {...methods} >
                                 <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                                     <div className='flex items-center flex-col  gap-1'>

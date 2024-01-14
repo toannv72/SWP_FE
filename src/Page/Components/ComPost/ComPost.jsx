@@ -7,12 +7,14 @@ import ComInput from "../ComInput/ComInput";
 
 import ComUpImg from "../ComUpImg/ComUpImg";
 import ComTextArea from "../ComInput/ComTextArea";
-import { Input, Modal } from "antd";
+import { Input, Modal, notification } from "antd";
 import { useEffect, useState } from "react";
 import ComButton from "../ComButton/ComButton";
 import { firebaseImgs } from "../../../upImgFirebase/firebaseImgs";
 import { postData } from "../../../api/api";
 import { useStorage } from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function ComPost({ }) {
@@ -20,6 +22,8 @@ export default function ComPost({ }) {
     const [disabled, setDisabled] = useState(true);
     const [image, setImages] = useState([]);
     const [token, setToken] = useStorage("user", {});
+    const navigate = useNavigate();
+    const [api, contextHolder] = notification.useNotification();
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -35,21 +39,35 @@ export default function ComPost({ }) {
     })
     const { handleSubmit, register, setFocus, watch, setValue } = methods
     const onSubmit = (data) => {
+        setDisabled(true)
+
         firebaseImgs(image)
             .then((img) => {
                 postData("/artwork", { ...data, user: token._doc._id, image: img })
                     .then((r) => {
+                        navigate('/login')
+                        handleCancel()
+                        api["success"]({
+                            message: "Đăng bài thành công",
+                            description:
+                                "Bài viết của bạn đã đăng thành công"
+                        });
+                        setDisabled(false)
 
-                        console.log(r);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        setDisabled(false)
+
+                        api["error"]({
+                            message: "Lỗi",
+                            description:
+                                "Hiện đang gặp phải vấn đề vui lòng thử lại sau"
+                        });
 
                     });
 
 
             });
-        console.log(data,);
 
 
     }
@@ -71,11 +89,13 @@ export default function ComPost({ }) {
     }, [image]);
     return (
         <>
+            {contextHolder}
+
             <div className="flex justify-center  p-2 ">
-                <div className="flex w-screen p-2 gap-2 bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936]">  
-                <img alt=""    className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white " src={token?._doc?.avatar}/>
-                <Input placeholder="Đăng tải lên " onClick={handleOpen} readonly="readonly" />
-                
+                <div className="flex w-screen p-2 gap-2 bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936]">
+                    <img alt="" className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white " src={token?._doc?.avatar} />
+                    <Input placeholder="Đăng tải lên " onClick={handleOpen} readonly="readonly" />
+
                 </div>
             </div>
             <Modal title='Đăng bài viết!'

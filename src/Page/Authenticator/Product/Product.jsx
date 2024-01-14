@@ -159,7 +159,7 @@ export default function Product() {
                                 </p>
                             </div>
                             <div className='flex pt-2'>Đã bán: <h2 className='text-indigo-600 '> {Product?.sold}</h2></div>
-                            <div className='flex pt-2'>{textApp.Product.page.genre}<div className='text-indigo-600 '>{Product?.material?.map((e) => ` ${e}`)}</div>
+                            <div className='flex pt-2'>{textApp.Product.page.genre}<div className='text-indigo-600 '>{Product?.genre?.map((e) => ` #${e}`)}</div>
                                 {/* {Product?.material?.[1]},{Product?.material?.[2]}. */}
                             </div>
                             <FormProvider {...methods} >

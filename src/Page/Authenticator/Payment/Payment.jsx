@@ -51,7 +51,7 @@ export default function Payment(props) {
     const onSubmit = (data) => {
         // setDisabled(true)
         const ProductPost = dataProduct.map((e, index) => {
-            return { ...e, product: e._id, price: e.reducedPrice, quantity: e?.data };
+            return { ...e, product: e._id, price: e.price, quantity: e?.data };
         })
         const dataPost = { ...data, amount: totalAmount, bankCode: "", language: 'vn', shippingAddress: data.shippingAddress, description: data.description, email: data.email, products: ProductPost, totalAmount: totalAmount ,}
        
@@ -100,7 +100,7 @@ export default function Payment(props) {
             });
     }
     const totalAmount = dataProduct?.reduce((total, data) => {
-        const itemTotal = data.reducedPrice * data?.data;
+        const itemTotal = data.price * data?.data;
         return total + itemTotal;
     }, 0) || 0;
     return (
@@ -128,9 +128,9 @@ export default function Payment(props) {
                                     <li key={index} className="list-group-item flex justify-between items-center">
                                         <div>
                                             <h6 className="my-0">{data.name}</h6>
-                                            <small className="text-gray-500">{formatCurrency(data.reducedPrice)} x {data?.data}</small>
+                                            <small className="text-gray-500">{formatCurrency(data.price)} x {data?.data}</small>
                                         </div>
-                                        <span className="text-gray-500">{formatCurrency(data.reducedPrice * data?.data)}</span>
+                                        <span className="text-gray-500">{formatCurrency(data.price * data?.data)}</span>
                                     </li>
                                 ))}
                                 <li className="list-group-item flex justify-between items-center text-black text-xl">

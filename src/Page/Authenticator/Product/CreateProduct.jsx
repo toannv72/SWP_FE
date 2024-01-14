@@ -121,7 +121,6 @@ export default function CreateProduct() {
 
                 postData('/product', {...updatedData,user:token._doc._id}, {})
                     .then((dataS) => {
-                        console.log(dataS);
                         setDisabled(false)
                         api["success"]({
                             message: textApp.CreateProduct.Notification.m2.message,

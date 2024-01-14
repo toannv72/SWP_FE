@@ -12,6 +12,8 @@ import ProductSold from "./Page/Authenticator/ProductShow/Productsold";
 import TableProduct from "./Page/Authenticator/Product/TableProduct";
 import Reissue from "./Page/Authenticator/Reissue/Reissue";
 import Payment from "./Page/Authenticator/Payment/Payment";
+import Author from "./Page/Authenticator/Author/Author";
+import Profile from "./Page/Authenticator/Profile/Profile";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -41,6 +43,14 @@ export const routers = createBrowserRouter([
   { 
     path: "/product/:slug", 
     element: <Product />, 
+  },
+  { 
+    path: "/author/:id", 
+    element: <Author />, 
+  },
+  { 
+    path: "/profile", 
+    element: <Profile />, 
   },
   { 
     path: "/payment", 

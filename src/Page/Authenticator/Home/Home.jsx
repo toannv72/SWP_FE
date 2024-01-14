@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import ComPost from "../../Components/ComPost/ComPost";
 import { Image } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 
@@ -25,7 +25,7 @@ export default function Home() {
     const navigate = useNavigate();
     const [token, setToken] = useStorage("user", {});
     const [likedProductIds, setLikedProductIds] = useState([])
-    console.log(likedProductIds);
+  
     const fetchData = async (pageNumber) => {
         try {
             const response = await getData(`/artwork?page=${pageNumber}&limit=10`);
@@ -135,8 +135,8 @@ export default function Home() {
                             <HoverCard>
 
                                 <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                    <HoverCardTrigger> <img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /> </HoverCardTrigger>
-                                    <HoverCardTrigger><div className="text-2xl">{getUserById(allUser, artwork.user)?.name}</div></HoverCardTrigger>
+                                    <HoverCardTrigger> <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link> </HoverCardTrigger>
+                                    <HoverCardTrigger><Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link></HoverCardTrigger>
                                 </div>
 
                                 <HoverCardContent className="relative transform  rounded-lg bg-slate-100 text-left shadow-xl transition-all p-2 z-50 ">

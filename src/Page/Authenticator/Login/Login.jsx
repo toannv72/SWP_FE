@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FieldError } from "../../Components/FieldError/FieldError";
 import { useCookies } from "react-cookie";
 import ComFooter from "../../Components/ComFooter/ComFooter";
+import { notification } from "antd";
 
 
 export default function Login() {
@@ -25,6 +26,7 @@ export default function Login() {
     const [LoginError, setLoginError] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const [api, contextHolder] = notification.useNotification();
 
     const loginMessenger = yup.object({
         // code: yup.string().required(textApp.Login.message.username).min(5, "Username must be at least 5 characters"),
@@ -94,6 +96,7 @@ export default function Login() {
     return (
         <>
             <ComHeader />
+            {contextHolder}
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
 

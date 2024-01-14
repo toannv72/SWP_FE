@@ -18,6 +18,7 @@ import ComUpImg from '../../Components/ComUpImg/ComUpImg';
 import ComTextArea from '../../Components/ComInput/ComTextArea';
 import ComHeader from '../../Components/ComHeader/ComHeader';
 import CreateProduct from './CreateProduct';
+import { useStorage } from '../../../hooks/useLocalStorage';
 
 
 
@@ -38,6 +39,7 @@ export default function TableProduct() {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
+    const [token, setToken] = useStorage("user", {});
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -50,7 +52,7 @@ export default function TableProduct() {
     };
 
     const showModalEdit = (e) => {
-        setSelectedMaterials(e.material)
+        setSelectedMaterials(e.genre)
         setProductPrice(e.price)
         setProductReducedPrice(e.reducedPrice)
         setProductQuantity(e.quantity)
@@ -64,7 +66,7 @@ export default function TableProduct() {
             detail: e.detail,
             shape: e.shape,
             models: e.models,
-            material: e.material,
+            genre: e.genre,
             accessory: e.accessory,
             description: e.description,
             id: e._id
@@ -131,8 +133,8 @@ export default function TableProduct() {
         price: yup.number().min(1, textApp.CreateProduct.message.priceMin).typeError(textApp.CreateProduct.message.price),
         price1: yup.string().required(textApp.CreateProduct.message.price).min(1, textApp.CreateProduct.message.priceMin).test('no-dots', textApp.CreateProduct.message.priceDecimal, value => !value.includes('.')),
         quantity: yup.number().min(0, textApp.CreateProduct.message.quantityMin).typeError(textApp.CreateProduct.message.quantity),
-        shape: yup.string().required(textApp.CreateProduct.message.shape),
-        genre: yup.array().required(textApp.CreateProduct.message.material),
+        // shape: yup.string().required(textApp.CreateProduct.message.shape),
+        genre: yup.array().required(textApp.CreateProduct.message.genre),
         description: yup.string().required(textApp.CreateProduct.message.description),
     })
 
@@ -154,7 +156,8 @@ export default function TableProduct() {
     function isInteger(number) {
         return typeof number === 'number' && isFinite(number) && Math.floor(number) === number;
     }
-    const onSubmit = (data) => {
+    const onSubmitUp = (data) => {
+        console.log(123);
         if (data.price % 1000 !== 0) {
             api["error"]({
                 message: textApp.CreateProduct.Notification.m7.message,
@@ -163,14 +166,7 @@ export default function TableProduct() {
             });
             return
         }
-        if (data.reducedPrice % 1000 !== 0) {
-            api["error"]({
-                message: textApp.CreateProduct.Notification.m8.message,
-                description:
-                    textApp.CreateProduct.Notification.m8.description
-            });
-            return
-        }
+   
         if (!isInteger(data.price)) {
 
             api["error"]({
@@ -181,7 +177,7 @@ export default function TableProduct() {
             return
         }
 
-        if (data.material.length === 0) {
+        if (data.genre.length === 0) {
             api["error"]({
                 message: textApp.CreateProduct.Notification.m4.message,
                 description:
@@ -291,7 +287,7 @@ export default function TableProduct() {
     }
     useEffect(() => {
         setTimeout(() => {
-            getData('/product/staff', {})
+            getData(`/product/user/${token._doc._id}`, {})
                 .then((data) => {
                     setProducts(data?.data?.docs)
                 })
@@ -406,9 +402,9 @@ export default function TableProduct() {
 
                 <div className='flex items-center justify-center'>
                     {/* <img src={record.image} className='h-24 object-cover object-center   ' alt={record.image} /> */}
-                    <Image.PreviewGroup 
+                    <Image.PreviewGroup
                         items={record.image}
-                        
+
                     >
                         <Image
                             maskClassName="w-full h-full object-cover object-center lg:h-full lg:w-full "
@@ -485,7 +481,7 @@ export default function TableProduct() {
                 </div>
             )
         },
-       
+
         {
             title: 'Chi tiết sản phẩm',
             dataIndex: 'description',
@@ -574,7 +570,7 @@ export default function TableProduct() {
 
                 onCancel={handleCancel}>
                 <FormProvider {...methods} >
-                    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-4 max-w-xl sm:mt-8">
+                    <form onSubmit={handleSubmit(onSubmitUp)} className="mx-auto mt-4 max-w-xl sm:mt-8">
                         <div className=' overflow-y-auto p-4'>
                             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2"
                                 style={{ height: "65vh" }}>
@@ -610,11 +606,12 @@ export default function TableProduct() {
                                         style={{
                                             width: '100%',
                                         }}
-                                        label={textApp.CreateProduct.label.material}
-                                        placeholder={textApp.CreateProduct.placeholder.material}
+                                        label={textApp.CreateProduct.label.genre}
+                                        placeholder={textApp.CreateProduct.placeholder.genre}
                                         required
                                         onChangeValue={handleChange}
                                         value={selectedMaterials}
+                                        mode="tags"
                                         options={options}
                                         {...register("genre")}
 
