@@ -12,9 +12,7 @@ import { Image } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
-
 import { CalendarDays } from "lucide-react";
-import { Avatar } from "@material-tailwind/react";
 import ComFooter from "../../Components/ComFooter/ComFooter";
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -82,13 +80,10 @@ export default function Home() {
 
     // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
 
-
     const handleLike = (index, id_artwork, id_user) => {
-
         const updatedLikedProducts = [...likedProducts];
         updatedLikedProducts[index] = !updatedLikedProducts[index];
         setLikedProducts(updatedLikedProducts);
-
         const updatedLikedProductIds = [...likedProductIds];
         updatedLikedProductIds[index] = updatedLikedProductIds[index] + 1;
         setLikedProductIds(updatedLikedProductIds);

@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Dialog, Menu, Popover, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
+  BellIcon,
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -234,7 +235,17 @@ export default function ComHeader({ dataCart, updateCart }) {
                         </form>
                       </FormProvider>
                     </div>
-
+                    <div className="ml-4 flow-root lg:ml-6">
+                      <button
+                        type="button"
+                        className="group -m-2 flex items-center p-2"
+                      >
+                        <BellIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                          {dataCart?.length || cart.length}
+                        </span>
+                      </button>
+                    </div>
                     {/* Cart */}
                     <div className="ml-4 flow-root lg:ml-6">
                       <button
@@ -303,6 +314,20 @@ export default function ComHeader({ dataCart, updateCart }) {
                                 </ComLink>
                               )}
                             </Menu.Item>}
+                            <Menu.Item >
+                              {({ active }) => (
+                                <ComLink
+                                  to={'/profile'}
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                >
+                                  Trang cá nhân
+                                </ComLink>
+
+                              )}
+                            </Menu.Item>
                             <Menu.Item >
                               {({ active }) => (
                                 <ComLink

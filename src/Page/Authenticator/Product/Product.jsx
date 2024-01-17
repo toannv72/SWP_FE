@@ -29,7 +29,7 @@ export default function Product() {
     const navigate = useNavigate();
 
     const productQuantity = yup.object({
-        quantity: yup.number().max(Product.quantity, `Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này`).min(1, textApp.Product.message.min).typeError(textApp.Product.message.quantity),
+        quantity: yup.number().max(Product?.quantity, `Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này`).min(1, textApp.Product.message.min).typeError(textApp.Product.message.quantity),
     })
     const LoginRequestDefault = {
         // quantity: "1",
@@ -47,14 +47,13 @@ export default function Product() {
         getData(`/product/${slug}`)
             .then((product) => {
                 setProduct(product.data)
-                if (product.data.quantity < 1) {
+                if (product?.data?.quantity < 1) {
                     setDisabled(true)
                 }
+                console.log(product);
             })
             .catch((error) => {
                 setError(true)
-
-                console.log(error);
             })
 
     }, [slug]);
@@ -90,7 +89,7 @@ export default function Product() {
         navigate('/payment', { state: { dataProduct: product } })
     }
     const addToCart = (data) => {
-        const existingProductIndex = cart.findIndex(item => item._id === Product._id);
+        const existingProductIndex = cart.findIndex(item => item._id === Product?._id);
         const updatedCart = [...cart];
         console.log(existingProductIndex);
         console.log(updatedCart);
@@ -136,7 +135,7 @@ export default function Product() {
         setCart(JSON.parse(localStorage.getItem('cart')))
 
     }, [sttCart]);
-    if (error) {
+    if (error || !Product) {
         return <PageNotFound />;
     }
     return (
@@ -150,12 +149,12 @@ export default function Product() {
                         <div className='product' ><ComImage product={image} /></div>
 
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
-                            <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{Product.name}</h3>
+                            <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{Product?.name}</h3>
 
                             <div className='flex gap-6'>
-                               
+
                                 <p className="text-3xl tracking-tight text-gray-900 ">
-                                    {Product.price && formatCurrency(Product.price)}
+                                    {Product?.price && formatCurrency(Product?.price)}
                                 </p>
                             </div>
                             <div className='flex pt-2'>Đã bán: <h2 className='text-indigo-600 '> {Product?.sold}</h2></div>
@@ -172,10 +171,10 @@ export default function Product() {
                                                 className="w-24 text-sm"
                                                 min={disabled ? 0 : 1}
                                                 defaultValue={1}
-                                                max={Product.quantity}
+                                                max={Product?.quantity}
                                                 {...register("quantity")}
                                             />
-                                            <div className=''> {Product.quantity} sản phẩm có sẵn</div>
+                                            <div className=''> {Product?.quantity} sản phẩm có sẵn</div>
                                             <Button
                                                 type='button'
                                                 onClick={(addToCart)}
@@ -204,7 +203,7 @@ export default function Product() {
                     <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
                         <div className="py-10 lg:col-span-2 lg:col-start-1   lg:pb-16  lg:pt-6 ">
                             <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
-                                {Product.description}
+                                {Product?.description}
                             </pre>
                         </div>
 

@@ -11,6 +11,7 @@ import ComInput from '../../Components/ComInput/ComInput';
 import { textApp } from '../../../TextContent/textApp';
 import { deleteData, getData, postData } from '../../../api/api';
 import ComButton from '../../Components/ComButton/ComButton';
+import ComHeader from '../../Components/ComHeader/ComHeader';
 
 
 export default function TableUser() {
@@ -310,6 +311,7 @@ export default function TableUser() {
     return (
         <>
             {contextHolder}
+            <ComHeader/>
             <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton>
             <div className='flex p-5 justify-center'>
                 <Table

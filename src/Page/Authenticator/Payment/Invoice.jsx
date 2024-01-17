@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { getData } from "../../../api/api";
+import { getData, postData } from "../../../api/api";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import ComFooter from "../../Components/ComFooter/ComFooter";
 
@@ -9,8 +9,14 @@ const InvoicePage = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState(null);
-
+  const location = useLocation()
   useEffect(() => {
+    postData(`/order/payment/bill/${id}${location.search}`, {})
+      .then((data) => {
+        console.log(data);
+      }).catch((error) => {
+      });
+
     // Lấy danh sách sản phẩm
     getData('/product/staff', {})
       .then((productData) => {
@@ -59,7 +65,7 @@ const InvoicePage = () => {
               // Sử dụng getProductById để lấy thông tin sản phẩm đầy đủ
               const fullProduct = getProductById(product.product);
               const materials = fullProduct?.material?.join(', ');
-              console.log(product.product)
+
               return (
                 <div key={index} className="mb-4 flex items-center">
                   <img src={fullProduct?.image} alt={fullProduct?.name} className="w-24 h-24 object-cover rounded-lg" />

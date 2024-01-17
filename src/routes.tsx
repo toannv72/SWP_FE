@@ -14,6 +14,8 @@ import Reissue from "./Page/Authenticator/Reissue/Reissue";
 import Payment from "./Page/Authenticator/Payment/Payment";
 import Author from "./Page/Authenticator/Author/Author";
 import Profile from "./Page/Authenticator/Profile/Profile";
+import InvoicePage from "./Page/Authenticator/Payment/Invoice";
+import Order from "./Page/Authenticator/Order/Order";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -57,6 +59,10 @@ export const routers = createBrowserRouter([
     element: <Payment />, 
   },
   {
+    path: "/payment/bill/:id",
+    element: <InvoicePage />,
+  },
+  {
     path: "/my/product/table", 
     element: <TableProduct />, 
   }, 
@@ -72,4 +78,12 @@ export const routers = createBrowserRouter([
     path: "/logout", 
     element: <Logout />, 
   },
+  {
+    path: "/admin/tableUser",
+    element: <TableUser />,
+  },
+  {
+    path: "/order",
+    element: <Order />,
+  }, 
 ]); 

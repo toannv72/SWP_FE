@@ -27,6 +27,7 @@ export default function Author() {
     const [error, setError] = useState(false);
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
+    const [follow, setFollow] = useState(false);
     const [page, setPage] = useState(1);
     const [likedProducts, setLikedProducts] = useState([]);
     const [allUser, setAllUser] = useState([]);
@@ -34,13 +35,23 @@ export default function Author() {
     const [token, setToken] = useStorage("user", {});
     const [likedProductIds, setLikedProductIds] = useState([])
 
+    const handFollow=()=>{
+        setFollow(!follow);
+        postData(`/user/followUser/${id}/${token?._doc?._id}`, {})
+        .then((e) => {
+            console.log(e);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+    }
     const fetchData = async (pageNumber) => {
         try {
             const response = await getData(`/artwork/user/${id}?page=${pageNumber}&limit=10`);
-            console.log(response);
+         
             return response.data.docs;
         } catch (error) {
-            console.log(error);
             return [];
         }
     };
@@ -114,7 +125,6 @@ export default function Author() {
     };
 
     const handleUnLike = (index, id_artwork, id_user) => {
-
         const updatedLikedProducts = [...likedProducts];
         updatedLikedProducts[index] = !updatedLikedProducts[index];
         setLikedProducts(updatedLikedProducts);
@@ -212,18 +222,14 @@ export default function Author() {
 
                 <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
                     <div className="flex items-center space-x-4 mt-2">
-                        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
-                            </svg>
-                            <span>Connect</span>
-                        </button>
-                        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd"></path>
-                            </svg>
-                            <span>Message</span>
-                        </button>
+                        {!follow ? <button onClick={handFollow} className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+                           
+                            <span>Theo dõi</span>
+                        </button> :
+                            <button onClick={handFollow} className="flex items-center bg-slate-500 hover:bg-slate-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
+                            
+                                <span>Hủy theo dõi</span>
+                            </button>}
                     </div>
                 </div>
                 <InfiniteScroll

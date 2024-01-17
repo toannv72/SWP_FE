@@ -160,7 +160,6 @@ export default function Profile() {
             label: 'Đổi mật khẩu',
             key: '3',
         },
-
     ]
 
     const menuProps = {

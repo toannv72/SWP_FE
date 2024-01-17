@@ -73,7 +73,6 @@ export default function Payment(props) {
 
             postData('/order/pay', dataPost)
                 .then((data) => {
-                    // navigate(data.url)
                     window.location.href = data.url;
                     setDisabled(false)
                 })
