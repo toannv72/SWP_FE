@@ -92,7 +92,7 @@ export default function ComPost({ }) {
             {contextHolder}
 
             <div className="flex justify-center  p-2 ">
-                <div className="flex w-screen p-2 gap-2 bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936]">
+                <div className="flex w-[90vw] p-2 gap-2 bg-[#f3f9f140]  xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936]">
                     <img alt="" className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white " src={token?._doc?.avatar} />
                     <Input placeholder="Đăng tải lên " onClick={handleOpen} readonly="readonly" />
 

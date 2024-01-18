@@ -17,7 +17,6 @@ import TextArea from 'antd/es/input/TextArea'
 import { useStorage } from '../../../hooks/useLocalStorage'
 import {
     LikeOutlined,
-    CommentOutlined
 } from '@ant-design/icons';
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
@@ -178,27 +177,25 @@ export default function Artwork() {
             <div className="bg-white">
                 <div className="">
                     <div className="mx-auto max-w-2xl px-4 pb-16 pt-8 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-8">
-
                         <div className='product' ><ComImage product={image} /></div>
-
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             {/* <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{getUserById(allUser, artwork?.user)?.name}</h3> */}
                             <HoverCard>
 
-                               <div className='flex justify-between'>
+                                <div className='flex justify-between'>
                                     <div className="px-2 py-1 flex items-center gap-2 w-auto">
                                         <HoverCardTrigger> <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link> </HoverCardTrigger>
                                         <HoverCardTrigger><Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link></HoverCardTrigger>
                                     </div>
                                     <Dropdown trigger={['click']} menu={menuProps} >
-    
+
                                         <button className="border border-gray-400 p-2 rounded text-gray-300 hover:text-gray-300 bg-gray-100 bg-opacity-10 hover:bg-opacity-20" title="Settings">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
                                             </svg>
                                         </button>
                                     </Dropdown>
-                               </div>
+                                </div>
                                 <HoverCardContent className="relative transform  rounded-lg bg-slate-100 text-left shadow-xl transition-all p-2 z-50 ">
                                     <div className="flex justify-between space-x-4">
                                         <img className="inline-block h-12 w-12 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" />
@@ -307,7 +304,32 @@ export default function Artwork() {
                     </div>
                 </div>
             </div>
+            <div className='flex justify-center'>
+                <div className=' lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2'>
+                    <div className=''>
+                        <img className='rounded-l-[2.5rem]  max-xl:rounded-r-[2.5rem] lg:rounded-l-[2.5rem] sm:rounded-l-[2.5rem]' src={artwork?.image} alt='' />
+                    </div>
+                    <div className='p-2'>
+                        <Dropdown trigger={['click']} menu={menuProps} >
+                            <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
 
+                                <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
+
+                            </button>
+                        </Dropdown>
+
+                        <div className='flex justify-between'>
+                            <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                                <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link>
+                                <Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link>
+                            </div>
+                            <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
+                                Theo dõi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </>
     )

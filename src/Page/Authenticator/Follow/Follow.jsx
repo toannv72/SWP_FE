@@ -9,8 +9,8 @@ import ComPost from "../../Components/ComPost/ComPost";
 import { Link } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 
-import './styles.css'
-export default function Home() {
+// import './styles.css'
+export default function Follow() {
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
@@ -63,7 +63,6 @@ export default function Home() {
                 const aspectRatio = img.naturalHeight / img.naturalWidth;
                 const cardHeight = card.offsetWidth * aspectRatio;
                 const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
-
                 // Áp dụng giá trị cho grid-row-end
                 card.style.gridRowEnd = `span ${rowSpan}`;
             });
@@ -84,15 +83,11 @@ export default function Home() {
         };
     }, [products]);
 
-
-
     // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
-
 
     return (
         <>
             <ComHeader />
-            <ComPost />
             <InfiniteScroll
                 dataLength={products.length}
                 next={fetchMoreProducts}
@@ -107,7 +102,6 @@ export default function Home() {
                                 src={artwork.image}
                                 style={{ borderRadius: '24px' }}
                                 alt={artwork.imageAlt}
-
                                 onLoad={() => containerRef.current.dispatchEvent(new Event('load'))}
                             />
                         </Link>

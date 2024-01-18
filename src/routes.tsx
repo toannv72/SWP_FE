@@ -16,6 +16,7 @@ import Author from "./Page/Authenticator/Author/Author";
 import Profile from "./Page/Authenticator/Profile/Profile";
 import InvoicePage from "./Page/Authenticator/Payment/Invoice";
 import Order from "./Page/Authenticator/Order/Order";
+import Follow from "./Page/Authenticator/Follow/Follow";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -85,5 +86,9 @@ export const routers = createBrowserRouter([
   {
     path: "/order",
     element: <Order />,
+  }, 
+  {
+    path: "/follow",
+    element: <Follow />,
   }, 
 ]); 
