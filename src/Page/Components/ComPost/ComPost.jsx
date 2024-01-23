@@ -45,13 +45,16 @@ export default function ComPost({ }) {
             .then((img) => {
                 postData("/artwork", { ...data, user: token._doc._id, image: img })
                     .then((r) => {
-                        navigate('/login')
-                        handleCancel()
                         api["success"]({
                             message: "Đăng bài thành công",
                             description:
                                 "Bài viết của bạn đã đăng thành công"
                         });
+                        setTimeout(() => {
+                            
+                            navigate('/login')
+                        }, 3000);
+                        handleCancel()
                         setDisabled(false)
 
                     })
@@ -112,7 +115,7 @@ export default function ComPost({ }) {
                                 rows={6}
                                 {...register("content")}
                             />
-                            <ComUpImg onChange={onChange} />
+                            <ComUpImg numberImg={1} onChange={onChange} />
                             <ComButton
                                 disabled={disabled}
                                 htmlType="submit"

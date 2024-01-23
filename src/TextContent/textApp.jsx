@@ -61,7 +61,6 @@ export const textApp = {
             quantity: "Số lượng sản phẩm",
             detail: "Chi tiết",
             models: "Mẫu mã",
-            genre: "Chất liệu",
             accessory: "Phụ kiền",
             sold: "Đã bán",
             image: 'Hình ảnh',

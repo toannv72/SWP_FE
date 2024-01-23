@@ -209,7 +209,7 @@ export default function Profile() {
                             </svg>
                         </span>
                     </div>
-                    <p className="text-gray-700">Senior Software Engineer at Tailwind CSS</p>
+                    <p className="text-gray-700">{Author?.follow?.length} người theo dõi ·  {Author?.followAdd?.length} người đang theo dõi</p>
                     <p className="text-sm text-gray-500">New York, USA</p>
                 </div>
 

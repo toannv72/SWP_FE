@@ -1,22 +1,20 @@
 
 import { useEffect, useRef, useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
 import ComHeader from '../../Components/ComHeader/ComHeader'
-import ComImage from '../../Components/ComImage/ComImage'
 import { getData, postData } from '../../../api/api'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { textApp } from '../../../TextContent/textApp'
 import { FormProvider, useForm } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
-import ComNumber from '../../Components/ComInput/ComNumber'
 import { Button, Dropdown, Input, Space, notification } from 'antd'
 import ComTextArea from '../../Components/ComInput/ComTextArea'
 import ComButton from '../../Components/ComButton/ComButton'
 import TextArea from 'antd/es/input/TextArea'
 import { useStorage } from '../../../hooks/useLocalStorage'
 import {
-    LikeOutlined,
+    HeartOutlined,
+    SendOutlined,
+    HeartFilled
 } from '@ant-design/icons';
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
@@ -133,6 +131,7 @@ export default function Artwork() {
     }
 
     const onChange = (e) => {
+        console.log(e);
         if (e.target.value) {
             setDisabled(false)
         } else {
@@ -144,7 +143,6 @@ export default function Artwork() {
         const user = array.find(item => item._id === userId);
         return user;
     };
-    console.log(artwork);
     if (error || !artwork) {
         return <PageNotFound />
     }
@@ -174,158 +172,99 @@ export default function Artwork() {
         <>
             {contextHolder}
             <ComHeader />
-            <div className="bg-white">
-                <div className="">
-                    <div className="mx-auto max-w-2xl px-4 pb-16 pt-8 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-8">
-                        <div className='product' ><ComImage product={image} /></div>
-                        <div className="mt-4 lg:row-span-3 lg:mt-0">
-                            {/* <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{getUserById(allUser, artwork?.user)?.name}</h3> */}
-                            <HoverCard>
 
-                                <div className='flex justify-between'>
-                                    <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                        <HoverCardTrigger> <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link> </HoverCardTrigger>
-                                        <HoverCardTrigger><Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link></HoverCardTrigger>
-                                    </div>
-                                    <Dropdown trigger={['click']} menu={menuProps} >
+            <div className='flex justify-center'>
+                <div className=' lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2'>
+                    <div className=''>
+                        <img className='rounded-l-[2.5rem]  max-xl:rounded-r-[2.5rem] lg:rounded-l-[2.5rem] sm:rounded-l-[2.5rem] w-full' src={artwork?.image} alt='' />
+                    </div>
+                    <div className='p-2 grid content-between'>
+                        <div>
+                            <Dropdown trigger={['click']} menu={menuProps} >
+                                <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
 
-                                        <button className="border border-gray-400 p-2 rounded text-gray-300 hover:text-gray-300 bg-gray-100 bg-opacity-10 hover:bg-opacity-20" title="Settings">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                                            </svg>
-                                        </button>
-                                    </Dropdown>
+                                    <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
+
+                                </button>
+                            </Dropdown>
+
+                            <div className='flex justify-between'>
+                                <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                                    <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link>
+                                    <Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link>
                                 </div>
-                                <HoverCardContent className="relative transform  rounded-lg bg-slate-100 text-left shadow-xl transition-all p-2 z-50 ">
-                                    <div className="flex justify-between space-x-4">
-                                        <img className="inline-block h-12 w-12 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" />
-                                        <div className="space-y-1">
-                                            <h4 className="text-sm font-semibold">{getUserById(allUser, artwork.user)?.name}</h4>
-                                            <p className="text-sm">
-                                                The React Framework – created and maintained by @vercel.
-                                            </p>
-                                            <div className="flex items-center pt-2">
-                                                <CalendarDays className="mr-2 h-4 w-4 opacity-70" />
-                                                <span className="text-xs text-muted-foreground">
-                                                    {getUserById(allUser, artwork.user)?.createdAt}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </HoverCardContent>
-                            </HoverCard>
+                                <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
+                                    Theo dõi
+                                </button>
+                            </div>
 
-                            <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
-                                {artwork?.content}
-                            </pre>
-                            <div className='h-44 overflow-auto'>
+                            <p>
+                                <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
+                                    {artwork?.content}
+                                </pre>
+                            </p>
+                            <div className='h-64 overflow-auto'>
                                 {artwork?.comments?.slice().reverse().map((comment, i) => (
-                                    <div key={i} className='bg-slate-200 m-2 rounded-lg'>
+                                    <div key={i} className=' m-2 rounded-lg flex items-start '>
                                         {/* <div className="px-2 py-1 flex items-center gap-2">
-                                            <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
-                                        </div> */}
-                                        <HoverCard>
-                                            <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                                <HoverCardTrigger> <Link to={`/author/${getUserById(allUser, comment?.user)?._id}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /></Link> </HoverCardTrigger>
-                                                <HoverCardTrigger><Link to={`/author/${getUserById(allUser, comment?.user)?._id}`} className="text-2xl">{getUserById(allUser, comment?.user)?.name}</Link></HoverCardTrigger>
-                                            </div>
+                                                <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
+                                            </div> */}
 
-                                            <HoverCardContent className="relative transform  rounded-lg bg-slate-100 text-left shadow-xl transition-all p-2 z-50 ">
-                                                <div className="flex justify-between space-x-4">
-                                                    <img className="inline-block h-12 w-12 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" />
-                                                    <div className="space-y-1">
-                                                        <h4 className="text-sm font-semibold">{getUserById(allUser, comment?.user)?.name}</h4>
-                                                        <p className="text-sm">
-                                                            The React Framework – created and maintained by @vercel.
-                                                        </p>
-                                                        <div className="flex items-center pt-2">
-                                                            <CalendarDays className="mr-2 h-4 w-4 opacity-70" />
-                                                            <span className="text-xs text-muted-foreground">
-                                                                {getUserById(allUser, artwork.user)?.createdAt}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </HoverCardContent>
-                                        </HoverCard>
-                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px', marginLeft: 10 }}>
+                                        <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                                            <Link to={`/author/${getUserById(allUser, comment?.user)?._id}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /></Link>
+                                            <Link to={`/author/${getUserById(allUser, comment?.user)?._id}`} className=" font-semibold">{getUserById(allUser, comment?.user)?.name}</Link>
+                                        </div>
+
+                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '11px', }}>
                                             {comment.content}
                                         </pre>
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex justify-around mb-1 p-1 gap-10 mt-2 ">
-                                <p>{artwork?.likes?.length} Đã thích</p>
-                                <p>{artwork?.comments?.length} Bình luận</p>
+                        </div>
+                        <div>
+                            <div className='flex justify-between items-center px-6 '>
+                                <div className=' font-semibold text-2xl '>
+
+                                    <p>{artwork?.comments?.length ? `${artwork?.comments?.length} Nhận xét ` : `Bạn nghĩ gì?`} </p>
+                                </div>
+                                <div className='flex gap-4 '>
+                                    <div className='flex gap-1'><HeartFilled style={{ fontSize: '20px', color: 'red' }} /> <div className='flex items-center'>{artwork?.likes?.length}</div></div>
+
+                                    <button
+                                        onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
+                                        className={`flex gap-2 p-2 rounded-full  items-center  justify-center  hover:bg-[#f1f0f0] ${like ? 'text-[#cc0700]' : ''}`}
+                                    >
+                                        {like ? <HeartFilled style={{ fontSize: '40px' }} /> : <HeartOutlined style={{ fontSize: '40px', }} />}
+                                    </button>
+                                </div>
                             </div>
-                            <button
-                                onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
-                                className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${like ? 'text-[#08c]' : ''}`}
-                            >
-                                {like ? <LikeOutlined style={{ fontSize: '20px' }} /> : <LikeOutlined style={{ fontSize: '20px', }} />}
-                                <p style={like ? { color: '#08c' } : {}}>{like ? 'Đã thích' : 'Thích'}</p>
-                            </button>
                             <FormProvider {...methods} >
-                                <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-                                    <div className='flex items-center flex-col  gap-1'>
+                                <form className="" onSubmit={handleSubmit(onSubmit)}>
+                                    <div className='p-6 flex justify-between items-start'>
                                         <ComTextArea
-                                            placeholder={"Bạn nghĩ gì?"}
-                                            rows={4}
-                                            showCount
+                                            placeholder="Thêm nhận xét"
+                                            autoSize={{
+                                                minRows: 1,
+                                                maxRows: 3,
+                                            }}
+                                            ref={textAreaRef}
                                             style={{
                                                 resize: 'none',
                                             }}
-                                            ref={textAreaRef}
+
                                             className="w-full"
-                                            onChange={onChange}
+                                            watch={onChange}
+                                            size='large'
                                             {...register("content")}
+
                                         />
-
-                                        <ComButton
-                                            disabled={disabled}
-                                            htmlType="submit"
-                                            type="primary"
-                                        >
-                                            Bình luận
-                                        </ComButton>
-
+                                        {disabled || <button className='p-2' type='submit'>
+                                            <SendOutlined style={{ fontSize: '30px', }} />
+                                        </button>}
                                     </div>
                                 </form>
                             </FormProvider>
-                        </div>
-                    </div>
-                    <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-                        <div className="py-10 lg:col-span-2 lg:col-start-1   lg:pb-16  lg:pt-6 ">
-                            <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
-                                {artwork?.description}
-                            </pre>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div className='flex justify-center'>
-                <div className=' lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2'>
-                    <div className=''>
-                        <img className='rounded-l-[2.5rem]  max-xl:rounded-r-[2.5rem] lg:rounded-l-[2.5rem] sm:rounded-l-[2.5rem]' src={artwork?.image} alt='' />
-                    </div>
-                    <div className='p-2'>
-                        <Dropdown trigger={['click']} menu={menuProps} >
-                            <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
-
-                                <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
-
-                            </button>
-                        </Dropdown>
-
-                        <div className='flex justify-between'>
-                            <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link>
-                                <Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link>
-                            </div>
-                            <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
-                                Theo dõi
-                            </button>
                         </div>
                     </div>
                 </div>

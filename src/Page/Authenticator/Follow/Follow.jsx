@@ -3,9 +3,6 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
-
-import ComPost from "../../Components/ComPost/ComPost";
-
 import { Link } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 
@@ -20,7 +17,7 @@ export default function Follow() {
     const containerRef = useRef(null);
     const fetchData = async (pageNumber) => {
         try {
-            const response = await getData(`/artwork?page=${pageNumber}&limit=20`);
+            const response = await getData(`/artwork/follow/${token?._doc?._id}?page=${pageNumber}&limit=20`);
             return response.data.docs;
         } catch (error) {
             console.log(error);
@@ -92,7 +89,6 @@ export default function Follow() {
                 dataLength={products.length}
                 next={fetchMoreProducts}
                 hasMore={hasMore}
-            // loader={<h4>Loading...</h4>}
             >
                 <div className="pin_container" ref={containerRef}>
                     {products.map((artwork, index) => (
