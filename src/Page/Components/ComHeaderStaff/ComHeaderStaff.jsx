@@ -1,23 +1,14 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
+import { useEffect, useState } from 'react'
+import { Dialog } from '@headlessui/react'
 import {
   Bars3Icon,
-  ShoppingBagIcon,
-  PresentationChartBarIcon,
-
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
   PowerIcon,
   ClipboardDocumentListIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, } from '@heroicons/react/20/solid'
-import { ComLink } from '../ComLink/ComLink'
 import { Link, useNavigate } from 'react-router-dom'
-import { getData } from '../../../api/api'
 import { Affix } from 'antd'
-import { useCookies } from 'react-cookie'
 import images from '../../../img'
 import { routs } from '../../../constants/ROUT'
 import { AccordionBody, AccordionHeader, ListItem, ListItemPrefix, Typography } from '@material-tailwind/react'
@@ -40,7 +31,7 @@ function classNames(...classes) {
 
 export default function ComHeaderStaff() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [user, setUser] = useStorage('user',{})
+  const [user, setUser] = useStorage('user', {})
   const navigate = useNavigate();
   const [open, setOpen] = useState(0);
 
@@ -49,9 +40,9 @@ export default function ComHeaderStaff() {
   };
 
   useEffect(() => {
-    if (!(user?._doc?.role==='staff')) {
+    if (!(user?._doc?.role === 'staff')) {
 
-        navigate('/login')
+      navigate('/login')
     }
   }, []);
   return (
@@ -72,7 +63,7 @@ export default function ComHeaderStaff() {
             <img className="h-16 w-auto" src={images.logo} alt="" />
           </div>
 
-         
+
         </nav>
         <Dialog as="div" className="" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-10" />
@@ -85,8 +76,8 @@ export default function ComHeaderStaff() {
                 </Typography>
               </div>
               <List>
-               
-               
+
+
                 <Link to={routs['/tableOrder'].link}>
                   <ListItem>
                     <ListItemPrefix>
@@ -151,7 +142,7 @@ export default function ComHeaderStaff() {
                   </AccordionBody>
                 </Accordion>
                 <hr className="my-2 border-blue-gray-50" />
-              
+
                 <Link to={routs['/logout'].link}>
                   <ListItem>
                     <ListItemPrefix>

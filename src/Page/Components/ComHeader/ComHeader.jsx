@@ -345,6 +345,20 @@ export default function ComHeader({ dataCart, updateCart }) {
                             <Menu.Item >
                               {({ active }) => (
                                 <ComLink
+                                  to={'/my/order'}
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                >
+                                 Đơn bán hàng
+                                </ComLink>
+
+                              )}
+                            </Menu.Item>
+                            <Menu.Item >
+                              {({ active }) => (
+                                <ComLink
                                   to="/my/product/table"
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',

@@ -17,6 +17,7 @@ import Profile from "./Page/Authenticator/Profile/Profile";
 import InvoicePage from "./Page/Authenticator/Payment/Invoice";
 import Order from "./Page/Authenticator/Order/Order";
 import Follow from "./Page/Authenticator/Follow/Follow";
+import TableOrder from "./Page/Authenticator/ComOrderTable/TableOrder";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -91,4 +92,8 @@ export const routers = createBrowserRouter([
     path: "/follow",
     element: <Follow />,
   }, 
+  {
+    path: "/my/order",
+    element: <TableOrder />,
+  },
 ]); 

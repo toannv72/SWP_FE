@@ -193,9 +193,9 @@ export default function Artwork() {
                                     <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link>
                                     <Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link>
                                 </div>
-                                <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
+                                {/* <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
                                     Theo dõi
-                                </button>
+                                </button> */}
                             </div>
 
                             <p>

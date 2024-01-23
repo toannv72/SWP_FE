@@ -12,6 +12,7 @@ import ComTextArea from "../../Components/ComInput/ComTextArea";
 import { useLocation, useNavigate } from "react-router-dom";
 import { postData } from "../../../api/api";
 import { Button, Radio, notification } from "antd";
+import { useStorage } from "../../../hooks/useLocalStorage";
 export default function Payment(props) {
     const [disabled, setDisabled] = useState(false);
     const navigate = useNavigate();
@@ -20,6 +21,8 @@ export default function Payment(props) {
     const dataProduct = location?.state?.dataProduct || null;
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || []);
     const [checked, setChecked] = useState(1);
+    const [token, setToken] = useStorage("user", {});
+
     const onChange = (e) => {
         setChecked(e.target.value);
     };
@@ -49,59 +52,134 @@ export default function Payment(props) {
     })
     const { handleSubmit, register, setFocus, watch, setValue } = methods
     const onSubmit = (data) => {
-        // setDisabled(true)
-        const ProductPost = dataProduct.map((e, index) => {
-            return { ...e, product: e._id, price: e.price, quantity: e?.data };
-        })
-        const dataPost = { ...data, amount: totalAmount, bankCode: "", language: 'vn', shippingAddress: data.shippingAddress, description: data.description, email: data.email, products: ProductPost, totalAmount: totalAmount ,}
-       
-        if (checked === 1) {
-            postData('/order/user', {...dataPost,payment:'Cash'})
-                .then((data) => {
-                    navigate(`bill/${data._id}`)
-                    setDisabled(false)
-                })
-                .catch((error) => {
-                    console.log(error);
-                    api["error"]({
-                        message: textApp.Payment.error,
-                        description: error.response.data.error
+        // ...
+
+        // Tạo mảng các đơn hàng cho từng người dùng
+        const orders = finalResult.map(userData => {
+            const productPost = userData.products.map((product, index) => {
+                return {
+                    product: product.productId,
+                    price: product.productPrice,
+                    quantity: product.productQuantity,
+                    name: product.productName,
+                    _id:product._id,
+                    seller: product.productQuantity,
+                };
+            });
+
+            return {
+                ...data,
+                amount: userData.totalAmount + userData.shippingFee,
+                shippingAddress: data.shippingAddress,
+                description: data.description,
+                email: data.email,
+                phone: data.phone,
+                products: productPost,
+                totalAmount: userData.totalAmount + userData.shippingFee,
+                seller: userData.userId,  // Thêm userId cho mỗi đơn hàng
+                user: token._doc._id,
+            };
+        });
+
+        // Lặp qua các đơn hàng và thực hiện đăng ký
+        orders.forEach(order => {
+            if (checked === 1) {
+                console.log(order);
+                postData('/order/user', { ...order, payment: 'Cash' })
+                    .then((data) => {
+                        navigate(`bill/${data._id}`);
+                        setDisabled(false);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        api["error"]({
+                            message: textApp.Payment.error,
+                            description: error?.response?.data?.error
+                        });
+                        setDisabled(false);
                     });
-                    setDisabled(false)
-                })
-        } else {
-
-            postData('/order/pay', dataPost)
-                .then((data) => {
-                    window.location.href = data.url;
-                    setDisabled(false)
-                })
-                .catch((error) => {
-                    console.log(error);
-                    api["error"]({
-                        message: textApp.Payment.error,
-                        description: error?.response?.data?.error
+            } else {
+                console.log(order);
+                postData('/order/pay', order)
+                    .then((data) => {
+                        window.location.href = data.url;
+                        setDisabled(false);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        api["error"]({
+                            message: textApp.Payment.error,
+                            description: error?.response?.data?.error
+                        });
+                        setDisabled(false);
                     });
-                    setDisabled(false)
-                })
-        }
-
-
-
-    }
+            }
+        });
+    };
 
     function formatCurrency(number) {
         // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.
         return number
-            .toLocaleString('en-US', {
+            ?.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'VND',
             });
     }
-    const totalAmount = dataProduct?.reduce((total, data) => {
-        const itemTotal = data.price * data?.data;
-        return total + itemTotal;
-    }, 0) || 0;
+ 
+
+    const userTotals = {};
+console.log(dataProduct)
+    // Lặp qua từng sản phẩm để tính tổng tiền
+    dataProduct?.forEach(product => {
+        const userId = product.user;
+        const totalPrice = product.price * product.data;
+
+        // Thêm vào đối tượng userTotals
+        if (!userTotals[userId]) {
+            userTotals[userId] = {
+                userId: userId,
+                totalAmount: 0,
+                products: []
+            };
+        }
+
+        userTotals[userId].totalAmount += totalPrice;
+        userTotals[userId].products.push({
+            productId: product._id,
+            productName: product.name,
+            _id:product._id,
+            productPrice: product.price,
+            productQuantity: product.data
+        });
+    });
+
+    // Lặp lại đối tượng userTotals để kiểm tra và áp dụng phí vận chuyển
+    for (const userId in userTotals) {
+        const totalAmount = userTotals[userId].totalAmount;
+
+        // Kiểm tra và áp dụng phí vận chuyển
+        if (totalAmount < 1000000) {
+            userTotals[userId].shippingFee = 40000; // Phí shipper là 40k
+        } else {
+            userTotals[userId].shippingFee = 0; // Miễn phí vận chuyển nếu tổng tiền trên 1 triệu
+        }
+    }
+
+    // Chuyển đối tượng thành mảng cuối cùng
+    const finalResult = Object.values(userTotals);
+
+
+    const calculateTotalToPay = () => {
+        let totalToPay = 0;
+
+        finalResult.forEach(userData => {
+            totalToPay += userData.totalAmount + userData.shippingFee;
+        });
+
+        return totalToPay;
+    };
+    console.log(finalResult);
+
     return (
         <>
             {contextHolder}
@@ -123,18 +201,28 @@ export default function Payment(props) {
                             </h4>
                             <ul className="list-group mb-3">
 
-                                {dataProduct?.map((data, index) => (
-                                    <li key={index} className="list-group-item flex justify-between items-center">
-                                        <div>
-                                            <h6 className="my-0">{data.name}</h6>
-                                            <small className="text-gray-500">{formatCurrency(data.price)} x {data?.data}</small>
-                                        </div>
-                                        <span className="text-gray-500">{formatCurrency(data.price * data?.data)}</span>
-                                    </li>
+                                {finalResult.map((userData, index) => (
+                                    <div key={index} className="user-container">
+
+                                        <ul className="list-group">
+                                            {userData.products.map((product, productIndex) => (
+                                                <li key={productIndex} className="list-group-item flex justify-between items-center">
+                                                    <div>
+                                                        <h6 className="my-0">{product.productName}</h6>
+                                                        <small className="text-gray-500">{formatCurrency(product.productPrice)} x {product.productQuantity}</small>
+                                                    </div>
+                                                    <span className="text-gray-500">{formatCurrency(product.productPrice * product.productQuantity)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="shipping-fee">Tiền giao hàng: {formatCurrency(userData.shippingFee)}</div>
+                                        <div className="total-amount">Total Amount: {formatCurrency(userData.totalAmount + userData.shippingFee)}</div>
+                                        -----------------------------------
+                                    </div>
                                 ))}
                                 <li className="list-group-item flex justify-between items-center text-black text-xl">
                                     <span>{textApp.Payment.totalMoney}</span>
-                                    <strong>{formatCurrency(totalAmount)}</strong>
+                                    <strong>{formatCurrency(calculateTotalToPay())}</strong>
                                 </li>
                             </ul>
                         </form>

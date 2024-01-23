@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
 
-export default function Pending({activeTab}) {
+export default function Pending({ activeTab }) {
   const [order, setOrder] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-  
-      getData('/product/staff', {})
-        .then((productData) => {
-       
-            setProducts(productData?.data);
-          
-        })
-        .catch((error) => {
-          console.error("Error fetching products:", error);
-        });
 
-      getData('/order/user/all', {})
-        .then((orderData) => {
-          setOrder(orderData?.data?.docs);
-    
-        })
-        .catch((error) => {
-          console.error("Error fetching items:", error);
-    
-        });
+    getData('/product/staff', {})
+      .then((productData) => {
+
+        setProducts(productData?.data);
+
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+
+    getData('/order/user/all', {})
+      .then((orderData) => {
+        setOrder(orderData?.data?.docs);
+
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+
+      });
     // }
   }, [activeTab]);
 
@@ -37,50 +37,50 @@ export default function Pending({activeTab}) {
   function formatCurrency(number) {
     // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.
     if (typeof number === "number") {
-      
+
       return number.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'VND',
+        style: 'currency',
+        currency: 'VND',
       });
     }
-}
-function getStatusClass(status) {
-  switch (status) {
-    case 'Pending':
-      return 'bg-yellow-500';
-    case 'Processing':
-      return 'bg-orange-500';
-    case 'Shipped':
-      return 'bg-blue-500';
-    case 'Delivered':
-      return 'bg-green-500';
-    case 'Cancelled':
-      return 'bg-red-500';
-    case 'Returned':
-      return 'bg-purple-500';
-    default:
-      return '';
   }
-}
+  function getStatusClass(status) {
+    switch (status) {
+      case 'Pending':
+        return 'bg-yellow-500';
+      case 'Processing':
+        return 'bg-orange-500';
+      case 'Shipped':
+        return 'bg-blue-500';
+      case 'Delivered':
+        return 'bg-green-500';
+      case 'Canceled':
+        return 'bg-red-500';
+      case 'Returned':
+        return 'bg-purple-500';
+      default:
+        return '';
+    }
+  }
 
-function getStatusText(status) {
-  switch (status) {
-    case 'Pending':
-      return 'Chờ xử lý';
-    case 'Processing':
-      return 'Đang xử lý';
-    case 'Shipped':
-      return 'Đang vận chuyển';
-    case 'Delivered':
-      return 'hoàn thành';
-    case 'Cancelled':
-      return 'Đã hủy';
-    case 'Returned':
-      return 'Đã trả hàng';
-    default:
-      return '';
+  function getStatusText(status) {
+    switch (status) {
+      case 'Pending':
+        return 'Chờ xử lý';
+      case 'Processing':
+        return 'Đang xử lý';
+      case 'Shipped':
+        return 'Đang vận chuyển';
+      case 'Delivered':
+        return 'hoàn thành';
+      case 'Canceled':
+        return 'Đã hủy';
+      case 'Returned':
+        return 'Đã trả hàng';
+      default:
+        return '';
+    }
   }
-}
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
@@ -117,7 +117,7 @@ function getStatusText(status) {
                             {textApp.OrderHistory.product.quantity} {product?.quantity}
                           </div>
                           <div className="text-sm text-gray-900">
-                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.reducedPrice)}
+                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.price)}
                           </div>
                         </li>
                       );
@@ -126,9 +126,9 @@ function getStatusText(status) {
                 </div>
                 <div className="col-span-1 mt-4 md:mt-0">
                   <div className="flex flex-col items-end mb-4">
-                  <div className={`flex-none text-white rounded-full px-3 py-1 mb-2 ${getStatusClass(orderData?.status)}`}>
-                  {getStatusText(orderData?.status)}
-                  </div>
+                    <div className={`flex-none text-white rounded-full px-3 py-1 mb-2 ${getStatusClass(orderData?.status)}`}>
+                      {getStatusText(orderData?.status)}
+                    </div>
                   </div>
                 </div>
                 <div className="col-span-3 mt-4 md:mt-0">

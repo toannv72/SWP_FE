@@ -20,6 +20,7 @@ export default function Return({activeTab}) {
 
       getData('/order/user/returned', {})
         .then((orderData) => {
+          console.log(orderData);
           setOrder(orderData?.data?.docs);
     
         })
@@ -80,7 +81,7 @@ export default function Return({activeTab}) {
                             {textApp.OrderHistory.product.quantity} {product?.quantity}
                           </div>
                           <div className="text-sm text-gray-900">
-                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.reducedPrice)}
+                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.price)}
                           </div>
                         </li>
                       );

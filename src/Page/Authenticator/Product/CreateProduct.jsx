@@ -20,20 +20,20 @@ import { useStorage } from '../../../hooks/useLocalStorage';
 
 const options = [
     {
-        label: "Gỗ",
-        value: "Gỗ"
+        label: "Tranh",
+        value: "Tranh"
     },
     {
-        label: "Nhựa",
-        value: "Nhựa"
+        label: "Trang trí",
+        value: "Trang trí"
     },
     {
-        label: "Kim Loại",
-        value: "Kim loại"
+        label: "Nghệ thuật",
+        value: "Nghệ thuật"
     },
 ];
 
-export default function CreateProduct() {
+export default function CreateProduct({ onCancel }) {
     const [disabled, setDisabled] = useState(false);
     const [image, setImages] = useState([]);
     const [api, contextHolder] = notification.useNotification();
@@ -46,7 +46,7 @@ export default function CreateProduct() {
         price1: yup.string().required(textApp.CreateProduct.message.price).min(1, textApp.CreateProduct.message.priceMin).test('no-dots', textApp.CreateProduct.message.priceDecimal, value => !value.includes('.')),
         quantity: yup.number().min(1, textApp.CreateProduct.message.quantityMin).typeError(textApp.CreateProduct.message.quantity).required('Số lượng không được để trống'),
         // shape: yup.string().required(textApp.CreateProduct.message.shape),
-        genre: yup.array().required(textApp.CreateProduct.message.material),
+        genre: yup.array().required("Vui lòng nhập thể loại"),
         description: yup.string().required(textApp.CreateProduct.message.description),
     })
     const createProductRequestDefault = {
@@ -119,7 +119,7 @@ export default function CreateProduct() {
 
                 };
 
-                postData('/product', {...updatedData,user:token._doc._id}, {})
+                postData('/product', { ...updatedData, user: token._doc._id }, {})
                     .then((dataS) => {
                         setDisabled(false)
                         api["success"]({
@@ -127,6 +127,7 @@ export default function CreateProduct() {
                             description:
                                 textApp.CreateProduct.Notification.m2.description
                         });
+                        onCancel()
                     })
                     .catch((error) => {
                         api["error"]({
@@ -136,6 +137,8 @@ export default function CreateProduct() {
                         });
                         console.error("Error fetching items:", error);
                         setDisabled(false)
+                        onCancel()
+
                     });
             })
             .catch((error) => {
@@ -223,15 +226,15 @@ export default function CreateProduct() {
                             </div>
 
 
-                            <div className="">
+                            <div className="sm:col-span-2">
                                 <ComSelect
                                     size={"large"}
                                     style={{
                                         width: '100%',
                                     }}
                                     mode="tags"
-                                    label={textApp.CreateProduct.label.material}
-                                    placeholder={textApp.CreateProduct.placeholder.material}
+                                    label="Thể loại"
+                                    placeholder="Thể loại"
                                     required
                                     onChangeValue={handleValueChangeSelect}
                                     options={options}

@@ -82,28 +82,28 @@ export default function TableProduct() {
     };
     const options = [
         {
-            label: "Gỗ",
-            value: "Gỗ"
+            label: "Tranh",
+            value: "Tranh"
         },
         {
-            label: "Nhựa",
-            value: "Nhựa"
+            label: "Trang trí",
+            value: "Trang trí"
         },
         {
-            label: "Kim Loại",
-            value: "Kim loại"
+            label: "Nghệ thuật",
+            value: "Nghệ thuật"
         },
     ];
 
     const handleCancel = () => {
         setIsModalOpen(false);
-
     };
     const handleCancelDelete = () => {
         setIsModalOpenDelete(false);
     };
     const handleCancelAdd = () => {
         setIsModalOpenAdd(false);
+        setDataRun(!dataRun);
     };
     const handleValueChange = (e, value) => {
         setProductPrice(value)
@@ -157,7 +157,7 @@ export default function TableProduct() {
         return typeof number === 'number' && isFinite(number) && Math.floor(number) === number;
     }
     const onSubmitUp = (data) => {
-        console.log(123);
+     
         if (data.price % 1000 !== 0) {
             api["error"]({
                 message: textApp.CreateProduct.Notification.m7.message,
@@ -166,7 +166,7 @@ export default function TableProduct() {
             });
             return
         }
-   
+
         if (!isInteger(data.price)) {
 
             api["error"]({
@@ -600,23 +600,6 @@ export default function TableProduct() {
                                     />
 
                                 </div>
-                                <div className="">
-                                    <ComSelect
-                                        size={"large"}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        label={textApp.CreateProduct.label.genre}
-                                        placeholder={textApp.CreateProduct.placeholder.genre}
-                                        required
-                                        onChangeValue={handleChange}
-                                        value={selectedMaterials}
-                                        mode="tags"
-                                        options={options}
-                                        {...register("genre")}
-
-                                    />
-                                </div>
                                 <div>
                                     <ComNumber
                                         label={textApp.CreateProduct.label.quantity}
@@ -629,6 +612,24 @@ export default function TableProduct() {
                                     />
 
                                 </div>
+                                <div className="sm:col-span-2">
+                                    <ComSelect
+                                        size={"large"}
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        label="Thể loại"
+                                        placeholder="Thể loại"
+                                        required
+                                        onChangeValue={handleChange}
+                                        value={selectedMaterials}
+                                        mode="tags"
+                                        options={options}
+                                        {...register("genre")}
+
+                                    />
+                                </div>
+                           
 
                                 <div className="sm:col-span-2">
 
@@ -682,10 +683,9 @@ export default function TableProduct() {
                 style={{ top: 20 }}
 
                 onCancel={handleCancelAdd}>
-                <CreateProduct />
+                <CreateProduct onCancel={handleCancelAdd} />
 
             </Modal>
-
 
 
             <Modal title={textApp.TableProduct.title.delete}

@@ -60,7 +60,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
     }
     let total = 0;
     for (const product of checkedList) {
-      total += product.reducedPrice*product.data;
+      total += product.price*product.data;
     }
     setTotalAmount(total)
   }, [checkedList]);
@@ -149,7 +149,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
   function formatCurrency(number) {
     // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.
     return number
-      .toLocaleString('en-US', {
+      ?.toLocaleString('en-US', {
         style: 'currency',
         currency: 'VND',
       });
@@ -241,7 +241,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                                             <Link onClick={() => { setOpen(false); handleCartClose(); }} to={`/product/${product._id}`}
                                             >{product.name}</Link>
                                           </h3>
-                                          <p className="ml-4">{formatCurrency(product.reducedPrice)}</p>
+                                          <p className="ml-4">{formatCurrency(product?.price)}</p>
                                         </div>
                                         <p className="mt-1 text-sm text-gray-500">{product.color}</p>
                                       </div>
@@ -281,7 +281,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                         <p>Tổng cộng</p>
                         <p>{formatCurrency(totalAmount)}</p>
                       </div>
-                      <p className="mt-0.5 text-sm text-gray-500">Vận chuyển và thuế được tính khi thanh toán.</p>
+                      {/* <p className="mt-0.5 text-sm text-gray-500">Vận chuyển và thuế được tính khi thanh toán.</p> */}
                       <div className="mt-6">
                         <Button
                           onClick={() => { onSubmit() }}

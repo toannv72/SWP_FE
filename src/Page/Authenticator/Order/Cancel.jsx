@@ -18,7 +18,7 @@ export default function Cancel({activeTab}) {
           console.error("Error fetching products:", error);
         });
 
-      getData('/order/user/Cancelled', {})
+      getData('/order/user/canceled', {})
         .then((orderData) => {
           setOrder(orderData?.data?.docs);
     
@@ -80,7 +80,7 @@ export default function Cancel({activeTab}) {
                             {textApp.OrderHistory.product.quantity} {product?.quantity}
                           </div>
                           <div className="text-sm text-gray-900">
-                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.reducedPrice)}
+                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.price)}
                           </div>
                         </li>
                       );
