@@ -3,7 +3,7 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 
 // import './styles.css'
@@ -15,10 +15,16 @@ export default function Follow() {
     const [token, setToken] = useStorage("user", {});
     const [likedProductIds, setLikedProductIds] = useState([])
     const containerRef = useRef(null);
+    const navigate = useNavigate();
+
     const fetchData = async (pageNumber) => {
         try {
+
+
+
             const response = await getData(`/artwork/follow/${token?._doc?._id}?page=${pageNumber}&limit=20`);
             return response.data.docs;
+
         } catch (error) {
             console.log(error);
             return [];
@@ -40,6 +46,7 @@ export default function Follow() {
     };
 
     useEffect(() => {
+
         const loadInitialData = async () => {
             const initialProducts = await fetchData(page);
             setProducts(initialProducts);
@@ -48,7 +55,11 @@ export default function Follow() {
             setLikedProductIds(likesCountArray)
             setLikedProducts(userLikesArray)
         };
-        loadInitialData();
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        } else {
+            loadInitialData();
+        }
     }, []); // Run only once on component mount
 
     useEffect(() => {

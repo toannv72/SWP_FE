@@ -51,8 +51,7 @@ export default function ComPost({ }) {
                                 "Bài viết của bạn đã đăng thành công"
                         });
                         setTimeout(() => {
-                            
-                            navigate('/login')
+                            navigate('/profile')
                         }, 3000);
                         handleCancel()
                         setDisabled(false)

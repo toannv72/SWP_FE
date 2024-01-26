@@ -1,15 +1,9 @@
 
 import { useEffect, useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
 import ComHeader from '../../Components/ComHeader/ComHeader'
-import ComImage from '../../Components/ComImage/ComImage'
 import { getData, postData } from '../../../api/api'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { textApp } from '../../../TextContent/textApp'
-import { FormProvider, useForm } from 'react-hook-form'
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup'
-import ComNumber from '../../Components/ComInput/ComNumber'
+import { Link,  useNavigate, useParams } from 'react-router-dom'
+
 import { Button, Image, notification } from 'antd'
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
@@ -34,7 +28,8 @@ export default function Author() {
     const navigate = useNavigate();
     const [token, setToken] = useStorage("user", {});
     const [likedProductIds, setLikedProductIds] = useState([])
-
+   
+ 
     const handFollow = () => {
         setFollow(!follow);
         postData(`/user/followUser/${id}/${token?._doc?._id}`, {})
@@ -153,6 +148,9 @@ export default function Author() {
     };
 
     useEffect(() => {
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
         getData(`/user/${id}`)
             .then((user) => {
                 setAuthor(user.data)

@@ -78,6 +78,9 @@ export default function Artwork() {
     }, [id, dataL, like]);
 
     const handleLike = (id_artwork, id_user) => {
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
         setLike(true);
         postData(`/artwork/likeArtwork/${id_artwork}/${id_user}`, {})
             .then((e) => {
@@ -88,6 +91,9 @@ export default function Artwork() {
 
     };
     const handleUnLike = (id_artwork, id_user) => {
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
         setLike(false);
 
         postData(`/artwork/unlikeArtwork/${id_artwork}/${id_user}`, {})
