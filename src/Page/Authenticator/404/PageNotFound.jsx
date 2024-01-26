@@ -19,7 +19,7 @@ export default function PageNotFound() {
                         >
                             Go back {routs["/"].name}
                         </ComLink>
-                        <ComLink to="https://www.facebook.com/vantoan1712/" className="text-sm font-semibold text-gray-900">
+                        <ComLink to="/" className="text-sm font-semibold text-gray-900">
                             Contact support <span aria-hidden="true">&rarr;</span>
                         </ComLink>
                     </div>

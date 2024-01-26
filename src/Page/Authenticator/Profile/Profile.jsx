@@ -234,7 +234,7 @@ export default function Profile() {
                     dataLength={products.length}
                     next={fetchMoreProducts}
                     hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
+                    // loader={<h4>Loading...</h4>}
                 >
                     <div className="grid gap-4 justify-center ">
                         {products.map((artwork, index) => (
