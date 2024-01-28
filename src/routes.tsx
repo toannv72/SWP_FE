@@ -18,6 +18,9 @@ import InvoicePage from "./Page/Authenticator/Payment/Invoice";
 import Order from "./Page/Authenticator/Order/Order";
 import Follow from "./Page/Authenticator/Follow/Follow";
 import TableOrder from "./Page/Authenticator/ComOrderTable/TableOrder";
+import Search from "./Page/Authenticator/Search/Search";
+import SearchGenre from "./Page/Authenticator/Search/Search2";
+import SearchUser from "./Page/Authenticator/Search/Search3";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -95,5 +98,17 @@ export const routers = createBrowserRouter([
   {
     path: "/my/order",
     element: <TableOrder />,
+  },
+  { 
+    path: "/search/:search", 
+    element: <Search/>, 
+  },
+  { 
+    path: "/searchGenre/:search", 
+    element: <SearchGenre/>, 
+  },
+  { 
+    path: "/searchUser/:search", 
+    element: <SearchUser/>, 
   },
 ]); 

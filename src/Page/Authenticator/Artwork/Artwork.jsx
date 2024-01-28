@@ -186,13 +186,7 @@ export default function Artwork() {
                     </div>
                     <div className='p-2 grid content-between'>
                         <div>
-                            <Dropdown trigger={['click']} menu={menuProps} >
-                                <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
-
-                                    <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
-
-                                </button>
-                            </Dropdown>
+                         
 
                             <div className='flex justify-between'>
                                 <div className="px-2 py-1 flex items-center gap-2 w-auto">
@@ -202,6 +196,11 @@ export default function Artwork() {
                                 {/* <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
                                     Theo dõi
                                 </button> */}
+                                <Dropdown trigger={['click']} menu={menuProps} >
+                                <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
+                                    <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
+                                </button>
+                            </Dropdown>
                             </div>
 
                             <p>

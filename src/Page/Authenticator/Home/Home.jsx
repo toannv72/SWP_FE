@@ -33,11 +33,7 @@ export default function Home() {
             setHasMore(false); // No more data to load
         } else {
             setProducts([...products, ...newProducts]);
-            const userLikesArray = newProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
-
-            const likesCountArray = newProducts.map(product => product.likes.length);
-            setLikedProducts([...likedProducts, ...userLikesArray])
-            setLikedProductIds([...likedProductIds, ...likesCountArray])
+     
             setPage(page + 1);
         }
     };
@@ -46,10 +42,7 @@ export default function Home() {
         const loadInitialData = async () => {
             const initialProducts = await fetchData(page);
             setProducts(initialProducts);
-            const userLikesArray = initialProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
-            const likesCountArray = initialProducts.map(product => product.likes.length);
-            setLikedProductIds(likesCountArray)
-            setLikedProducts(userLikesArray)
+       
         };
         loadInitialData();
     }, []); // Run only once on component mount

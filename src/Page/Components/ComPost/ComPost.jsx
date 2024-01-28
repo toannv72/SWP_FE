@@ -1,11 +1,6 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup';
-import ComInput from "../ComInput/ComInput";
-
-import ComUpImg from "../ComUpImg/ComUpImg";
 import ComTextArea from "../ComInput/ComTextArea";
 import { Input, Modal, notification } from "antd";
 import { useEffect, useState } from "react";
@@ -14,7 +9,9 @@ import { firebaseImgs } from "../../../upImgFirebase/firebaseImgs";
 import { postData } from "../../../api/api";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
-
+import ComUpImgOne from "../ComUpImg/ComUpImgOne";
+import { firebaseImg } from "../../../upImgFirebase/firebaseImg";
+import ComSelect from "../ComInput/ComSelect";
 
 
 export default function ComPost({ }) {
@@ -24,6 +21,35 @@ export default function ComPost({ }) {
     const [token, setToken] = useStorage("user", {});
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
+    const [selectedMaterials, setSelectedMaterials] = useState();
+
+
+    const handleChange = (e, value) => {
+        console.log(value);
+        setSelectedMaterials(value);
+        if (value.length === 0) {
+            setValue("genre", null, { shouldValidate: true });
+        } else {
+            setValue("genre", value, { shouldValidate: true });
+
+        }
+    };
+
+    const options = [
+        {
+            label: "Tranh",
+            value: "Tranh"
+        },
+        {
+            label: "Trang trí",
+            value: "Trang trí"
+        },
+        {
+            label: "Nghệ thuật",
+            value: "Nghệ thuật"
+        },
+    ];
+
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -43,6 +69,7 @@ export default function ComPost({ }) {
 
         firebaseImgs(image)
             .then((img) => {
+                console.log(img);
                 postData("/artwork", { ...data, user: token._doc._id, image: img })
                     .then((r) => {
                         api["success"]({
@@ -75,10 +102,12 @@ export default function ComPost({ }) {
     }
     const onChange = (data) => {
         const selectedImages = data;
+    
         // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
-        const newImages = selectedImages.map((file) => file.originFileObj);
+        // const newImages = selectedImages.map((file) => file.originFileObj);
         // Cập nhật trạng thái 'image' bằng danh sách tệp mới
-        setImages(newImages);
+        console.log([selectedImages]);
+        setImages([selectedImages]);
         // setFileList(data);
     }
 
@@ -114,7 +143,24 @@ export default function ComPost({ }) {
                                 rows={6}
                                 {...register("content")}
                             />
-                            <ComUpImg numberImg={1} onChange={onChange} />
+                                <div className="sm:col-span-2">
+                                    <ComSelect
+                                        size={"large"}
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        label="Thể loại"
+                                        placeholder="Thể loại"
+                                        required
+                                        onChangeValue={handleChange}
+                                        value={selectedMaterials}
+                                        mode="tags"
+                                        options={options}
+                                        {...register("genre")}
+
+                                    />
+                                </div>
+                            <ComUpImgOne numberImg={1} onChange={onChange} />
                             <ComButton
                                 disabled={disabled}
                                 htmlType="submit"

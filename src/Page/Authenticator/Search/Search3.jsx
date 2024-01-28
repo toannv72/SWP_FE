@@ -2,18 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../../api/api";
 import ComHeader from "../../Components/ComHeader/ComHeader";
-import { Radio } from "antd";
+import {  Radio } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
 
-export default function SearchGenre() {
+export default function SearchUser() {
     const { search } = useParams();
 
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
-    const [checked, setChecked] = useState(1);
+    const [checked, setChecked] = useState(3);
     const containerRef = useRef(null);
     const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ export default function SearchGenre() {
             }
             if (checked === 3) {
                 const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=20`);
-
+               
                 return response.data.user;
             }
         } catch (error) {
@@ -55,11 +55,12 @@ export default function SearchGenre() {
         };
         loadInitialData();
         setPage(1);
-    }, [search, checked]); // Run only once on component mount
+    }, [search]); 
 
     useEffect(() => {
         const handleImageLoad = () => {
             const cards = containerRef.current.querySelectorAll('.card');
+
             cards.forEach((card) => {
                 const img = card.querySelector('img');
                 const aspectRatio = img.naturalHeight / img.naturalWidth;
@@ -84,9 +85,9 @@ export default function SearchGenre() {
                 container.removeEventListener('load', handleImageLoad);
             }
         };
-    }, [products, checked]);
+    }, [products,checked]);
 
-
+  
     const onChange = (e) => {
         if (e.target.value === 1) {
             return navigate(`/search/${search}`)
@@ -136,7 +137,7 @@ export default function SearchGenre() {
                         </div>
                     </InfiniteScroll> : <div className=" text-center w-screen"> Không tìm thấy bài viết đang tìm kiếm</div>}
 
-
+             
                 </div>
             </div>
         </>
