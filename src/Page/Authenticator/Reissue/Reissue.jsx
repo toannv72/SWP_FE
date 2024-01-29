@@ -77,6 +77,13 @@ export default function Reissue() {
             })
             .catch((error) => {
                 setError(error?.response?.data?.error)
+                if (error?.response?.data?.keyValue?.email) {
+                    setError('Tài khoản mail này đã có người sửa dụng')
+                }
+
+                if (error?.response?.data?.keyValue?.phone) {
+                    setError('Số điện thoại này đã có người sửa dụng')
+                }
                 console.error("Error fetching items:", error);
                 setDisabled(false)
             });
