@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import ComHeader from '../../Components/ComHeader/ComHeader'
 import ComImage from '../../Components/ComImage/ComImage'
-import { getData, postData } from '../../../api/api'
+import { getData, postData, putData } from '../../../api/api'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { textApp } from '../../../TextContent/textApp'
 import { FormProvider, useForm } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
 import ComNumber from '../../Components/ComInput/ComNumber'
-import { Button, Dropdown, Image, notification } from 'antd'
+import { Button, Dropdown, Image, Modal, notification } from 'antd'
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { CalendarDays } from 'lucide-react'
@@ -20,6 +20,9 @@ import {
     CommentOutlined
 } from '@ant-design/icons';
 import { useStorage } from '../../../hooks/useLocalStorage'
+import ComUpImgOne from '../../Components/ComUpImg/ComUpImgOne'
+import ComButton from '../../Components/ComButton/ComButton'
+import { firebaseImgs } from '../../../upImgFirebase/firebaseImgs'
 export default function Profile() {
     const [Author, setAuthor] = useState([])
     const { id } = useParams();
@@ -34,6 +37,25 @@ export default function Profile() {
     const [likedProductIds, setLikedProductIds] = useState([])
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
+    const [image, setImages] = useState([]);
+    const [disabled, setDisabled] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    useEffect(() => {
+        if (image.length > 0) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
+    }, [image]);
     const fetchData = async (pageNumber) => {
         try {
             const response = await getData(`/artwork/user/${token?._doc?._id}?page=${pageNumber}&limit=10`);
@@ -127,7 +149,16 @@ export default function Profile() {
             });
 
     };
+    const onChange = (data) => {
+        const selectedImages = data;
 
+        // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
+        // const newImages = selectedImages.map((file) => file.originFileObj);
+        // Cập nhật trạng thái 'image' bằng danh sách tệp mới
+        console.log([selectedImages]);
+        setImages([selectedImages]);
+        // setFileList(data);
+    }
     useEffect(() => {
         getData(`/user/${token?._doc?._id}`)
             .then((user) => {
@@ -145,7 +176,20 @@ export default function Profile() {
         return <PageNotFound />;
     }
     const handleMenuClick = (e) => {
-        console.log('click', e);
+
+        switch (e.key) {
+            case '1':
+                showModal()
+                break;
+            case '2':
+                console.log(2);
+                break;
+            case '3':
+                console.log(3);
+                break;
+            default:
+                break;
+        }
     };
     const items = [
         {
@@ -153,12 +197,8 @@ export default function Profile() {
             key: '1',
         },
         {
-            label: 'Đổi ảnh bìa',
-            key: '2',
-        },
-        {
             label: 'Đổi mật khẩu',
-            key: '3',
+            key: '2',
         },
     ]
 
@@ -166,6 +206,42 @@ export default function Profile() {
         items,
         onClick: handleMenuClick,
     };
+
+    const onSubmit = () => {
+        setDisabled(true)
+        firebaseImgs(image)
+            .then((img) => {
+                console.log(img);
+                putData(`/user`,token?._doc?._id, { avatar: img[0] })
+                    .then((data) => {
+                        api["success"]({
+                            message: "Thành công",
+                            description:
+                                "Ảnh đại diện của bạn đã được thanh đổi"
+                        });
+                        setToken(data)
+                        console.log(data);
+                        setTimeout(() => {
+                            navigate(`/author/${token?._doc?._id}`)
+                        }, 2000);
+                       
+                    })
+                    .catch((error) => {
+                        setDisabled(false)
+
+                        api["error"]({
+                            message: "Lỗi",
+                            description:
+                                "Hiện đang gặp phải vấn đề vui lòng thử lại sau"
+                        });
+
+                    });
+
+
+            });
+
+
+    }
     return (
         <>
             {contextHolder}
@@ -186,7 +262,7 @@ export default function Profile() {
                     <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className=" object-cover w-full h-full rounded-tl-lg rounded-tr-lg" alt='' />
                 </div>
                 <div className="flex flex-col items-center -mt-20">
-                   <button> <img onClick={() => setVisible(true)} src={Author?.avatar} className="w-40 object-cover h-40 border-4 border-white rounded-full" alt='' /></button>
+                    <button> <img onClick={() => setVisible(true)} src={Author?.avatar} className="w-40 object-cover h-40 border-4 border-white rounded-full" alt='' /></button>
                     <Image
                         width={200}
                         style={{
@@ -203,38 +279,22 @@ export default function Profile() {
                     />
                     <div className="flex items-center space-x-2 mt-2">
                         <p className="text-2xl">{Author?.name}</p>
-                        <span className="bg-blue-500 rounded-full p-1" title="Verified">
+                        {/* <span className="bg-blue-500 rounded-full p-1" title="Verified">
                             <svg xmlns="http://www.w3.org/2000/svg" className="text-gray-100 h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path>
                             </svg>
-                        </span>
+                        </span> */}
                     </div>
                     <p className="text-gray-700">{Author?.follow?.length} người theo dõi ·  {Author?.followAdd?.length} người đang theo dõi</p>
-                    <p className="text-sm text-gray-500">New York, USA</p>
+
                 </div>
 
 
-                {/* <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
-                    <div className="flex items-center space-x-4 mt-2">
-                        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
-                            </svg>
-                            <span>Connect</span>
-                        </button>
-                        <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd"></path>
-                            </svg>
-                            <span>Message</span>
-                        </button>
-                    </div>
-                </div> */}
+
                 <InfiniteScroll
                     dataLength={products.length}
                     next={fetchMoreProducts}
                     hasMore={hasMore}
-                    // loader={<h4>Loading...</h4>}
                 >
                     <div className="grid gap-4 justify-center ">
                         {products.map((artwork, index) => (
@@ -303,7 +363,19 @@ export default function Profile() {
                     </div>
                 </InfiniteScroll>
             </div>
+            <Modal title="Đổi ảnh đại diện" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
 
+                <div className='flex justify-center'>
+                    <ComUpImgOne numberImg={1} onChange={onChange} />
+                </div>
+                <ComButton
+                    type="primary"
+                    disabled={disabled}
+                    onClick={onSubmit}
+                >
+                Lưu</ComButton>
+
+            </Modal>
 
         </>
     )

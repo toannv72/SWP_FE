@@ -82,7 +82,6 @@ export default function ComPost({ }) {
                         }, 3000);
                         handleCancel()
                         setDisabled(false)
-
                     })
                     .catch((error) => {
                         setDisabled(false)
@@ -151,7 +150,6 @@ export default function ComPost({ }) {
                                         }}
                                         label="Thể loại"
                                         placeholder="Thể loại"
-                                        required
                                         onChangeValue={handleChange}
                                         value={selectedMaterials}
                                         mode="tags"

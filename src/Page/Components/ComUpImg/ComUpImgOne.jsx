@@ -68,30 +68,33 @@ const ComUpImgOne = ({ onChange, numberImg }) => {
   };
   return (
     <>
-      <Upload
-        name="avatar"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        // beforeUpload={beforeUpload}
-        onChange={handleFileChange}
-        accept=".jpg,.jpeg,.png,.gif" // Chỉ cho phép chọn các tệp hình ảnh
-
-      >
-
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="avatar"
-            style={{
-              width: '100px',
-              height: '100px',
-            }}
-          />
-        ) : (
-          uploadButton
-        )}
-      </Upload>
+      <div className=''>
+        <Upload
+          name="avatar"
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          // beforeUpload={beforeUpload}
+          onChange={handleFileChange}
+          accept=".jpg,.jpeg,.png,.gif" // Chỉ cho phép chọn các tệp hình ảnh
+  
+        >
+  
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt="avatar"
+              style={{
+                width: '100px',
+                height: '100px',
+                objectFit: "cover"
+              }}
+            />
+          ) : (
+            uploadButton
+          )}
+        </Upload>
+      </div>
     </>
   );
 };
