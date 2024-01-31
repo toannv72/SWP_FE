@@ -3,11 +3,13 @@ import { storage } from "../configs/firebase";
 
 
 export const firebaseImgs = async (images) => {
+  console.log(1111111,images);
     const imagePromises = [];
 
     for (const image of images) {
       const imageRef = ref(storage, `images/${image.name}`);
       const uploadTask = uploadBytes(imageRef, image);
+      console.log(image);
       imagePromises.push(uploadTask);
     }
 

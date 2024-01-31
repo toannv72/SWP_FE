@@ -87,7 +87,7 @@ export default function Payment(props) {
                 console.log(order);
                 postData('/order/user', { ...order, payment: 'Cash' })
                     .then((data) => {
-                        navigate(`bill/${data._id}`);
+                        navigate(`order`);
                         setDisabled(false);
                     })
                     .catch((error) => {
@@ -284,7 +284,7 @@ console.log(dataProduct)
                                 <div className="flex items-center mb-2">
                                     <Radio.Group onChange={onChange} value={checked} className="grid ">
                                         <Radio value={1}>tiền mặt</Radio>
-                                        <Radio value={2}>VNPAY</Radio>
+                                        {/* <Radio value={2}>VNPAY</Radio> */}
                                     </Radio.Group>
                                 </div>
 
