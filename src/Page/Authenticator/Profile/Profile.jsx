@@ -40,6 +40,11 @@ export default function Profile() {
     const [image, setImages] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    useEffect(() => {
+        if (!token?._doc?._id) {
+          navigate('/login')
+        }
+      },);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -72,9 +77,9 @@ export default function Profile() {
             setHasMore(false); // No more data to load
         } else {
             setProducts([...products, ...newProducts]);
-            const userLikesArray = newProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
+            const userLikesArray = newProducts?.map(product => product.likes.some(like => like.user === token?._doc?._id));
 
-            const likesCountArray = newProducts.map(product => product.likes.length);
+            const likesCountArray = newProducts?.map(product => product.likes.length);
             setLikedProducts([...likedProducts, ...userLikesArray])
             setLikedProductIds([...likedProductIds, ...likesCountArray])
             setPage(page + 1);
@@ -85,8 +90,8 @@ export default function Profile() {
         const loadInitialData = async () => {
             const initialProducts = await fetchData(page);
             setProducts(initialProducts);
-            const userLikesArray = initialProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
-            const likesCountArray = initialProducts.map(product => product.likes.length);
+            const userLikesArray = initialProducts?.map(product => product.likes.some(like => like.user === token?._doc?._id));
+            const likesCountArray = initialProducts?.map(product => product.likes.length);
             setLikedProductIds(likesCountArray)
             setLikedProducts(userLikesArray)
         };
@@ -292,12 +297,12 @@ export default function Profile() {
 
 
                 <InfiniteScroll
-                    dataLength={products.length}
+                    dataLength={products?.length}
                     next={fetchMoreProducts}
                     hasMore={hasMore}
                 >
                     <div className="grid gap-4 justify-center ">
-                        {products.map((artwork, index) => (
+                        {products?.map((artwork, index) => (
                             <div key={index} className=" w-screen bg-[#f3f9f140] sm:w-[600px] lg:w-[900px] xl:w-[1000px] xl:gap-x-8 shadow-md rounded-lg border-solid border-2 border-[#89898936] ">
                                 <HoverCard>
 

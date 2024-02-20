@@ -20,6 +20,13 @@
     justify-content: center;
 
 }
+.artwork-image {
+    transition: filter 0.3s ease-in-out;
+}
+
+.group:hover .artwork-image {
+    filter: brightness(70%);
+}
 
 .card {
     padding: 0px;

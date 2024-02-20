@@ -244,18 +244,18 @@ export default function TableUser() {
             ...getColumnSearchProps('name', 'tên sản phẩm'),
 
         },
-        {
-            title: 'password',
-            dataIndex: 'password',
-            width: 100,
-            key: 'password',
+        // {
+        //     title: 'password',
+        //     dataIndex: 'password',
+        //     width: 100,
+        //     key: 'password',
 
-            render: (_, record) => (
-                <div >
-                    <h1>**********</h1>
-                </div>
-            ),
-        },
+        //     render: (_, record) => (
+        //         <div >
+        //             <h1>**********</h1>
+        //         </div>
+        //     ),
+        // },
         {
             title: 'Ngày tạo',
             dataIndex: 'createdAt',
@@ -269,19 +269,33 @@ export default function TableUser() {
             )
         },
         {
-            title: <div className='flex justify-center '>trạng thái</div>,
-            dataIndex: '',
-            key: '',
-            width: 100,
-            render: (_, record) => (
-                <div >
-                    <div className='flex justify-center text-lg text-cyan-600'>hoạt động</div>
-                </div>
-            ),
-
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            width: 110,
+            key: 'phone',
+        
         },
         {
-            title: <div className='flex justify-center '>tài khoản</div>,
+            title: 'Gmail',
+            dataIndex: 'email',
+            width: 110,
+            key: 'email',
+        
+        },
+        // {
+        //     title: <div className='flex justify-center '>trạng thái</div>,
+        //     dataIndex: '',
+        //     key: '',
+        //     width: 100,
+        //     render: (_, record) => (
+        //         <div >
+        //             <div className='flex justify-center text-lg text-cyan-600'>hoạt động</div>
+        //         </div>
+        //     ),
+
+        // },
+        {
+            title: <div className='flex justify-center '>Tài khoản</div>,
             dataIndex: '',
             key: '',
             width: 100,
@@ -292,27 +306,27 @@ export default function TableUser() {
             ),
 
         },
-        {
-            title: <div className='flex justify-center'>Action</div>,
-            key: 'operation',
-            width: 50,
-            render: (_, record) => (
-                <div className='flex items-center flex-col'>
-                    <div className='mt-2'>
-                        <Typography.Link onClick={() => showModalDelete(record)}>
-                            <div className='text-red-600'>Khóa</div>
-                        </Typography.Link>
-                    </div>
-                </div>
-            )
-        },
+        // {
+        //     title: <div className='flex justify-center'>Action</div>,
+        //     key: 'operation',
+        //     width: 50,
+        //     render: (_, record) => (
+        //         <div className='flex items-center flex-col'>
+        //             <div className='mt-2'>
+        //                 <Typography.Link onClick={() => showModalDelete(record)}>
+        //                     <div className='text-red-600'>Khóa</div>
+        //                 </Typography.Link>
+        //             </div>
+        //         </div>
+        //     )
+        // },
     ];
 
     return (
         <>
             {contextHolder}
             <ComHeader/>
-            <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton>
+            {/* <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton> */}
             <div className='flex p-5 justify-center'>
                 <Table
                     rowKey="_id"

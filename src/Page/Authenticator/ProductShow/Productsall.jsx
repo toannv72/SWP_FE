@@ -27,7 +27,7 @@ export default function ProductBest() {
             })
     }, [page, sortPrice, minPrice, maxPrice]);
     useEffect(() => {
-        window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
     }, [page]);
     const onChange = (pageNumber) => {
         console.log('Page: ', pageNumber);
@@ -71,7 +71,7 @@ export default function ProductBest() {
                 <h2 className="bg-cyan-400 h-12 flex items-center p-2 text-2xl font-bold tracking-tight text-white mb-4">Sản phẩm bán chạy nhất </h2>
 
                 {/* <div className="flex gap-2 mb-2">
-                        Giá giao động
+                        Giá dao động
                         <InputNumber
                             style={{
                                 width: 120,
