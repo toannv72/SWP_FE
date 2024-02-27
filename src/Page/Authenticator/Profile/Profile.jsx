@@ -282,6 +282,7 @@ export default function Profile() {
                             },
                         }}
                     />
+                    
                     <div className="flex items-center space-x-2 mt-2">
                         <p className="text-2xl">{Author?.name}</p>
                         {/* <span className="bg-blue-500 rounded-full p-1" title="Verified">

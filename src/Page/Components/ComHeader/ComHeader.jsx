@@ -1,4 +1,3 @@
-
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Menu, Popover, Transition } from "@headlessui/react";
 import {
@@ -10,33 +9,47 @@ import {
 import ShoppingCart from "../../Authenticator/ShoppingCart/ShoppingCart";
 import { routs } from "../../../constants/ROUT";
 import { ComLink } from "../ComLink/ComLink";
-import { Affix, FloatButton, } from "antd";
+import { Affix, Drawer, Dropdown, FloatButton } from "antd";
 import images from "../../../img";
 import ComInput from "../ComInput/ComInput";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup"
+import * as yup from "yup";
 import { textApp } from "../../../TextContent/textApp";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
+import { useSocket } from "../../../App";
 
 const navigation = {
   pages: [
-    { name: textApp.Header.home, href: "/", },
-    { name: "Theo dõi", href: "/follow", },
-    { name: "Cửa hàng", href: "/product", },
+    { name: textApp.Header.home, href: "/" },
+    { name: "Theo dõi", href: "/follow" },
+    { name: "Cửa hàng", href: "/product" },
   ],
 };
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function ComHeader({ dataCart, updateCart }) {
+  const socket = useSocket();
+  const [openNotification, setOpenNotification] = useState(false);
+  const showDrawer = () => {
+    setOpenNotification(true);
+  };
+
+  const onClose = () => {
+    setOpenNotification(false);
+  };
   const [open, setOpen] = useState(false);
   const [shoppingCart, setShoppingCart] = useState(false);
-  const [sttLogin, setSttLogin] = useState(JSON.parse(localStorage.getItem('user')) || []);
-  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
+  const [sttLogin, setSttLogin] = useState(
+    JSON.parse(localStorage.getItem("user")) || []
+  );
+  const [cart, setCart] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
   const [token, setToken] = useStorage("user", {});
 
   const location = useLocation();
@@ -46,45 +59,90 @@ export default function ComHeader({ dataCart, updateCart }) {
   }, []);
   const updateShoppingCartStatus = (newStatus) => {
     setShoppingCart(newStatus);
-    updateCart && updateCart(newStatus)
-
+    updateCart && updateCart(newStatus);
   };
 
   const CreateProductMessenger = yup.object({
     search: yup.string(),
-  })
+  });
   const methods = useForm({
     resolver: yupResolver(CreateProductMessenger),
     defaultValues: {
-      search: ''
+      search: "",
     },
-  })
+  });
 
   useEffect(() => {
-    setSttLogin(JSON.parse(localStorage.getItem('user')) || [])
+    setSttLogin(JSON.parse(localStorage.getItem("user")) || []);
 
-    if (location.pathname === '/login' && token?.accessToken) {
-      navigate('/')
+    if (location.pathname === "/login" && token?.accessToken) {
+      navigate("/");
     }
-  }, []);;
+  }, []);
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem('cart')))
+    setCart(JSON.parse(localStorage.getItem("cart")));
   }, [dataCart, shoppingCart]);
 
-  const { handleSubmit, register } = methods
+  const { handleSubmit, register } = methods;
   const onSubmit = (data) => {
-    if (data.search.trim() !== '') {
-      navigate(`/search/${data.search.trim()}`)
+    if (data.search.trim() !== "") {
+      navigate(`/search/${data.search.trim()}`);
+    }
+  };
+
+  const [listNotification, setListNotification] = useState([]);
+
+  useEffect(() => {
+    socket?.on("notification", (data) => {
+      if (data?.author === token._doc._id) {
+        setListNotification((prevNotifications) => [
+          ...prevNotifications,
+          data,
+        ]);
+      }
+    });
+
+    // Đảm bảo hủy lắng nghe khi component unmount
+    return () => {
+      socket?.off("notification");
+    };
+  }, [socket, token._doc]);
+
+  const renderType = (type) => {
+    switch (type) {
+      case 1:
+        return "bài viết";
+      case 2:
+        return "follow";
+      case 3:
+        return "";
+
+      default:
+        break;
+    }
+  };
+
+  const renderTail= (type)=> {
+    switch (type) {
+      case 1:
+        return "của bạn";
+      case 2:
+        return "bạn";
+      case 3:
+        return "bài viết";
+
+      default:
+        break;
     }
   }
+
   return (
-    <>
+    <div className="relative bg-white z-50">
       <ShoppingCart
         show={shoppingCart}
         updateShoppingCart={updateShoppingCartStatus}
-
       ></ShoppingCart>
-      <Affix offsetTop={0} >
+      <Affix offsetTop={0}>
         <div className="bg-white ">
           {/* Mobile menu */}
           <Transition.Root show={open} as={Fragment}>
@@ -135,7 +193,12 @@ export default function ComHeader({ dataCart, updateCart }) {
                             to={page.href}
                             className=" block p-2 font-medium text-gray-900"
                           >
-                            <div className="flex gap-2" style={{ fontFamily: `-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'` }}>
+                            <div
+                              className="flex gap-2"
+                              style={{
+                                fontFamily: `-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'`,
+                              }}
+                            >
                               {page.icon}
                               {page.name}
                             </div>
@@ -144,31 +207,33 @@ export default function ComHeader({ dataCart, updateCart }) {
                       ))}
                     </div>
 
-                    {!sttLogin && <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                      <div className="flow-root">
-                        <ComLink
-                          to={routs["/login"].link}
-                          className="-m-2 block p-2 font-medium text-gray-900"
-                        >
-                          {routs["/login"].name}
-                        </ComLink>
+                    {!sttLogin && (
+                      <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                        <div className="flow-root">
+                          <ComLink
+                            to={routs["/login"].link}
+                            className="-m-2 block p-2 font-medium text-gray-900"
+                          >
+                            {routs["/login"].name}
+                          </ComLink>
+                        </div>
+                        <div className="flow-root">
+                          <ComLink
+                            to={routs["/reissue"].link}
+                            className="-m-2 block p-2 font-medium text-gray-900"
+                          >
+                            {routs["/reissue"].name}
+                          </ComLink>
+                        </div>
                       </div>
-                      <div className="flow-root">
-                        <ComLink
-                          to={routs["/reissue"].link}
-                          className="-m-2 block p-2 font-medium text-gray-900"
-                        >
-                          {routs["/reissue"].name}
-                        </ComLink>
-                      </div>
-                    </div>}
+                    )}
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
             </Dialog>
           </Transition.Root>
 
-          <header className="relative bg-white z-10">
+          <header className="relative bg-white z-50">
             <nav
               aria-label="Top"
               className="mx-auto max-w-full px-4 sm:px-6 lg:px-8"
@@ -200,8 +265,6 @@ export default function ComHeader({ dataCart, updateCart }) {
                   {/* Flyout menus */}
                   <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
                     <div className="flex h-full space-x-8">
-
-
                       {navigation.pages.map((page) => (
                         <Link
                           key={page.name}
@@ -218,17 +281,17 @@ export default function ComHeader({ dataCart, updateCart }) {
                   </Popover.Group>
 
                   <div className="ml-auto flex items-center">
-
                     {/* Search */}
                     <div className="flex lg:ml-6">
-                      <FormProvider {...methods} >
-                        <form onSubmit={handleSubmit(onSubmit)} className="lg:w-96">
+                      <FormProvider {...methods}>
+                        <form
+                          onSubmit={handleSubmit(onSubmit)}
+                          className="lg:w-96"
+                        >
                           <ComInput
                             placeholder={textApp.Header.search}
                             search
-
                             type="text"
-
                             {...register("search")}
                           />
                         </form>
@@ -239,7 +302,12 @@ export default function ComHeader({ dataCart, updateCart }) {
                         type="button"
                         className="group -m-2 flex items-center p-2"
                       >
-                        <BellIcon className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                        <BellIcon
+                          onClick={showDrawer}
+                          className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+
                         <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                           {dataCart?.length || cart.length}
                         </span>
@@ -264,144 +332,150 @@ export default function ComHeader({ dataCart, updateCart }) {
                       </button>
                     </div>
                     {/* login */}
-                    {!sttLogin?._doc && <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 lg:ml-6">
-                      <ComLink
-                        to={routs["/login"].link}
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        {routs["/login"].name}
-                      </ComLink>
-                      <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                      <ComLink
-                        to={routs["/reissue"].link}
-                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        {routs["/reissue"].name}
-                      </ComLink>
-                    </div>}
-
-                    {sttLogin?._doc && <div>
-                      <Menu as="div" className="relative ml-3 z-50">
-                        <div>
-                          <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="absolute -inset-1.5" />
-                            <span className="sr-only">Open user menu</span>
-                            <img on className="h-8 w-8 rounded-full" src={token?._doc?.avatar} alt="" />
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
+                    {!sttLogin?._doc && (
+                      <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 lg:ml-6">
+                        <ComLink
+                          to={routs["/login"].link}
+                          className="text-sm font-medium text-gray-700 hover:text-gray-800"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {routs["/login"].name}
+                        </ComLink>
+                        <span
+                          className="h-6 w-px bg-gray-200"
+                          aria-hidden="true"
+                        />
+                        <ComLink
+                          to={routs["/reissue"].link}
+                          className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                        >
+                          {routs["/reissue"].name}
+                        </ComLink>
+                      </div>
+                    )}
 
-                            {sttLogin?._doc?.role === 'staff' && <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={routs['/createProduct'].link}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
+                    {sttLogin?._doc && (
+                      <div>
+                        <Menu as="div" className="relative ml-3 z-50">
+                          <div>
+                            <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                              <span className="absolute -inset-1.5" />
+                              <span className="sr-only">Open user menu</span>
+                              <img
+                                on
+                                className="h-8 w-8 rounded-full"
+                                src={token?._doc?.avatar}
+                                alt=""
+                              />
+                            </Menu.Button>
+                          </div>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                          >
+                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              {sttLogin?._doc?.role === "staff" && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <ComLink
+                                      to={routs["/createProduct"].link}
+                                      className={classNames(
+                                        active ? "bg-gray-100" : "",
+                                        "block px-4 py-2 text-sm text-gray-700"
+                                      )}
+                                    >
+                                      {routs["/createProduct"].name2}
+                                    </ComLink>
                                   )}
-                                >
-                                  {routs['/createProduct'].name2}
-                                </ComLink>
+                                </Menu.Item>
                               )}
-                            </Menu.Item>}
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={'/profile'}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  Trang cá nhân
-                                </ComLink>
-
-                              )}
-                            </Menu.Item>
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={routs['/order'].link}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  {routs['/order'].name}
-                                </ComLink>
-
-                              )}
-                            </Menu.Item>
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={'/my/order'}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                 Đơn bán hàng
-                                </ComLink>
-
-                              )}
-                            </Menu.Item>
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to="/my/product/table"
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  Sản phẩm của tôi
-                                </ComLink>
-
-                              )}
-                            </Menu.Item>
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={'/orderRequest'}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  Đơn hàng theo yêu cầu
-                                </ComLink>
-
-                              )}
-                            </Menu.Item>
-                            <Menu.Item >
-                              {({ active }) => (
-                                <ComLink
-                                  to={routs['/logout'].link}
-                                  className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                  )}
-                                >
-                                  {routs['/logout'].name}
-                                </ComLink>
-                              )}
-                            </Menu.Item>
-
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    </div>
-                    }
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to={"/profile"}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Trang cá nhân
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to={routs["/order"].link}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    {routs["/order"].name}
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to={"/my/order"}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Đơn bán hàng
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to="/my/product/table"
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Sản phẩm của tôi
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to={"/orderRequest"}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    Đơn hàng theo yêu cầu
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <ComLink
+                                    to={routs["/logout"].link}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    {routs["/logout"].name}
+                                  </ComLink>
+                                )}
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -409,7 +483,16 @@ export default function ComHeader({ dataCart, updateCart }) {
           </header>
         </div>
       </Affix>
+      <Drawer title="Notification" onClose={onClose} open={openNotification}>
+        {listNotification?.map((item, key) => (
+          <div key={key}>
+            {item?.pusher?.name} {item?.textType} {renderType(item?.type)}{" "}
+            {renderTail(item?.type)}
+          </div>
+        ))}
+      </Drawer>
+      {console.log(listNotification)}
       <FloatButton.BackTop />
-    </>
+    </div>
   );
 }

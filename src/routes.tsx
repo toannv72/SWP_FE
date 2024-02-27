@@ -21,6 +21,12 @@ import TableOrder from "./Page/Authenticator/ComOrderTable/TableOrder";
 import Search from "./Page/Authenticator/Search/Search";
 import SearchGenre from "./Page/Authenticator/Search/Search2";
 import SearchUser from "./Page/Authenticator/Search/Search3";
+import OrderRequest from "./Page/Authenticator/Order_Request/OrderRequest";
+import Required from "./Page/Authenticator/Required/Required";
+import RequiredSuccess from "./Page/Authenticator/Required/RequiredSuccess";
+import TableProductAdmin from "./Page/Authenticator/Admin2/TableProduct";
+import TableFeedBack from "./Page/Authenticator/Admin2/TableFeedBack";
+import TableReportUser from "./Page/Authenticator/Admin2/TableReportUser";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -88,8 +94,32 @@ export const routers = createBrowserRouter([
     element: <TableUser />,
   },
   {
+    path: "/admin/tableProduct",
+    element: <TableProductAdmin />,
+  },
+  {
+    path: "/admin/tableFeedback",
+    element: <TableFeedBack />,
+  },
+  {
+    path: "/admin/tablereportuser",
+    element: <TableReportUser />,
+  },
+  {
     path: "/order",
     element: <Order />,
+  }, 
+  {
+    path: "/orderRequest",
+    element: <OrderRequest />,
+  }, 
+  {
+    path: "/require",
+    element: <Required />,
+  }, 
+  {
+    path: "/required/bill/:id",
+    element: <RequiredSuccess />,
   }, 
   {
     path: "/follow",

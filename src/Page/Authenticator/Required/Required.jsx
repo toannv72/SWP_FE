@@ -17,32 +17,35 @@ import ComSelect from "../../Components/ComInput/ComSelect";
 import bird from "../../../../src/img/bird-svgrepo-com.svg";
 import ComFooter from "../../Components/ComFooter/ComFooter";
 import ComHeader from "../../Components/ComHeader/ComHeader";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSocket } from "../../../App";
 const options = [
   {
-    label: "Gỗ",
-    value: "Gỗ",
+    label: "Tranh",
+    value: "Tranh",
   },
   {
-    label: "Nhựa",
-    value: "Nhựa",
+    label: "Trang trí",
+    value: "Trang trí",
   },
   {
-    label: "Kim Loại",
-    value: "Kim loại",
+    label: "Nghệ thuật",
+    value: "Nghệ thuật",
   },
 ];
 
 export default function Required() {
+  const socket= useSocket()
   const [disabled, setDisabled] = useState(false);
   const [image, setImages] = useState("");
   const [api, contextHolder] = notification.useNotification();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || []);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams]= useSearchParams()
   const CreateProductMessenger = yup.object({
-
     name: yup.string().required(textApp.Payment.information.message.name),
     bird: yup.string().required(textApp.Payment.information.message.name),
-
+    
     email: yup
       .string()
       .email("Vui lòng nhập đúng định dạng gmail")
@@ -53,14 +56,12 @@ export default function Required() {
       .min(10, "Số điện thoại phải có ít nhất 10 chữ số")
       .max(10, "Số điện thoại không được quá 10 chữ số")
       .required("Vui lòng nhập số điện thoại"),
-    quantity: yup.number().typeError("Số lượng không được để trống").min(1, textApp.CreateProduct.message.quantityMin).required('Số lượng không được để trống'),
-    material: yup.array().required(textApp.CreateProduct.message.material),
-    spokes: yup
+    quantity: yup
       .number()
-      .min(10, "Số nan phải lớn hơn 10")
-      .max(30, "Số nan phải nhỏ hơn 30")
-      .required("Vui lòng nhập số nan")
-      .typeError("Số nan phải là số"),
+      .typeError("Số lượng không được để trống")
+      .min(1, textApp.CreateProduct.message.quantityMin)
+      .required("Số lượng không được để trống"),
+    material: yup.array().required(textApp.CreateProduct.message.material),
     shippingAddress: yup.string().required("Vui lòng nhập địa chỉ giao hàng"),
     description: yup
       .string()
@@ -68,7 +69,6 @@ export default function Required() {
   });
   const createProductRequestDefault = {
     quantity: 1,
-
   };
   const methods = useForm({
     resolver: yupResolver(CreateProductMessenger),
@@ -79,12 +79,13 @@ export default function Required() {
       bird: "",
       material: "",
       image: "",
-      spokes: "",
+      spokes: 0,
       quantity: 1,
       shippingAddress: "",
       description: "",
+      freelancer: searchParams.get("id")
     },
-    values: createProductRequestDefault
+    values: createProductRequestDefault,
   });
   const { handleSubmit, register, setFocus, watch, setValue } = methods;
 
@@ -120,13 +121,14 @@ export default function Required() {
       .then((dataImg) => {
         console.log("ảnh nè : ", dataImg);
         const updatedData = {
-          ...data, // Giữ lại các trường dữ liệu hiện có trong data
+          ...data, freelancer: searchParams.get("id"), // Giữ lại các trường dữ liệu hiện có trong data
           image: "" + dataImg,
         };
-        console.log("updatedData: ",updatedData);
+        console.log("updatedData: ", updatedData);
         postData("/customOrder/user", updatedData, {})
           .then((dataS) => {
-            console.log("dataS: ",dataS);
+            console.log("dataS: ", dataS);
+            sendNotification("đã yêu cầu order", 3)
             setDisabled(false);
             api["success"]({
               message: textApp.CreateProduct.Notification.m9.message,
@@ -147,6 +149,11 @@ export default function Required() {
         console.log(error);
       });
   };
+
+  const sendNotification = (textType, type) => {
+    socket.emit("push_notification", { artwork: {}, pusher: user._doc, author: searchParams.get("id"), textType, type })
+}
+
   const onChange = (data) => {
     const selectedImages = data;
     // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
@@ -206,8 +213,8 @@ export default function Required() {
                 <div className="mt-2.5">
                   <ComInput
                     type="text"
-                    label={"Tên chim"}
-                    placeholder={"Nhập tên chim"}
+                    label={"Tên sản phẩm"}
+                    placeholder={"Nhập tên sản phẩm"}
                     {...register("bird")}
                     required
                   />
@@ -257,6 +264,17 @@ export default function Required() {
                 />
               </div>
               <div className="">
+                <div class="mb-4 flex justify-between">
+                  <label
+                    for="7886e4ee-a1d8-4625-a73f-988b8f53fae5"
+                    class="text-paragraph font-bold"
+                  >
+                    Thể loại
+                    <span class="text-paragraph font-bold text-error-7 text-red-500">
+                      *
+                    </span>
+                  </label>
+                </div>
                 <ComSelect
                   size={"large"}
                   style={{
@@ -269,17 +287,6 @@ export default function Required() {
                   options={options}
                   {...register("material")}
                 />
-              </div>
-              <div className="sm:col-span-2">
-                <div className="mt-2.5">
-                  <ComNumber
-                    type="text"
-                    label={"Số nan"}
-                    placeholder={"Nhập số nan"}
-                    {...register("spokes")}
-                    required
-                  />
-                </div>
               </div>
               {/* <div className="sm:col-span-2">
                 <ComInput
@@ -311,7 +318,6 @@ export default function Required() {
                   <span className="text-paragraph font-bold text-error-7 text-red-500">
                     *
                   </span>
-
                 </label>
                 <ComUpImg numberImg={1} onChange={onChange} multiple={false} />
               </div>

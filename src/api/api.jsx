@@ -46,3 +46,59 @@ export const deleteData = async (endpoint, id, headers = {}) => {
     throw error;
   }
 };
+
+export const unblockData = async (endpoint, id, headers = {}) => {
+  try {
+    const response = await api.post(`${endpoint}/unblock/${id}`, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const acceptProduct= async (endpoint, id, headers= {}) => {
+  try {
+    const response = await api.post(`${endpoint}/accept/${id}`, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+    
+  }
+}
+
+export const rejectProduct= async (endpoint, id, headers= {}) => {
+  try {
+    const response = await api.post(`${endpoint}/reject/${id}`, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+    
+  }
+}
+
+export const postFeedback= async (endpoint, data, headers = {})=> {
+  try {
+    const response = await api.post(`${endpoint}`, data, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const hideArtwork= async (endpoint, id, data, headers = {})=> {
+  try {
+    const response = await api.post(`${endpoint}/${id}`, data , { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const unhideArtwork= async (endpoint, id, data, headers = {})=> {
+  try {
+    const response = await api.post(`${endpoint}/${id}`, data, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

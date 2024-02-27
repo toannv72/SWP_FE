@@ -57,13 +57,13 @@ const RequiredSuccess = () => {
                   <img src={orderDetails.image} alt="Product" className="w-24 h-24 object-cover rounded-lg" />
          <div className="ml-4"> 
          <p className="text-lg font-semibold">
-            Tên chim: {orderDetails.bird}
+            Tên sản phẩm: {orderDetails.bird}
           </p>
           <p className="text-gray-600 mb-2">
             Số lượng: {orderDetails.quantity}
             </p>
             <p className="text-gray-600 mb-2">
-            Chất liệu: {orderDetails.material.join(", ")}
+            Thể loại: {orderDetails.material.join(", ")}
             </p>   
           </div>
           </div>

@@ -19,9 +19,13 @@ import {
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { CalendarDays } from 'lucide-react'
+import { useSocket } from '../../../App'
+import ReportModal from './ReportModal'
 
 export default function Artwork() {
+    const socket = useSocket()
     const [artwork, setArtwork] = useState([])
+    const [openModal, setOpenModal]= useState(false)
     const [image, setImage] = useState([])
     const [disabled, setDisabled] = useState(false);
     const [dataL, setDataL] = useState(false);
@@ -45,6 +49,7 @@ export default function Artwork() {
             textAreaRef.current.textArea.value = ''; // Xóa giá trị trong TextArea
         }
     };
+    // console.log()
     useEffect(() => {
         getData('/user', {})
             .then((data) => {
@@ -88,7 +93,7 @@ export default function Artwork() {
             .catch(err => {
                 console.log(err);
             });
-
+        sendNotification("đã thích", 1)
     };
     const handleUnLike = (id_artwork, id_user) => {
         if (!token?._doc?._id) {
@@ -129,11 +134,16 @@ export default function Artwork() {
                     console.log(error);
 
                 });
+            sendNotification("đã comment", 1)
         }
         clearTextArea()
         setDataL(!dataL)
         setValue('content', '');
         return
+    }
+
+    const sendNotification = (textType, type) => {
+        socket.emit("push_notification", { artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type })
     }
 
     const onChange = (e) => {
@@ -168,6 +178,7 @@ export default function Artwork() {
 
     ]
     const handleMenuClick = (e) => {
+        setOpenModal(true)
         console.log('click', e);
     };
     const menuProps = {
@@ -178,7 +189,7 @@ export default function Artwork() {
         <>
             {contextHolder}
             <ComHeader />
-
+            <ReportModal isModalOpen={openModal} setIsModalOpen={setOpenModal} artwork={artwork} user={user} />
             <div className='flex justify-center'>
                 <div className=' lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2'>
                     <div className=''>
@@ -186,7 +197,7 @@ export default function Artwork() {
                     </div>
                     <div className='p-2 grid content-between'>
                         <div>
-                         
+
 
                             <div className='flex justify-between'>
                                 <div className="px-2 py-1 flex items-center gap-2 w-auto">
@@ -197,10 +208,10 @@ export default function Artwork() {
                                     Theo dõi
                                 </button> */}
                                 <Dropdown trigger={['click']} menu={menuProps} >
-                                <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
-                                    <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
-                                </button>
-                            </Dropdown>
+                                    <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
+                                        <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
+                                    </button>
+                                </Dropdown>
                             </div>
 
                             <p>
