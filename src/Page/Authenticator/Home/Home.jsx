@@ -85,7 +85,7 @@ export default function Home() {
     return (
         <>
             <ComHeader />
-            {token?._doc?._id ? <ComPost /> : <div></div>}
+            {token?._doc?.hidden!== true && <ComPost />}
             <InfiniteScroll
                 dataLength={products.length}
                 next={fetchMoreProducts}

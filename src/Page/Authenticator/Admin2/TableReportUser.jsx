@@ -327,7 +327,11 @@ export default function TableReportUser() {
             {record?.hidden=== false && 
               <Typography.Link
                 onClick={async () => {
-                  const result = await hideArtwork("feedback/hide",record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  const result = await hideArtwork(
+                    "feedback/hide",
+                    record._id,
+                    { artwork: record.artwork?._id || record.accuse?._id }
+                  );
                   if (result?.hide === true) {
                     swal("Thông báo", "Ẩn bài post thành công", "success");
                     setDataRun(!dataRun);
@@ -346,7 +350,11 @@ export default function TableReportUser() {
               <Typography.Link
                 style={{ whiteSpace: "nowrap" }}
                 onClick={async () => {
-                  const result = await unhideArtwork("feedback/unhide", record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  const result = await unhideArtwork(
+                    "feedback/unhide",
+                    record._id,
+                    { artwork: record.artwork?._id || record.accuse?._id }
+                  );
                   if (result?.unhide === true) {
                     swal("Thông báo", "Huỷ ẩn post thành công", "success");
                     setDataRun(!dataRun);
