@@ -47,12 +47,12 @@ export default function Pprocessing({ activeTab }) {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
-      {order.length === 0 ? (
+      {order?.length === 0 ? (
         <div class="flex items-center justify-center">
           <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95" alt="" />
         </div>
-      ) : order.error ? (
-        <p>Error: {order.error.message}</p>
+      ) : order?.error ? (
+        <p>Error: {order?.error.message}</p>
       ) : (
   
         <table className="min-w-full divide-y divide-gray-200">
@@ -70,7 +70,7 @@ export default function Pprocessing({ activeTab }) {
           </tr>
         </thead>
         <tbody>
-          {order.map((orderData) => (
+          {order?.map((orderData) => (
             <tr key={orderData.index}>
               <td className="px-6 py-4 whitespace-nowrap">{orderData._id}</td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>

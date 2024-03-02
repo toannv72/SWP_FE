@@ -19,6 +19,7 @@ import ComFooter from "../../Components/ComFooter/ComFooter";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSocket } from "../../../App";
+import axios from "axios";
 const options = [
   {
     label: "Tranh",
@@ -150,8 +151,15 @@ export default function Required() {
       });
   };
 
-  const sendNotification = (textType, type) => {
+  const sendNotification = async (textType, type) => {
     socket.emit("push_notification", { artwork: {}, pusher: user._doc, author: searchParams.get("id"), textType, type })
+    const res= await axios({
+      url: "http://localhost:5000/api/notification",
+      method: "post",
+      data: {
+          artwork: {}, pusher: user._doc, author: searchParams.get("id"), textType, type, link: window.location.href
+      }
+  })
 }
 
   const onChange = (data) => {

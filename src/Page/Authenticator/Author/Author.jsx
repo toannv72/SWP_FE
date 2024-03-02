@@ -16,6 +16,7 @@ import {
 import { useStorage } from '../../../hooks/useLocalStorage'
 import { useSocket } from '../../../App'
 import ReportModal from './ReportModal'
+import axios from 'axios'
 export default function Author() {
     const socket= useSocket()
     const [Author, setAuthor] = useState([])
@@ -61,8 +62,15 @@ export default function Author() {
         navigate("/require?id="+ Author?._id)
     }
 
-    const sendNotification = (textType, type) => {
-        socket.emit("push_notification", { pusher: token._doc, author: Author?._id, textType, type })
+    const sendNotification = async (textType, type) => {
+        socket.emit("push_notification", { pusher: token._doc, author: Author?._id, textType, type, link: window.location.href })
+        const res= await axios({
+            url: "http://localhost:5000/api/notification",
+            method: "post",
+            data: {
+                pusher: token._doc, author: Author?._id, textType, type, link: window.location.href
+            }
+        })
     }
     const fetchData = async (pageNumber) => {
         try {

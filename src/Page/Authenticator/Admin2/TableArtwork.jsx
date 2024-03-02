@@ -18,7 +18,15 @@ import {
 } from "antd";
 import { textApp } from "../../../TextContent/textApp";
 import { firebaseImgs } from "../../../upImgFirebase/firebaseImgs";
-import { acceptProduct, deleteData, getData, hideArtwork, putData, rejectProduct, unhideArtwork } from "../../../api/api";
+import {
+  acceptProduct,
+  deleteData,
+  getData,
+  hideArtwork,
+  putData,
+  rejectProduct,
+  unhideArtwork,
+} from "../../../api/api";
 import ComButton from "../../Components/ComButton/ComButton";
 import ComNumber from "../../Components/ComInput/ComNumber";
 import ComSelect from "../../Components/ComInput/ComSelect";
@@ -31,7 +39,7 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
 
-export default function TableReportUser() {
+export default function TableArtwork() {
   const [disabled, setDisabled] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
   const [image, setImages] = useState([]);
@@ -90,11 +98,9 @@ export default function TableReportUser() {
     setIsModalOpenDelete(true);
   };
 
-  
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
-
 
   function formatCurrency(number) {
     // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.
@@ -105,10 +111,10 @@ export default function TableReportUser() {
       });
     }
   }
-  
+
   const deleteById = () => {
     setDisabled(true);
-    deleteData("feedback", productRequestDefault.id)
+    deleteData("artwork", productRequestDefault.id)
       .then((data) => {
         setDisabled(false);
         handleCancelDelete();
@@ -131,9 +137,9 @@ export default function TableReportUser() {
   };
   useEffect(() => {
     setTimeout(() => {
-      getData(`/feedback`, {})
+      getData(`/artwork`, {})
         .then((data) => {
-            setProducts(data?.data?.docs?.filter(item=> item?.type=== 2));
+          setProducts(data?.data?.docs);
         })
         .catch((error) => {
           console.error("Error fetching items:", error);
@@ -141,13 +147,6 @@ export default function TableReportUser() {
     }, 100);
   }, [dataRun]);
 
-  const onChange = (data) => {
-    const selectedImages = data;
-    // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
-    const newImages = selectedImages.map((file) => file.originFileObj);
-    // Cập nhật trạng thái 'image' bằng danh sách tệp mới
-    setImages(newImages);
-  };
   const getColumnSearchProps = (dataIndex, title) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -243,39 +242,29 @@ export default function TableReportUser() {
   });
   const columns = [
     {
-      title: "Link nguời dùng",
-      dataIndex: "accuse",
+      title: "Link artwork",
+      dataIndex: "artwork",
       width: 200,
-      key: "accuse",
+      key: "artwork",
       fixed: "left",
 
       render: (_, record) => (
         <div>
+          {console.log(record)}
           <h1>
-            <Link to={"/author/" + record.accuse?._id}>Click tại đây</Link>
+            <Link to={"/artwork/" + record._id}>Click tại đây</Link>
           </h1>
         </div>
       ),
     },
     {
-      title: "Người báo cáo",
+      title: "Tiêu đề artwork",
       width: 150,
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "content",
+      key: "content",
       render: (_, record) => (
         <div>
-          <h1>{record?.user?.username}</h1>
-        </div>
-      ),
-    },
-    {
-      title: "Lý do",
-      width: 100,
-      dataIndex: "text",
-      key: "text",
-      render: (_, record) => (
-        <div>
-          <h1>{record?.text}</h1>
+          <h1>{record?.content}</h1>
         </div>
       ),
     },
@@ -292,28 +281,29 @@ export default function TableReportUser() {
       ),
     },
     {
-        title: "Trạng thái",
-        dataIndex: "hidden",
-        key: "hidden",
-        width: 300,
-        // ...getColumnSearchProps("accept", "trạng thái"),
-        // render: (_, record) => (
-  
-        //     <div className="text-sm text-gray-700 line-clamp-4">
-        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-        //     </div>
-  
-        // ),
-        ellipsis: {
-          showTitle: false,
-        },
-        render: (record) => (
-          <>
-            <div>{record=== true && "Đã ẩn"}</div>
-            <div>{record=== false && "Chưa ẩn"}</div>
-          </>
-        ),
+      title: "Trạng thái",
+      dataIndex: "hidden",
+      key: "hidden",
+      width: 300,
+      // ...getColumnSearchProps("accept", "trạng thái"),
+      // render: (_, record) => (
+
+      //     <div className="text-sm text-gray-700 line-clamp-4">
+      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+      //     </div>
+
+      // ),
+      ellipsis: {
+        showTitle: false,
       },
+      render: (record) => (
+        <>
+          {console.log(record)}
+          <div>{record === true && "Đã ẩn"}</div>
+          <div>{record === false && "Chưa ẩn"}</div>
+        </>
+      ),
+    },
     {
       title: "Action",
       key: "operation",
@@ -323,10 +313,12 @@ export default function TableReportUser() {
       render: (_, record) => (
         <div className="flex items-center flex-col">
           <div>
-            {record?.hidden=== false && 
+            {record?.hidden === false && (
               <Typography.Link
                 onClick={async () => {
-                  const result = await hideArtwork("feedback/hide",record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  const result = await hideArtwork("artwork/hide", record._id, {
+                    artwork: record.artwork?._id,
+                  });
                   if (result?.hide === true) {
                     swal("Thông báo", "Ẩn bài post thành công", "success");
                     setDataRun(!dataRun);
@@ -337,15 +329,18 @@ export default function TableReportUser() {
               >
                 Ẩn
               </Typography.Link>
-            }
+            )}
           </div>
           <div>
-            {
-              record?.hidden=== true && 
+            {record?.hidden === true && (
               <Typography.Link
                 style={{ whiteSpace: "nowrap" }}
                 onClick={async () => {
-                  const result = await unhideArtwork("feedback/unhide", record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  const result = await unhideArtwork(
+                    "artwork/unhide",
+                    record._id,
+                    { artwork: record.artwork?._id }
+                  );
                   if (result?.unhide === true) {
                     swal("Thông báo", "Huỷ ẩn post thành công", "success");
                     setDataRun(!dataRun);
@@ -356,7 +351,7 @@ export default function TableReportUser() {
               >
                 Huỷ ẩn
               </Typography.Link>
-            }
+            )}
           </div>
           <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>

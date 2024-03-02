@@ -27,6 +27,7 @@ import RequiredSuccess from "./Page/Authenticator/Required/RequiredSuccess";
 import TableProductAdmin from "./Page/Authenticator/Admin2/TableProduct";
 import TableFeedBack from "./Page/Authenticator/Admin2/TableFeedBack";
 import TableReportUser from "./Page/Authenticator/Admin2/TableReportUser";
+import TableArtwork from "./Page/Authenticator/Admin2/TableArtwork";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -104,6 +105,10 @@ export const routers = createBrowserRouter([
   {
     path: "/admin/tablereportuser",
     element: <TableReportUser />,
+  },
+  {
+    path: "/admin/tableartwork",
+    element: <TableArtwork />,
   },
   {
     path: "/order",

@@ -47,13 +47,13 @@ export default function Done({activeTab}) {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
-      {order.length === 0 ? (
+      {order?.length === 0 ? (
         <p>Loading...</p>
-      ) : order.error ? (
-        <p>Error: {order.error.message}</p>
+      ) : order?.error ? (
+        <p>Error: {order?.error.message}</p>
       ) : (
         <ul role="list" className="divide-y divide-gray-200">
-          {order.map((orderData) => (
+          {order?.map((orderData) => (
             <tr key={orderData.index}>
             <td className="px-6 py-4 whitespace-nowrap">{orderData._id}</td>
             <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>

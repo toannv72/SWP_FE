@@ -507,6 +507,30 @@ export default function TableProduct() {
 
         },
         {
+            title: 'Trạng thái',
+            dataIndex: 'accept',
+            key: 'accept',
+            width: 300,
+            ...getColumnSearchProps('accept', "Trạng thái"),
+            // render: (_, record) => (
+
+            //     <div className="text-sm text-gray-700 line-clamp-4">
+            //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+            //     </div>
+
+            // ),
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (record) => (
+               <>
+                {record=== true && "Đã duyệt"}
+                {record=== false && "Chưa duyệt"}
+               </>
+            ),
+
+        },
+        {
             title: 'Action',
             key: 'operation',
             fixed: 'right',

@@ -6,6 +6,7 @@ import { useSocket } from "../../../App";
 import { useParams } from "react-router-dom";
 import { postFeedback } from "../../../api/api";
 import swal from "sweetalert";
+import axios from "axios";
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
 const plainOptions = ["lý do 1", "lý do 2", "lý do 3", "lý do 4"];
@@ -48,14 +49,22 @@ const ReportModal = (props) => {
       swal("Thông báo", "Gửi report thành công", "success")
     }
   };
-  const sendNotification = (textType, type) => {
+  const sendNotification = async (textType, type) => {
     socket.emit("push_notification", {
       artwork: artwork,
       pusher: user._doc,
       author: artwork?.user,
       textType,
       type,
+      link :window.location.href
     });
+    const res= await axios({
+      url: "http://localhost:5000/api/notification",
+      method: "post",
+      data: {
+          artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type, link: window.location.href
+      }
+  })
     setIsModalOpen(false)
   };
 

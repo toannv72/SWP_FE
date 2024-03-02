@@ -19,6 +19,7 @@ import { textApp } from "../../../TextContent/textApp";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { useSocket } from "../../../App";
+import axios from "axios";
 
 const navigation = {
   pages: [
@@ -90,6 +91,12 @@ export default function ComHeader({ dataCart, updateCart }) {
     }
   };
 
+  const handleClick = (link) => {
+    const url = new URL(link);
+    const pathname = url.pathname;
+    navigate(pathname);
+  };
+
   const [listNotification, setListNotification] = useState([]);
 
   useEffect(() => {
@@ -108,6 +115,20 @@ export default function ComHeader({ dataCart, updateCart }) {
     };
   }, [socket, token._doc]);
 
+  useEffect(() => {
+    (async () => {
+      const res = await axios({
+        url: "http://localhost:5000/api/notification",
+        method: "get",
+      });
+      const result = await res.data;
+
+      setListNotification(
+        result?.filter((item) => item?.author === token?._doc?._id)
+      );
+    })();
+  }, []);
+
   const renderType = (type) => {
     switch (type) {
       case 1:
@@ -122,7 +143,7 @@ export default function ComHeader({ dataCart, updateCart }) {
     }
   };
 
-  const renderTail= (type)=> {
+  const renderTail = (type) => {
     switch (type) {
       case 1:
         return "của bạn";
@@ -134,10 +155,10 @@ export default function ComHeader({ dataCart, updateCart }) {
       default:
         break;
     }
-  }
+  };
 
   return (
-    <div className="relative bg-white z-50">
+    <>
       <ShoppingCart
         show={shoppingCart}
         updateShoppingCart={updateShoppingCartStatus}
@@ -233,7 +254,7 @@ export default function ComHeader({ dataCart, updateCart }) {
             </Dialog>
           </Transition.Root>
 
-          <header className="relative bg-white z-50">
+          <header className="relative bg-white z-10">
             <nav
               aria-label="Top"
               className="mx-auto max-w-full px-4 sm:px-6 lg:px-8"
@@ -485,7 +506,7 @@ export default function ComHeader({ dataCart, updateCart }) {
       </Affix>
       <Drawer title="Notification" onClose={onClose} open={openNotification}>
         {listNotification?.map((item, key) => (
-          <div key={key}>
+          <div style={{cursor: "pointer"}} onClick={() => handleClick(item?.link)} key={key}>
             {item?.pusher?.name} {item?.textType} {renderType(item?.type)}{" "}
             {renderTail(item?.type)}
           </div>
@@ -493,6 +514,6 @@ export default function ComHeader({ dataCart, updateCart }) {
       </Drawer>
       {console.log(listNotification)}
       <FloatButton.BackTop />
-    </div>
+    </>
   );
 }

@@ -47,15 +47,15 @@ export default function Done({activeTab}) {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
-      {order.length === 0 ? (
+      {order?.length === 0 ? (
         <div class="flex items-center justify-center">
           <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95" alt="" />
         </div>
-      ) : order.error ? (
-        <p>Error: {order.error.message}</p>
+      ) : order?.error ? (
+        <p>Error: {order?.error.message}</p>
       ) : (
         <ul role="list" className="divide-y divide-gray-200">
-          {order.map((orderData) => (
+          {order?.map((orderData) => (
             <li key={orderData.index} className="py-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                 <div className="col-span-2">

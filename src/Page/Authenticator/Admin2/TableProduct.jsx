@@ -29,7 +29,6 @@ import ComTextArea from "../../Components/ComInput/ComTextArea";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
-import ComSideNav from "../../Components/ComSideNav";
 
 export default function TableProductAdmin() {
   const [disabled, setDisabled] = useState(false);
@@ -281,7 +280,11 @@ export default function TableProductAdmin() {
       dataIndex: "price",
       key: "price",
       sorter: (a, b) => a.price - b.price,
-      render: (_, record) => <div>{formatCurrency(record.price)}</div>,
+      render: (_, record) => (
+        <div>
+          <h1>{formatCurrency(record.price)}</h1>
+        </div>
+      ),
     },
     {
       title: "Đã bán",
@@ -345,28 +348,29 @@ export default function TableProductAdmin() {
       ),
     },
     {
-      title: "Trạng thái",
-      dataIndex: "accept",
-      key: "accept",
-      width: 300,
-      // ...getColumnSearchProps("accept", "trạng thái"),
-      // render: (_, record) => (
-
-      //     <div className="text-sm text-gray-700 line-clamp-4">
-      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-      //     </div>
-
-      // ),
-      ellipsis: {
-        showTitle: false,
+        title: "Trạng thái",
+        dataIndex: "accept",
+        key: "accept",
+        width: 300,
+        // ...getColumnSearchProps("accept", "trạng thái"),
+        // render: (_, record) => (
+  
+        //     <div className="text-sm text-gray-700 line-clamp-4">
+        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+        //     </div>
+  
+        // ),
+        ellipsis: {
+          showTitle: false,
+        },
+        render: (record) => (
+          <>
+            <div>{record=== true && "Đã duyệt"}</div>
+            <div>{record=== false && "Chưa duyệt"}</div>
+            
+          </>
+        ),
       },
-      render: (record) => (
-        <>
-          <div>{record === true && "Đã duyệt"}</div>
-          <div>{record === false && "Chưa duyệt"}</div>
-        </>
-      ),
-    },
     {
       title: "Action",
       key: "operation",
@@ -401,11 +405,7 @@ export default function TableProductAdmin() {
               onClick={async () => {
                 const result = await rejectProduct("product", record._id);
                 if (result?.reject === true) {
-                  swal(
-                    "Thông báo",
-                    "Không duyệt sản phẩm thành công",
-                    "success"
-                  );
+                  swal("Thông báo", "Không duyệt sản phẩm thành công", "success");
                   setDataRun(!dataRun);
                 } else {
                   swal("Thông báo", "Có lỗi xảy ra", "error");
@@ -429,8 +429,7 @@ export default function TableProductAdmin() {
     <>
       {contextHolder}
       <ComHeader />
-      <ComSideNav />
-      <div className="flex px-5 justify-center ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen bg-gray-50 transition-all duration-200">
+      <div className="flex px-5 justify-center">
         <Table
           rowKey="_id"
           columns={columns}

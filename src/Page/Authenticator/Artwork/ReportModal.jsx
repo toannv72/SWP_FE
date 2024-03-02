@@ -6,18 +6,19 @@ import { useSocket } from "../../../App";
 import { useParams } from "react-router-dom";
 import { postFeedback } from "../../../api/api";
 import swal from "sweetalert";
+import axios from "axios";
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
 const plainOptions = ["lý do 1", "lý do 2", "lý do 3", "lý do 4"];
 const defaultCheckedList = [];
 const ReportModal = (props) => {
-  const {id }= useParams()
+  const { id } = useParams();
   const socket = useSocket();
   const { isModalOpen, setIsModalOpen, artwork, user } = props;
   const [checkedList, setCheckedList] = useState(defaultCheckedList);
-  const [note, setNote]= useState("")
+  const [note, setNote] = useState("");
   const checkAll = plainOptions.length === checkedList.length;
-  
+
   const indeterminate =
     checkedList.length > 0 && checkedList.length < plainOptions.length;
   const onChange = (list) => {
@@ -40,23 +41,43 @@ const ReportModal = (props) => {
 
   const handleSubmit = async () => {
     sendNotification("đã report", 1);
-    const result= await postFeedback("/feedback", {artwork: id, user: props?.artwork?.user, text: checkedList.concat(note).toString(), publisher: props?.user?._doc?._id, type: 1})
-    if(result?.duplicate=== true) {
-      swal("Thông báo", "Bạn chỉ được gửi report một lần cho một bài viết")
-    }
-    else {
-      swal("Thông báo", "Gửi report thành công", "success")
+    const result = await postFeedback("/feedback", {
+      artwork: id,
+      user: props?.artwork?.user,
+      text: checkedList.concat(note).toString(),
+      publisher: props?.user?._doc?._id,
+      type: 1,
+    });
+    if (result?.duplicate === true) {
+      swal("Thông báo", "Bạn chỉ được gửi report một lần cho một bài viết");
+    } else {
+      swal("Thông báo", "Gửi report thành công", "success");
     }
   };
-  const sendNotification = (textType, type) => {
+  const sendNotification = async (textType, type) => {
     socket.emit("push_notification", {
       artwork: artwork,
       pusher: user._doc,
       author: artwork?.user,
       textType,
       type,
+      link: window.location.href,
     });
-    setIsModalOpen(false)
+    const res = await axios({
+      url: "http://localhost:5000/api/notification",
+      method: "post",
+      data: {
+        artwork: artwork,
+        pusher: user._doc,
+        author: artwork?.user,
+        textType,
+        type,
+        link: window.location.href,
+      },
+    });
+    const result = await res.data;
+    console.log(result);
+    setIsModalOpen(false);
   };
 
   return (
@@ -78,7 +99,12 @@ const ReportModal = (props) => {
           onChange={onChange}
         />
         <Divider />
-        <TextArea value={note} onChange={(e)=> setNote(e.target.value)} placeholder="Lý do khác" rows={4} />
+        <TextArea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Lý do khác"
+          rows={4}
+        />
         <Divider />
         <Button
           key="submit"

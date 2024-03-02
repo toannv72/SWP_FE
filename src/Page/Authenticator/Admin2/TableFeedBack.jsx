@@ -30,7 +30,6 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
-import ComSideNav from "../../Components/ComSideNav";
 
 export default function TableFeedBack() {
   const [disabled, setDisabled] = useState(false);
@@ -252,7 +251,10 @@ export default function TableFeedBack() {
 
       render: (_, record) => (
         <div>
-          <Link to={"/artwork/" + record.artwork}>Click tại đây</Link>
+          {console.log(record)}
+          <h1>
+            <Link to={"/artwork/" + record.artwork._id}>Click tại đây</Link>
+          </h1>
         </div>
       ),
     },
@@ -261,14 +263,22 @@ export default function TableFeedBack() {
       width: 150,
       dataIndex: "user",
       key: "user",
-      render: (_, record) => <div>{record?.user?.username}</div>,
+      render: (_, record) => (
+        <div>
+          <h1>{record?.user?.username}</h1>
+        </div>
+      ),
     },
     {
       title: "Lý do",
       width: 100,
       dataIndex: "text",
       key: "text",
-      render: (_, record) => <div>{record?.text}</div>,
+      render: (_, record) => (
+        <div>
+          <h1>{record?.text}</h1>
+        </div>
+      ),
     },
     {
       title: "Ngày tạo",
@@ -283,28 +293,28 @@ export default function TableFeedBack() {
       ),
     },
     {
-      title: "Trạng thái",
-      dataIndex: "hidden",
-      key: "hidden",
-      width: 300,
-      // ...getColumnSearchProps("accept", "trạng thái"),
-      // render: (_, record) => (
-
-      //     <div className="text-sm text-gray-700 line-clamp-4">
-      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-      //     </div>
-
-      // ),
-      ellipsis: {
-        showTitle: false,
+        title: "Trạng thái",
+        dataIndex: "hidden",
+        key: "hidden",
+        width: 300,
+        // ...getColumnSearchProps("accept", "trạng thái"),
+        // render: (_, record) => (
+  
+        //     <div className="text-sm text-gray-700 line-clamp-4">
+        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+        //     </div>
+  
+        // ),
+        ellipsis: {
+          showTitle: false,
+        },
+        render: (record) => (
+          <>
+            <div>{record=== true && "Đã ẩn"}</div>
+            <div>{record=== false && "Chưa ẩn"}</div>
+          </>
+        ),
       },
-      render: (record) => (
-        <>
-          <div>{record === true && "Đã ẩn"}</div>
-          <div>{record === false && "Chưa ẩn"}</div>
-        </>
-      ),
-    },
     {
       title: "Action",
       key: "operation",
@@ -314,41 +324,39 @@ export default function TableFeedBack() {
       render: (_, record) => (
         <div className="flex items-center flex-col">
           <div>
-            <Typography.Link
-              onClick={async () => {
-                const result = await hideArtwork("feedback/hide", record._id, {
-                  artwork: record.artwork?._id,
-                });
-                if (result?.hide === true) {
-                  swal("Thông báo", "Ẩn bài post thành công", "success");
-                  setDataRun(!dataRun);
-                } else {
-                  swal("Thông báo", "Có lỗi xảy ra", "error");
-                }
-              }}
-            >
-              Ẩn
-            </Typography.Link>
+            {record?.hidden=== false && 
+              <Typography.Link
+                onClick={async () => {
+                  const result = await hideArtwork("feedback/hide",record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  if (result?.hide === true) {
+                    swal("Thông báo", "Ẩn bài post thành công", "success");
+                    setDataRun(!dataRun);
+                  } else {
+                    swal("Thông báo", "Có lỗi xảy ra", "error");
+                  }
+                }}
+              >
+                Ẩn
+              </Typography.Link>
+            }
           </div>
           <div>
-            <Typography.Link
-              style={{ whiteSpace: "nowrap" }}
-              onClick={async () => {
-                const result = await unhideArtwork(
-                  "feedback/unhide",
-                  record._id,
-                  { artwork: record.artwork?._id }
-                );
-                if (result?.unhide === true) {
-                  swal("Thông báo", "Huỷ ẩn post thành công", "success");
-                  setDataRun(!dataRun);
-                } else {
-                  swal("Thông báo", "Có lỗi xảy ra", "error");
-                }
-              }}
-            >
-              Huỷ ẩn
-            </Typography.Link>
+            {record?.hidden=== true &&
+              <Typography.Link
+                style={{ whiteSpace: "nowrap" }}
+                onClick={async () => {
+                  const result = await unhideArtwork("feedback/unhide", record._id, {artwork: (record.artwork?._id || record.user?._id)});
+                  if (result?.unhide === true) {
+                    swal("Thông báo", "Huỷ ẩn post thành công", "success");
+                    setDataRun(!dataRun);
+                  } else {
+                    swal("Thông báo", "Có lỗi xảy ra", "error");
+                  }
+                }}
+              >
+                Huỷ ẩn
+              </Typography.Link>
+            }
           </div>
           <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>
@@ -364,8 +372,7 @@ export default function TableFeedBack() {
     <>
       {contextHolder}
       <ComHeader />
-      <ComSideNav />
-      <div className="flex px-5 justify-center ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen bg-gray-50 transition-all duration-200">
+      <div className="flex px-5 justify-center">
         <Table
           rowKey="_id"
           columns={columns}

@@ -21,6 +21,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-h
 import { CalendarDays } from 'lucide-react'
 import { useSocket } from '../../../App'
 import ReportModal from './ReportModal'
+import axios from 'axios'
 
 export default function Artwork() {
     const socket = useSocket()
@@ -71,9 +72,14 @@ export default function Artwork() {
     useEffect(() => {
         getData(`/artwork/${id}`)
             .then((artwork) => {
-                setArtwork(artwork.data)
-                const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
-                setLike(userLikes)
+                if(artwork?.data?.hidden=== false ) {
+                    setArtwork(artwork.data)
+                    const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
+                    setLike(userLikes)
+                }
+                else {
+                    setArtwork()
+                }
             })
             .catch((error) => {
                 setError(true)
@@ -142,8 +148,17 @@ export default function Artwork() {
         return
     }
 
-    const sendNotification = (textType, type) => {
-        socket.emit("push_notification", { artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type })
+    const sendNotification = async (textType, type) => {
+        socket.emit("push_notification", { artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type, link: window.location.href })
+        const res= await axios({
+            url: "http://localhost:5000/api/notification",
+            method: "post",
+            data: {
+                artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type, link: window.location.href
+            }
+        })
+        const result= await res.data
+        console.log(result)
     }
 
     const onChange = (e) => {
@@ -185,6 +200,7 @@ export default function Artwork() {
         items,
         onClick: handleMenuClick,
     };
+    console.log(token)
     return (
         <>
             {contextHolder}
@@ -246,19 +262,22 @@ export default function Artwork() {
                                 </div>
                                 <div className='flex gap-4 '>
                                     <div className='flex gap-1'><HeartFilled style={{ fontSize: '20px', color: 'red' }} /> <div className='flex items-center'>{artwork?.likes?.length}</div></div>
-
-                                    <button
-                                        onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
-                                        className={`flex gap-2 p-2 rounded-full  items-center  justify-center  hover:bg-[#f1f0f0] ${like ? 'text-[#cc0700]' : ''}`}
-                                    >
-                                        {like ? <HeartFilled style={{ fontSize: '40px' }} /> : <HeartOutlined style={{ fontSize: '40px', }} />}
-                                    </button>
+                                    {
+                                        token?._doc?.hidden=== true ? "" : 
+                                        <button
+                                            onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
+                                            className={`flex gap-2 p-2 rounded-full  items-center  justify-center  hover:bg-[#f1f0f0] ${like ? 'text-[#cc0700]' : ''}`}
+                                        >
+                                            {like ? <HeartFilled style={{ fontSize: '40px' }} /> : <HeartOutlined style={{ fontSize: '40px', }} />}
+                                        </button>
+                                    }
                                 </div>
                             </div>
                             <FormProvider {...methods} >
                                 <form className="" onSubmit={handleSubmit(onSubmit)}>
                                     <div className='p-6 flex justify-between items-start'>
                                         <ComTextArea
+                                            readOnly={token?._doc?.hidden=== true ? true : false}
                                             placeholder="Thêm nhận xét"
                                             autoSize={{
                                                 minRows: 1,
@@ -275,9 +294,14 @@ export default function Artwork() {
                                             {...register("content")}
 
                                         />
-                                        {disabled || <button className='p-2' type='submit'>
-                                            <SendOutlined style={{ fontSize: '30px', }} />
-                                        </button>}
+                                        {
+                                            token?._doc?.hidden!== true &&
+                                            <>
+                                                {disabled || <button className='p-2' type='submit'>
+                                                    <SendOutlined style={{ fontSize: '30px', }} />
+                                                </button>}
+                                            </>
+                                        }
                                     </div>
                                 </form>
                             </FormProvider>
