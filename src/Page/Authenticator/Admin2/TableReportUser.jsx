@@ -30,6 +30,7 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
+import AdminHeader from "../../Components/ComHeader/AdminHeader";
 
 export default function TableReportUser() {
   const [disabled, setDisabled] = useState(false);
@@ -358,11 +359,11 @@ export default function TableReportUser() {
               </Typography.Link>
             }
           </div>
-          <div className="mt-2">
+          {/* <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>
               <div className="text-red-600">Xóa</div>
             </Typography.Link>
-          </div>
+          </div> */}
         </div>
       ),
     },
@@ -371,7 +372,7 @@ export default function TableReportUser() {
   return (
     <>
       {contextHolder}
-      <ComHeader />
+      <AdminHeader />
       <div className="flex px-5 justify-center">
         <Table
           rowKey="_id"

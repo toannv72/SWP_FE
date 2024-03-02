@@ -38,6 +38,7 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
+import AdminHeader from "../../Components/ComHeader/AdminHeader";
 
 export default function TableArtwork() {
   const [disabled, setDisabled] = useState(false);
@@ -244,16 +245,35 @@ export default function TableArtwork() {
     {
       title: "Link artwork",
       dataIndex: "artwork",
-      width: 200,
+      width: 100,
       key: "artwork",
       fixed: "left",
 
       render: (_, record) => (
         <div>
-          {console.log(record)}
+          {console.log("record", record)}
           <h1>
             <Link to={"/artwork/" + record._id}>Click tại đây</Link>
           </h1>
+        </div>
+      ),
+    },
+    {
+      title: "Ảnh sản phẩm",
+      dataIndex: "image",
+      key: "img",
+      width: 100,
+      fixed: "left",
+      render: (_, record) => (
+        <div className="flex items-center justify-center">
+          {/* <img src={record.image} className='h-24 object-cover object-center   ' alt={record.image} /> */}
+          <Image.PreviewGroup items={record.image}>
+            <Image
+              maskClassName="w-full h-full object-cover object-center lg:h-full lg:w-full "
+              src={record.image}
+              alt={record.imageAlt}
+            />
+          </Image.PreviewGroup>
         </div>
       ),
     },
@@ -265,6 +285,19 @@ export default function TableArtwork() {
       render: (_, record) => (
         <div>
           <h1>{record?.content}</h1>
+        </div>
+      ),
+    },
+    {
+      title: "Category",
+      width: 150,
+      dataIndex: "genre",
+      key: "genre",
+      render: (_, record) => (
+        <div>
+          {record?.genre.map((data, i) => (
+            <h1 key={i}>{data}</h1>
+          ))}
         </div>
       ),
     },
@@ -284,7 +317,7 @@ export default function TableArtwork() {
       title: "Trạng thái",
       dataIndex: "hidden",
       key: "hidden",
-      width: 300,
+      width: 200,
       // ...getColumnSearchProps("accept", "trạng thái"),
       // render: (_, record) => (
 
@@ -353,11 +386,11 @@ export default function TableArtwork() {
               </Typography.Link>
             )}
           </div>
-          <div className="mt-2">
+          {/* <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>
               <div className="text-red-600">Xóa</div>
             </Typography.Link>
-          </div>
+          </div> */}
         </div>
       ),
     },
@@ -366,7 +399,7 @@ export default function TableArtwork() {
   return (
     <>
       {contextHolder}
-      <ComHeader />
+      <AdminHeader />
       <div className="flex px-5 justify-center">
         <Table
           rowKey="_id"

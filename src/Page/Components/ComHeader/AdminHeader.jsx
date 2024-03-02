@@ -23,9 +23,11 @@ import axios from "axios";
 
 const navigation = {
   pages: [
-    { name: textApp.Header.home, href: "/" },
-    { name: "Theo dõi", href: "/follow" },
-    { name: "Cửa hàng", href: "/product" },
+    { name: "Quản lý người dùng", href: "/admin/tableUser" },
+    { name: "Quản lý báo cáo bài viết", href: "/admin/tableFeedback" },
+    { name: "Quản lý báo cáo người dùng", href: "/admin/tablereportuser" },
+    { name: "Quản lý sản phẩm", href: "/admin/tableproduct" },
+    { name: "table Artwork", href: "/admin/tableartwork" },
   ],
 };
 
@@ -33,7 +35,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ComHeader({ dataCart, updateCart }) {
+export default function AdminHeader({ dataCart, updateCart }) {
   const socket = useSocket();
   const [openNotification, setOpenNotification] = useState(false);
   const showDrawer = () => {
@@ -339,8 +341,8 @@ export default function ComHeader({ dataCart, updateCart }) {
                           className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
                         />
-                        {/* 
-                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+
+                        {/* <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                           {dataCart?.length || cart.length}
                         </span> */}
                       </button>

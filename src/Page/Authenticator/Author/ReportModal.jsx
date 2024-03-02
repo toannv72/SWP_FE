@@ -9,7 +9,11 @@ import swal from "sweetalert";
 import axios from "axios";
 const { TextArea } = Input;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ["lý do 1", "lý do 2", "lý do 3", "lý do 4"];
+const plainOptions = [
+  "Nội dung gây hiểu lầm hoặc không phù hợp.",
+  "bài đăng này vi phạm quyền sở hữu trí tuệ.",
+  "Nội dung chứa các liên kết hoặc mục đích độc hại",
+];
 const defaultCheckedList = [];
 const ReportModal = (props) => {
   const {id }= useParams()
@@ -71,7 +75,7 @@ const ReportModal = (props) => {
   return (
     <>
       <Modal
-        title="Report artwork"
+        title="Report User"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

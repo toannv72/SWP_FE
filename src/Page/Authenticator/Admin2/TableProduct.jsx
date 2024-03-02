@@ -29,6 +29,7 @@ import ComTextArea from "../../Components/ComInput/ComTextArea";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
+import AdminHeader from "../../Components/ComHeader/AdminHeader";
 
 export default function TableProductAdmin() {
   const [disabled, setDisabled] = useState(false);
@@ -348,29 +349,28 @@ export default function TableProductAdmin() {
       ),
     },
     {
-        title: "Trạng thái",
-        dataIndex: "accept",
-        key: "accept",
-        width: 300,
-        // ...getColumnSearchProps("accept", "trạng thái"),
-        // render: (_, record) => (
-  
-        //     <div className="text-sm text-gray-700 line-clamp-4">
-        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-        //     </div>
-  
-        // ),
-        ellipsis: {
-          showTitle: false,
-        },
-        render: (record) => (
-          <>
-            <div>{record=== true && "Đã duyệt"}</div>
-            <div>{record=== false && "Chưa duyệt"}</div>
-            
-          </>
-        ),
+      title: "Trạng thái",
+      dataIndex: "accept",
+      key: "accept",
+      width: 300,
+      // ...getColumnSearchProps("accept", "trạng thái"),
+      // render: (_, record) => (
+
+      //     <div className="text-sm text-gray-700 line-clamp-4">
+      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+      //     </div>
+
+      // ),
+      ellipsis: {
+        showTitle: false,
       },
+      render: (record) => (
+        <>
+          <div>{record === true && "Đã duyệt"}</div>
+          <div>{record === false && "Chưa duyệt"}</div>
+        </>
+      ),
+    },
     {
       title: "Action",
       key: "operation",
@@ -379,47 +379,54 @@ export default function TableProductAdmin() {
 
       render: (_, record) => (
         <div className="flex items-center flex-col">
-          <div>
+          {/* <div>
             <Typography.Link onClick={() => showModalEdit(record)}>
               Chỉnh sửa
             </Typography.Link>
-          </div>
-          <div>
-            <Typography.Link
-              onClick={async () => {
-                const result = await acceptProduct("product", record._id);
-                if (result?.accept === true) {
-                  swal("Thông báo", "Duyệt sản phẩm thành công", "success");
-                  setDataRun(!dataRun);
-                } else {
-                  swal("Thông báo", "Có lỗi xảy ra", "error");
-                }
-              }}
-            >
-              Duyệt
-            </Typography.Link>
-          </div>
-          <div>
-            <Typography.Link
-              style={{ whiteSpace: "nowrap" }}
-              onClick={async () => {
-                const result = await rejectProduct("product", record._id);
-                if (result?.reject === true) {
-                  swal("Thông báo", "Không duyệt sản phẩm thành công", "success");
-                  setDataRun(!dataRun);
-                } else {
-                  swal("Thông báo", "Có lỗi xảy ra", "error");
-                }
-              }}
-            >
-              Không duyệt
-            </Typography.Link>
-          </div>
-          <div className="mt-2">
+          </div> */}
+          {record.accept ? (
+            <div>
+              <Typography.Link
+                style={{ whiteSpace: "nowrap" }}
+                onClick={async () => {
+                  const result = await rejectProduct("product", record._id);
+                  if (result?.reject === true) {
+                    swal(
+                      "Thông báo",
+                      "Không duyệt sản phẩm thành công",
+                      "success"
+                    );
+                    setDataRun(!dataRun);
+                  } else {
+                    swal("Thông báo", "Có lỗi xảy ra", "error");
+                  }
+                }}
+              >
+                Không duyệt
+              </Typography.Link>
+            </div>
+          ) : (
+            <div>
+              <Typography.Link
+                onClick={async () => {
+                  const result = await acceptProduct("product", record._id);
+                  if (result?.accept === true) {
+                    swal("Thông báo", "Duyệt sản phẩm thành công", "success");
+                    setDataRun(!dataRun);
+                  } else {
+                    swal("Thông báo", "Có lỗi xảy ra", "error");
+                  }
+                }}
+              >
+                Duyệt
+              </Typography.Link>
+            </div>
+          )}
+          {/* <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>
               <div className="text-red-600"> Xóa</div>
             </Typography.Link>
-          </div>
+          </div> */}
         </div>
       ),
     },
@@ -428,7 +435,7 @@ export default function TableProductAdmin() {
   return (
     <>
       {contextHolder}
-      <ComHeader />
+      <AdminHeader />
       <div className="flex px-5 justify-center">
         <Table
           rowKey="_id"

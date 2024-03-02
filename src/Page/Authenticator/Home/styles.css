@@ -20,6 +20,19 @@
     justify-content: center;
 
 }
+.pon_container {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(40%);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--card_width));
+    grid-auto-rows: var(--row_increment);
+    justify-content: center;
+
+}
 .artwork-image {
     transition: filter 0.3s ease-in-out;
 }

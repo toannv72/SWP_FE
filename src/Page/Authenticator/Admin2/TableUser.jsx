@@ -12,6 +12,7 @@ import { textApp } from '../../../TextContent/textApp';
 import { deleteData, getData, postData, unblockData } from '../../../api/api';
 import ComButton from '../../Components/ComButton/ComButton';
 import ComHeader from '../../Components/ComHeader/ComHeader';
+import AdminHeader from '../../Components/ComHeader/AdminHeader';
 
 
 export default function TableUser() {
@@ -372,155 +373,158 @@ export default function TableUser() {
     ];
 
     return (
-        <>
-            {contextHolder}
-            <ComHeader/>
-            {/* <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton> */}
-            <div className='flex p-5 justify-center'>
-                <Table
-                    rowKey="_id"
-                    columns={columns}
-                    dataSource={products}
-                    scroll={{
-                        x: 1520,
-                        y: "70vh",
-                    }}
-                    bordered
-                    pagination={{
-                        showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
-                        pageSizeOptions: ['10', '20', '50', '100'], // Các tùy chọn số lượng dữ liệu
-                    }}
+      <>
+        {contextHolder}
+        <AdminHeader />
+        {/* <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton> */}
+        <div className="flex p-5 justify-center">
+          <Table
+            rowKey="_id"
+            columns={columns}
+            dataSource={products}
+            scroll={{
+              x: 1520,
+              y: "70vh",
+            }}
+            bordered
+            pagination={{
+              showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
+              pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
+            }}
+          />
+        </div>
+        <Modal
+          title="Thêm tài khoản"
+          okType="primary text-black border-gray-700"
+          open={isModalOpen}
+          width={800}
+          style={{ top: 20 }}
+          onCancel={handleCancel}
+        >
+          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <FormProvider {...methods}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <ComInput
+                  placeholder={textApp.Reissue.placeholder.username}
+                  label={textApp.Reissue.label.username}
+                  type="text"
+                  // search
+                  maxLength={26}
+                  onchange={() => {
+                    setError("");
+                  }}
+                  {...register("username")}
+                  required
                 />
-            </div>
-            <Modal title='Thêm tài khoản'
-                okType="primary text-black border-gray-700"
-                open={isModalOpen}
 
-                width={800}
-                style={{ top: 20 }}
+                <ComInput
+                  placeholder={textApp.Reissue.placeholder.phone}
+                  label={textApp.Reissue.label.phone}
+                  type="numbers"
+                  maxLength={16}
+                  {...register("phone")}
+                  required
+                />
+                <ComInput
+                  placeholder={textApp.Reissue.placeholder.email}
+                  label={textApp.Reissue.label.email}
+                  type="text"
+                  {...register("email")}
+                  required
+                />
+                <ComInput
+                  placeholder={textApp.Reissue.placeholder.password}
+                  label={textApp.Reissue.label.password}
+                  type="password"
+                  maxLength={26}
+                  {...register("password")}
+                  required
+                />
+                <ComInput
+                  placeholder={textApp.Reissue.placeholder.password2}
+                  label={textApp.Reissue.label.password2}
+                  type="password"
+                  maxLength={26}
+                  {...register("password2")}
+                  required
+                />
+                <Radio.Group onChange={onChange} value={valueSelect}>
+                  <Space direction="vertical">
+                    <Radio value={"manager"}>Manager</Radio>
+                    <Radio value={"staff"}>Staff</Radio>
+                  </Space>
+                </Radio.Group>
+                <h1 className="text-red-500">{error}</h1>
+                <ComButton disabled={disabled} htmlType="submit" type="primary">
+                  {textApp.Reissue.pageTitle}
+                </ComButton>
+              </form>
+            </FormProvider>
+          </div>
+        </Modal>
 
-                onCancel={handleCancel}>
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <FormProvider {...methods} >
-                        <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
-
-                            <ComInput
-                                placeholder={textApp.Reissue.placeholder.username}
-                                label={textApp.Reissue.label.username}
-                                type="text"
-                                // search
-                                maxLength={26}
-                                onchange={() => { setError("") }}
-                                {...register("username")}
-                                required
-                            />
-
-                            <ComInput
-                                placeholder={textApp.Reissue.placeholder.phone}
-                                label={textApp.Reissue.label.phone}
-                                type="numbers"
-                                maxLength={16}
-                                {...register("phone")}
-                                required
-                            />
-                            <ComInput
-                                placeholder={textApp.Reissue.placeholder.email}
-                                label={textApp.Reissue.label.email}
-                                type="text"
-                                {...register("email")}
-                                required
-                            />
-                            <ComInput
-                                placeholder={textApp.Reissue.placeholder.password}
-                                label={textApp.Reissue.label.password}
-                                type="password"
-                                maxLength={26}
-                                {...register("password")}
-                                required
-                            />
-                            <ComInput
-                                placeholder={textApp.Reissue.placeholder.password2}
-                                label={textApp.Reissue.label.password2}
-                                type="password"
-                                maxLength={26}
-                                {...register("password2")}
-                                required
-                            />
-                            <Radio.Group onChange={onChange} value={valueSelect}>
-                                <Space direction="vertical">
-                                    <Radio value={'manager'}>Manager</Radio>
-                                    <Radio value={'staff'}>Staff</Radio>
-                                </Space>
-                            </Radio.Group>
-                            <h1 className="text-red-500">{error}</h1>
-                            <ComButton
-                                disabled={disabled}
-                                htmlType="submit"
-                                type="primary"
-                            >
-                                {textApp.Reissue.pageTitle}
-                            </ComButton>
-                        </form>
-                    </FormProvider>
-                </div>
-            </Modal>
-
-            <Modal title='Khóa tài khoản?'
-                okType="primary text-black border-gray-700"
-                open={isModalOpenDelete}
-
-                width={800}
-                style={{ top: 20 }}
-
-                onCancel={handleCancelDelete}>
-                <div className='text-lg p-6'>Bạn có chắc chắn muốn Khóa người dùng này không?</div>
-                <div className='flex'>
-                    <ComButton
-                        disabled={disabled}
-                        type="primary"
-                        danger
-                        onClick={deleteById}
-                    >
-                        Khóa
-                    </ComButton>
-                    <ComButton
-                        type="primary"
-                        disabled={disabled}
-                        onClick={handleCancelDelete}
-                    >
-                        {textApp.TableProduct.modal.cancel}
-                    </ComButton>
-                </div>
-            </Modal>
-            {/*  */}
-            <Modal title='Mở khoá tài khoản?'
-                okType="primary text-black border-gray-700"
-                open={isModalOpenUnblock}
-
-                width={800}
-                style={{ top: 20 }}
-
-                onCancel={handleCancelUnblock}>
-                <div className='text-lg p-6'>Bạn có chắc chắn muốn mở khoá người dùng này không?</div>
-                <div className='flex'>
-                    <ComButton
-                        disabled={disabled}
-                        type="primary"
-                        danger
-                        onClick={unblockById}
-                    >
-                        Mở khoá
-                    </ComButton>
-                    <ComButton
-                        type="primary"
-                        disabled={disabled}
-                        onClick={handleCancelUnblock}
-                    >
-                        {textApp.TableProduct.modal.cancel}
-                    </ComButton>
-                </div>
-            </Modal>
-
-        </>
-    )
+        <Modal
+          title="Khóa tài khoản?"
+          okType="primary text-black border-gray-700"
+          open={isModalOpenDelete}
+          width={800}
+          style={{ top: 20 }}
+          onCancel={handleCancelDelete}
+        >
+          <div className="text-lg p-6">
+            Bạn có chắc chắn muốn Khóa người dùng này không?
+          </div>
+          <div className="flex">
+            <ComButton
+              disabled={disabled}
+              type="primary"
+              danger
+              onClick={deleteById}
+            >
+              Khóa
+            </ComButton>
+            <ComButton
+              type="primary"
+              disabled={disabled}
+              onClick={handleCancelDelete}
+            >
+              {textApp.TableProduct.modal.cancel}
+            </ComButton>
+          </div>
+        </Modal>
+        {/*  */}
+        <Modal
+          title="Mở khoá tài khoản?"
+          okType="primary text-black border-gray-700"
+          open={isModalOpenUnblock}
+          width={800}
+          style={{ top: 20 }}
+          onCancel={handleCancelUnblock}
+        >
+          <div className="text-lg p-6">
+            Bạn có chắc chắn muốn mở khoá người dùng này không?
+          </div>
+          <div className="flex">
+            <ComButton
+              disabled={disabled}
+              type="primary"
+              danger
+              onClick={unblockById}
+            >
+              Mở khoá
+            </ComButton>
+            <ComButton
+              type="primary"
+              disabled={disabled}
+              onClick={handleCancelUnblock}
+            >
+              {textApp.TableProduct.modal.cancel}
+            </ComButton>
+          </div>
+        </Modal>
+      </>
+    );
 }

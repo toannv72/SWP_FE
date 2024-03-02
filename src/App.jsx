@@ -24,9 +24,9 @@ function App() {
 
   return (
     <div className="App">
-      {user?._doc?.role=== "admin" && 
+      {/* {user?._doc?.role=== "admin" && 
         <Sidebar />
-      }
+      } */}
       {/* Cung cấp kết nối Socket.IO qua context provider */}
       <SocketContext.Provider value={socket}>
         <RouterProvider router={routers}/>

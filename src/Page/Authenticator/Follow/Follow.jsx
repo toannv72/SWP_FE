@@ -9,6 +9,7 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 // import './styles.css'
 export default function Follow() {
     const [products, setProducts] = useState([]);
+    const [users, setUsers] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
     const [likedProducts, setLikedProducts] = useState([]);
@@ -19,10 +20,10 @@ export default function Follow() {
 
     const fetchData = async (pageNumber) => {
         try {
-
-
-
             const response = await getData(`/artwork/follow/${token?._doc?._id}?page=${pageNumber}&limit=20`);
+            const responseUser = await getData(
+              `/artwork/userFollow/${token?._doc?._id}?page=${pageNumber}&limit=20`
+            );
             return response.data.docs;
 
         } catch (error) {
@@ -30,6 +31,17 @@ export default function Follow() {
             return [];
         }
     };
+        const fetchDataUser = async (pageNumber) => {
+          try {
+            const response = await getData(
+              `/artwork/userFollow/${token?._doc?._id}?page=${pageNumber}&limit=20`
+            );
+            return response.data.docs;
+          } catch (error) {
+            console.log(error);
+            return [];
+          }
+        };
     const fetchMoreProducts = async () => {
         const newProducts = await fetchData(page + 1);
         if (newProducts.length === 0) {
@@ -49,7 +61,9 @@ export default function Follow() {
 
         const loadInitialData = async () => {
             const initialProducts = await fetchData(page);
+            const initialUsers = await fetchDataUser(page);
             setProducts(initialProducts);
+            setUsers(initialUsers);
             const userLikesArray = initialProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
             const likesCountArray = initialProducts.map(product => product.likes.length);
             setLikedProductIds(likesCountArray)
@@ -94,28 +108,64 @@ export default function Follow() {
     // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
 
     return (
-        <>
-            <ComHeader />
-            <InfiniteScroll
-                dataLength={products.length}
-                next={fetchMoreProducts}
-                hasMore={hasMore}
-            >
-                <div className="pin_container" ref={containerRef}>
-                    {products.map((artwork, index) => (
-                        <Link to={`/artwork/${artwork._id}`} className={`card`} key={index} >
-                            <img
-                                className="rounded-md p-1"
-                                src={artwork.image}
-                                style={{ borderRadius: '24px' }}
-                                alt={artwork.imageAlt}
-                                onLoad={() => containerRef.current.dispatchEvent(new Event('load'))}
-                            />
-                        </Link>
-                    ))}
-                </div>
-            </InfiniteScroll>
-
-        </>
+      <>
+        <ComHeader />
+        <InfiniteScroll dataLength={users.length} hasMore={hasMore}>
+          <h4
+            className="bg-cyan-500 h-12 flex items-center p-2 text-2xl font-bold tracking-tight text-white mb-4"
+            style={{ margin: "20px 70px 0 70px" }}
+          >
+            User Follow
+          </h4>
+          <div className="pin_container" ref={containerRef}>
+            {users.map((user, index) => (
+              <div>
+                <Link
+                  to={`/author/${user._id}`}
+                  className={`card`}
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <img
+                    className="rounded-md p-1"
+                    src={user.avatar}
+                    style={{ borderRadius: "50%", width: "60px" }}
+                    alt={user.avatar}
+                    onLoad={() =>
+                      containerRef.current.dispatchEvent(new Event("load"))
+                    }
+                  />
+                  <span>{user.username}</span>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </InfiniteScroll>
+        <InfiniteScroll
+          dataLength={products.length}
+          next={fetchMoreProducts}
+          hasMore={hasMore}
+        >
+          <div className="pon_container" ref={containerRef}>
+            {products.map((artwork, index) => (
+              <Link
+                to={`/artwork/${artwork._id}`}
+                className={`card`}
+                key={index}
+              >
+                <img
+                  className="rounded-md p-1"
+                  src={artwork.image}
+                  style={{ borderRadius: "24px" }}
+                  alt={artwork.imageAlt}
+                  onLoad={() =>
+                    containerRef.current.dispatchEvent(new Event("load"))
+                  }
+                />
+              </Link>
+            ))}
+          </div>
+        </InfiniteScroll>
+      </>
     );
 }
