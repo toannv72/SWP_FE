@@ -286,7 +286,7 @@ export const textApp = {
         label:{
         status: "Chờ duyệt",
         status1:"Đang xử lí",
-        status2:"Đang vận chuyển",
+        status2:"Đang làm",
         status3:"Hoàn thành",
         status4:"Đã hủy",
         status5:"Trả hàng",

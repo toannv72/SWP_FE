@@ -24,11 +24,11 @@ const data = [
     value: textApp.OrderHistory.value.status,
     desc:<Pending/>,
   },
-  {
-    label: textApp.OrderHistory.label.status7,
-    value: textApp.OrderHistory.value.status7,
-    desc:<Deposit/>,
-  },
+  // {
+  //   label: textApp.OrderHistory.label.status7,
+  //   value: textApp.OrderHistory.value.status7,
+  //   desc:<Deposit/>,
+  // },
   {
     label: textApp.OrderHistory.label.status1,
     value: textApp.OrderHistory.value.status1,

@@ -9,7 +9,7 @@ import {
 import ShoppingCart from "../../Authenticator/ShoppingCart/ShoppingCart";
 import { routs } from "../../../constants/ROUT";
 import { ComLink } from "../ComLink/ComLink";
-import { Affix, Drawer, Dropdown, FloatButton } from "antd";
+import { Affix, Drawer, Dropdown, FloatButton, Select } from "antd";
 import images from "../../../img";
 import ComInput from "../ComInput/ComInput";
 import { FormProvider, useForm } from "react-hook-form";
@@ -43,6 +43,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   const onClose = () => {
     setOpenNotification(false);
   };
+  const [sortCate, setSortCate] = useState("all");
   const [open, setOpen] = useState(false);
   const [shoppingCart, setShoppingCart] = useState(false);
   const [sttLogin, setSttLogin] = useState(
@@ -157,6 +158,9 @@ export default function ComHeader({ dataCart, updateCart }) {
     }
   };
 
+      const changeSelectCate = (value) => {
+       value ==="" ? navigate("/") : navigate(`?cate=${value}`);
+      };
   return (
     <>
       <ShoppingCart
@@ -309,6 +313,34 @@ export default function ComHeader({ dataCart, updateCart }) {
                           </div>
                         </Link>
                       ))}
+                      {location.pathname === "/" && (
+                        <Select
+                          defaultValue=""
+                          style={{
+                            width: 120,
+                          }}
+                          className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
+                          onChange={changeSelectCate}
+                          options={[
+                            {
+                              label: "Tất cả",
+                              value: "",
+                            },
+                            {
+                              label: "Tranh",
+                              value: "Tranh",
+                            },
+                            {
+                              label: "Trang trí",
+                              value: "Trang trí",
+                            },
+                            {
+                              label: "Nghệ thuật",
+                              value: "Nghệ thuật",
+                            },
+                          ]}
+                        />
+                      )}
                     </div>
                   </Popover.Group>
 
@@ -518,12 +550,15 @@ export default function ComHeader({ dataCart, updateCart }) {
       <Drawer title="Notification" onClose={onClose} open={openNotification}>
         {listNotification?.map((item, key) => (
           <div
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", padding: "5px" }}
+            className="shadow-md"
             onClick={() => handleClick(item?.link)}
             key={key}
           >
-            {item?.pusher?.name} {item?.textType} {renderType(item?.type)}{" "}
-            {renderTail(item?.type)}
+            {item?.pusher?.name} {item?.textType}{" "}
+            <span style={{ color: "#509adb", fontWeight: "500" }}>
+              {renderType(item?.type)} {renderTail(item?.type)}
+            </span>
           </div>
         ))}
       </Drawer>
