@@ -51,6 +51,7 @@ export default function Pending({ activeTab }) {
         .catch((error) => {
           console.error("Error fetching products:", error);
         });
+        setOrder(order.filter((item) => item._id !== id));
 }
   return (
     <div className="container mx-auto p-4">

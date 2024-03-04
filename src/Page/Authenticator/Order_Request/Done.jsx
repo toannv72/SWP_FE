@@ -20,7 +20,21 @@ export default function Done({activeTab}) {
 
       getData('customOrder/user/delivered', {})
         .then((orderData) => {
-          setOrder(orderData?.data?.docs);
+                                  const newArray =
+                                    orderData.data.userOrders.length > 0
+                                      ? orderData.data.userOrders.map(
+                                          (item) => {
+                                            const updatedItem = { ...item };
+                                            updatedItem.userOrders = true;
+                                            return updatedItem;
+                                          }
+                                        )
+                                      : [];
+                                  const combinedOrders = [
+                                    ...orderData.data.freelancerOrders,
+                                    ...newArray,
+                                  ];
+                                  setOrder(combinedOrders);
     
         })
         .catch((error) => {
