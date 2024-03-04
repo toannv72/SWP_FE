@@ -13,8 +13,6 @@ import ComTextArea from "../../Components/ComInput/ComTextArea";
 import ComNumber from "../../Components/ComInput/ComNumber";
 import { Select, notification } from "antd";
 import ComSelect from "../../Components/ComInput/ComSelect";
-
-import bird from "../../../../src/img/bird-svgrepo-com.svg";
 import ComFooter from "../../Components/ComFooter/ComFooter";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -194,7 +192,6 @@ export default function Required() {
       <div className="flex justify-center flex-col py-5 text-center">
         {/* bird */}
         <div className="flex justify-center">
-          <img src={bird} alt="bird" className="w-32 h-32" />
         </div>
         <h1 className="text-4xl">{"Đặt hàng theo yêu cầu"}</h1>
       </div>
@@ -322,7 +319,7 @@ export default function Required() {
               </div>
               <div className="sm:col-span-2">
                 <label className="text-paragraph font-bold">
-                  Hình ảnh
+                  Hình ảnh minh hoạ
                   <span className="text-paragraph font-bold text-error-7 text-red-500">
                     *
                   </span>

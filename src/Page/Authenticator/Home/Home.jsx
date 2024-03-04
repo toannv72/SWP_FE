@@ -1,14 +1,10 @@
-
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useEffect, useRef, useState } from "react";
 import { getData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import ComPost from "../../Components/ComPost/ComPost";
-
 import { Link, useLocation } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
-
 import './styles.css'
 export default function Home() {
   const location = useLocation();
@@ -92,11 +88,11 @@ export default function Home() {
   }, [products]);
 
   // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
-
+console.log(token);
   return (
     <>
       <ComHeader />
-      {token?._doc?.hidden !== true && <ComPost />}
+      {token?._doc  ? <ComPost />:<></>}
       <InfiniteScroll
         dataLength={products.length}
         next={fetchMoreProducts}
