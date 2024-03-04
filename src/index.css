@@ -42,8 +42,17 @@
 .recharts-surface {
   padding: 5px;
 }
-
-
+.head .ant-select-selector{
+      color: rgb(55 65 81 / 1)!important;
+      border: none!important;
+          font-weight: 500!important;
+              font-size: 1rem!important;
+    line-height: 1.5rem!important;
+}
+.ant-select-selector span{
+          font-weight: 500!important;
+              font-size: 1rem!important;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

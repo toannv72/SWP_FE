@@ -319,7 +319,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                           style={{
                             width: 120,
                           }}
-                          className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
+                          className="head flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
                           onChange={changeSelectCate}
                           options={[
                             {
