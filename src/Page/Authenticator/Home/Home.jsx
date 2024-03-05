@@ -28,14 +28,12 @@ export default function Home() {
   const fetchData = async (pageNumber) => {
     try {
       const response = await getData(
-        `/artwork?page=${pageNumber}&limit=20${
-          params["cate"] && `&cate=${params["cate"]}`
-        }`
+        `/artwork?page=${pageNumber}&limit=20${params["cate"] && `&cate=${params["cate"]}`}`
       );
-              const newArray =
-                response.data.docs.length > 0
-                  ? response.data.docs.filter((item) => item.hidden !== true)
-                  : [];
+      const newArray =
+        response.data.docs.length > 0
+          ? response.data.docs.filter((item) => item.hidden !== true)
+          : [];
       return newArray;
     } catch (error) {
       console.log(error);
@@ -92,7 +90,7 @@ export default function Home() {
   }, [products]);
 
   // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
-console.log(token);
+  console.log(token);
   return (
     <>
       <ComHeader />
@@ -102,7 +100,7 @@ console.log(token);
         dataLength={products.length}
         next={fetchMoreProducts}
         hasMore={hasMore}
-        // loader={<h4>Loading...</h4>}
+      // loader={<h4>Loading...</h4>}
       >
         <div className="pin_container" ref={containerRef}>
           {products.map((artwork, index) => (
@@ -121,9 +119,8 @@ console.log(token);
                   <p className="text-white text-2xl"> Thể Loại:</p>
                   {artwork?.genre.map((genre, index) => (
                     <p
-                      className={`text-white text-xl ${
-                        index >= 3 ? "hidden" : ""
-                      }`}
+                      className={`text-white text-xl ${index >= 3 ? "hidden" : ""
+                        }`}
                       key={index}
                     >
                       {genre}

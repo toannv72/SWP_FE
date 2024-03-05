@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../../api/api";
 import ComHeader from "../../Components/ComHeader/ComHeader";
-import {  Radio } from "antd";
+import { Radio } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
@@ -16,12 +16,26 @@ export default function SearchUser() {
     const [checked, setChecked] = useState(3);
     const containerRef = useRef(null);
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const encodedString = location.search;
+    const queryString = encodedString.substring(1);
+    const queryParams = queryString.split("&");
+    const params = {};
+    for (let i = 0; i < queryParams.length; i++) {
+      const pair = queryParams[i].split("=");
+      const key = decodeURIComponent(pair[0]);
+      const value = decodeURIComponent(pair[1]);
+      params[key] = value;
+    }
     const fetchData = async (pageNumber) => {
         try {
             if (checked === 1) {
-                const response = await getData(`/artwork/search?name=${search}&page=${pageNumber}&limit=20`);
-                return response.data.products;
+                const response = await getData(`/artwork/search?name=${search}&page=${pageNumber}&limit=20${params["cate"] && `&cate=${params["cate"]}`}`);
+                const newArray =
+                response.data.docs.length > 0
+                  ? response.data.docs.filter((item) => item.hidden !== true)
+                  : [];
+              return newArray;
             }
             if (checked === 2) {
                 const response = await getData(`/artwork/searchGenre?name=${search}&page=${pageNumber}&limit=20`);
@@ -29,7 +43,7 @@ export default function SearchUser() {
             }
             if (checked === 3) {
                 const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=20`);
-               
+
                 return response.data.user;
             }
         } catch (error) {
@@ -50,28 +64,27 @@ export default function SearchUser() {
 
     useEffect(() => {
         const loadInitialData = async () => {
-            const initialProducts = await fetchData(page);
-            setProducts(initialProducts);
+          const initialProducts = await fetchData(page);
+          setProducts(initialProducts);
         };
         loadInitialData();
-        setPage(1);
-    }, [search]); 
-
-    useEffect(() => {
+      }, [params["cate"], page]); // Run only once on component mount
+    
+      useEffect(() => {
         const handleImageLoad = () => {
-            const cards = containerRef.current.querySelectorAll('.card');
-
-            cards.forEach((card) => {
-                const img = card.querySelector('img');
-                const aspectRatio = img.naturalHeight / img.naturalWidth;
-                const cardHeight = card.offsetWidth * aspectRatio;
-                const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
-
-                // Áp dụng giá trị cho grid-row-end
-                card.style.gridRowEnd = `span ${rowSpan}`;
-            });
+          const cards = containerRef.current.querySelectorAll(".card");
+    
+          cards.forEach((card) => {
+            const img = card.querySelector("img");
+            const aspectRatio = img.naturalHeight / img.naturalWidth;
+            const cardHeight = card.offsetWidth * aspectRatio;
+            const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
+    
+            // Áp dụng giá trị cho grid-row-end
+            card.style.gridRowEnd = `span ${rowSpan}`;
+          });
         };
-
+    
         const container = containerRef.current;
 
         if (container) {
@@ -85,9 +98,9 @@ export default function SearchUser() {
                 container.removeEventListener('load', handleImageLoad);
             }
         };
-    }, [products,checked]);
+    }, [products, checked]);
 
-  
+
     const onChange = (e) => {
         if (e.target.value === 1) {
             return navigate(`/search/${search}`)
@@ -123,21 +136,36 @@ export default function SearchUser() {
                     >
                         <div className=" pin_container " style={{ width: '70vw' }} ref={containerRef}>
                             {products?.map((artwork, index) => (
-                                <Link to={`/artwork/${artwork._id}`} className={`card`} key={index} >
-                                    <img
-                                        className="rounded-md p-1"
-                                        src={artwork.image}
-                                        style={{ borderRadius: '24px' }}
-                                        alt={artwork.imageAlt}
-
-                                        onLoad={() => containerRef.current.dispatchEvent(new Event('load'))}
-                                    />
+                                <Link to={`/artwork/${artwork._id}`} className={`card`} key={index}>
+                                    <div className="relative group">
+                                        <img
+                                            className="rounded-md p-1 artwork-image"
+                                            src={artwork.image}
+                                            style={{ borderRadius: "24px" }}
+                                            alt={artwork.imageAlt}
+                                            onLoad={() =>
+                                                containerRef.current.dispatchEvent(new Event("load"))
+                                            }
+                                        />
+                                        <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <p className="text-white text-2xl"> Thể Loại:</p>
+                                            {artwork?.genre.map((genre, index) => (
+                                                <p
+                                                    className={`text-white text-xl ${index >= 3 ? "hidden" : ""
+                                                        }`}
+                                                    key={index}
+                                                >
+                                                    {genre}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </Link>
                             ))}
                         </div>
                     </InfiniteScroll> : <div className=" text-center w-screen"> Không tìm thấy bài viết đang tìm kiếm</div>}
 
-             
+
                 </div>
             </div>
         </>
