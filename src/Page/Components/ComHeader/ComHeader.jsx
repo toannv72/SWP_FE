@@ -44,6 +44,7 @@ export default function ComHeader({ dataCart, updateCart }) {
     setOpenNotification(false);
   };
   const [sortCate, setSortCate] = useState("all");
+  const [countNoti, setCountNoti] = useState(false);
   const [open, setOpen] = useState(false);
   const [shoppingCart, setShoppingCart] = useState(false);
   const [sttLogin, setSttLogin] = useState(
@@ -107,6 +108,7 @@ export default function ComHeader({ dataCart, updateCart }) {
           ...prevNotifications,
           data,
         ]);
+        setCountNoti(true);
       }
     });
 
@@ -158,9 +160,9 @@ export default function ComHeader({ dataCart, updateCart }) {
     }
   };
 
-      const changeSelectCate = (value) => {
-       value ==="" ? navigate("/") : navigate(`/?cate=${value}`);
-      };
+  const changeSelectCate = (value) => {
+    value === "" ? navigate("/") : navigate(`/?cate=${value}`);
+  };
   return (
     <>
       <ShoppingCart
@@ -369,10 +371,20 @@ export default function ComHeader({ dataCart, updateCart }) {
                           className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
                         />
-                        {/* 
-                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                          {dataCart?.length || cart.length}
-                        </span> */}
+                        {countNoti && (
+                          <span
+                            className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
+                            style={{
+                              background: "#e13232",
+                              width: "10px",
+                              height: "10px",
+                              borderRadius: "50%",
+                              position: "absolute",
+                              top: "20px",
+                              right: "140px",
+                            }}
+                          ></span>
+                        )}
                       </button>
                     </div>
                     {/* Cart */}

@@ -364,7 +364,7 @@ export default function TableUser() {
                     const result = await hideArtwork("feedback/unhide", {
                       accuse: record._id,
                     });
-                    if (result?.hide === true) {
+                    if (result?.unhide === true) {
                       swal("Thông báo", "Ẩn bài post thành công", "success");
                       setDataRun(!dataRun);
                     } else {
