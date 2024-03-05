@@ -327,9 +327,24 @@ export default function TableUser() {
             key: '',
             width: 100,
             render: (_, record) => (
-                <div >
-                    <div className='flex justify-center text-lg text-cyan-600'>hoạt động</div>
-                </div>
+                <div className='flex items-center flex-col'>
+                {console.log(record)}
+                {record?.deleted=== true && 
+                    <div className='mt-2'>
+                        
+                            <div className='text-red-600'>Đã khóa</div>
+                       
+                    </div>
+                }
+                {
+                    record?.deleted=== false && 
+                    <div className='mt-2'>
+                        
+                            <div className=''>Hoạt động</div>
+                      
+                    </div>
+                }
+            </div>
             ),
 
         },

@@ -114,7 +114,7 @@ export const textApp = {
             },
             m5: {
                 message: "Lỗi",
-                description: "Vui lòng chọn ít nhất một ảnh cho sản phẩm!"
+                description: "Vui lòng chọn ít nhất một ảnh minh họa!"
             },
             m6: {
                 message: "Lỗi",
@@ -205,7 +205,7 @@ export const textApp = {
         contact: {
             title: "Thông tin liên hệ",
             adress: "Địa chỉ: LôE2a Đường D1, Thành phố Thủ Đức",
-            email: "Email: IHC@gmail.com",
+            email: "Email: ĐangKhoa@gmail.com",
             phone: "Số điện thoại: (0123) 456-7890",
         },
 
