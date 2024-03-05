@@ -201,10 +201,10 @@ export default function Profile() {
             label: 'Đổi ảnh đại diện',
             key: '1',
         },
-        {
-            label: 'Đổi mật khẩu',
-            key: '2',
-        },
+        // {
+        //     label: 'Đổi mật khẩu',
+        //     key: '2',
+        // },
     ]
 
     const menuProps = {

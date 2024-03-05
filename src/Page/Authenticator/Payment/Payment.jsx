@@ -58,12 +58,12 @@ export default function Payment(props) {
         const orders = finalResult.map(userData => {
             const productPost = userData.products.map((product, index) => {
                 return {
-                    product: product.productId,
-                    price: product.productPrice,
-                    quantity: product.productQuantity,
-                    name: product.productName,
-                    _id:product._id,
-                    seller: product.productQuantity,
+                  product: product.productId,
+                  price: product.productPrice,
+                  quantity: product.productQuantity,
+                  name: product.productName,
+                  _id: product._id,
+                  seller: userData.userId,
                 };
             });
 
@@ -87,7 +87,7 @@ export default function Payment(props) {
                 console.log(order);
                 postData('/order/user', { ...order, payment: 'Cash' })
                     .then((data) => {
-                        navigate(`order`);
+                        navigate(`/order`);
                         setDisabled(false);
                     })
                     .catch((error) => {

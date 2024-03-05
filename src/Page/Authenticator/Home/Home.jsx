@@ -32,7 +32,11 @@ export default function Home() {
           params["cate"] && `&cate=${params["cate"]}`
         }`
       );
-      return response.data.docs;
+              const newArray =
+                response.data.docs.length > 0
+                  ? response.data.docs.filter((item) => item.hidden !== true)
+                  : [];
+      return newArray;
     } catch (error) {
       console.log(error);
       return [];

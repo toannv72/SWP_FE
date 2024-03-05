@@ -26,7 +26,7 @@ const navigation = {
     { name: "Quản lý người dùng", href: "/admin/tableUser" },
     { name: "Quản lý báo cáo bài viết", href: "/admin/tableFeedback" },
     { name: "Quản lý báo cáo người dùng", href: "/admin/tablereportuser" },
-    { name: "Quản lý sản phẩm", href: "/admin/tableproduct" },
+    // { name: "Quản lý sản phẩm", href: "/admin/tableproduct" },
     { name: "table Artwork", href: "/admin/tableartwork" },
   ],
 };

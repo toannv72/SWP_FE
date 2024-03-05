@@ -53,6 +53,10 @@
           font-weight: 500!important;
               font-size: 1rem!important;
 }
+.ant-popconfirm-buttons .ant-btn-primary{
+  background-color: #1677ff !important;
+      color: #fff!important;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

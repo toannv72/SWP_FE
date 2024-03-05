@@ -85,14 +85,14 @@ export const postFeedback= async (endpoint, data, headers = {})=> {
   }
 }
 
-export const hideArtwork= async (endpoint, id, data, headers = {})=> {
+export const hideArtwork = async (endpoint, data, headers = {}) => {
   try {
-    const response = await api.post(`${endpoint}/${id}`, data , { headers });
+    const response = await api.post(`${endpoint}`, data, { headers });
     return response.data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const unhideArtwork= async (endpoint, id, data, headers = {})=> {
   try {

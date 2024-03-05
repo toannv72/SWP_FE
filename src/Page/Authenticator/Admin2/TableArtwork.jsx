@@ -9,6 +9,7 @@ import {
   Image,
   Input,
   Modal,
+  Popconfirm,
   Select,
   Space,
   Table,
@@ -347,10 +348,12 @@ export default function TableArtwork() {
         <div className="flex items-center flex-col">
           <div>
             {record?.hidden === false && (
-              <Typography.Link
-                onClick={async () => {
-                  const result = await hideArtwork("artwork/hide", record._id, {
-                    artwork: record.artwork?._id,
+              <Popconfirm
+                title="Block the artwork"
+                description="Are you sure to block this artwork?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/hide", {
+                    artwork: record._id,
                   });
                   if (result?.hide === true) {
                     swal("Thông báo", "Ẩn bài post thành công", "success");
@@ -359,21 +362,22 @@ export default function TableArtwork() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Ẩn
-              </Typography.Link>
+                <Button danger>Ẩn</Button>
+              </Popconfirm>
             )}
           </div>
           <div>
             {record?.hidden === true && (
-              <Typography.Link
-                style={{ whiteSpace: "nowrap" }}
-                onClick={async () => {
-                  const result = await unhideArtwork(
-                    "artwork/unhide",
-                    record._id,
-                    { artwork: record.artwork?._id }
-                  );
+              <Popconfirm
+                title="UnBlock the artwork"
+                description="Are you sure to unblock this artwork?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/unhide", {
+                    artwork: record._id,
+                  });
                   if (result?.unhide === true) {
                     swal("Thông báo", "Huỷ ẩn post thành công", "success");
                     setDataRun(!dataRun);
@@ -381,9 +385,13 @@ export default function TableArtwork() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Huỷ ẩn
-              </Typography.Link>
+                <Button type="primary" ghost>
+                  Hủy Ẩn
+                </Button>
+              </Popconfirm>
             )}
           </div>
           {/* <div className="mt-2">
