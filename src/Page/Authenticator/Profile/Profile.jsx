@@ -23,11 +23,14 @@ import { useStorage } from '../../../hooks/useLocalStorage'
 import ComUpImgOne from '../../Components/ComUpImg/ComUpImgOne'
 import ComButton from '../../Components/ComButton/ComButton'
 import { firebaseImgs } from '../../../upImgFirebase/firebaseImgs'
+import { FieldError } from '../../Components/FieldError/FieldError'
+import ComInput from '../../Components/ComInput/ComInput'
 export default function Profile() {
     const [Author, setAuthor] = useState([])
     const { id } = useParams();
     const [api, contextHolder] = notification.useNotification();
     const [error, setError] = useState(false);
+    const [error1, setError1] = useState('');
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
@@ -40,11 +43,28 @@ export default function Profile() {
     const [image, setImages] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const loginMessenger = yup.object({
+        // code: yup.string().required(textApp.Login.message.username).min(5, "Username must be at least 5 characters"),
+        name: yup.string().required(textApp.Reissue.message.username).min(6, textApp.Reissue.message.usernameMIn),
+        phone: yup.string().required(textApp.Reissue.message.phone).min(10, "Số điện thoại phải lớn hơn 9 số!").max(10, "Số điện thoại phải nhỏ hơn 11 số!").matches(/^0\d{9,10}$/, "Số điện thoại không hợp lệ"),
+        email: yup.string().email(textApp.Reissue.message.emailFormat).required(textApp.Reissue.message.email),
+    })
+    const methods = useForm({
+        resolver: yupResolver(loginMessenger),
+        defaultValues: {
+            // code: "",
+            name: token?._doc?.name,
+            phone: token?._doc?.phone,
+            email: token?._doc?.email,
+        },
+    })
+    const { handleSubmit, register, setFocus, watch, setValue } = methods
     useEffect(() => {
         if (!token?._doc?._id) {
-          navigate('/login')
+            navigate('/login')
         }
-      },);
+    },);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -53,6 +73,15 @@ export default function Profile() {
     };
     const handleCancel = () => {
         setIsModalOpen(false);
+    };
+    const showModal1 = () => {
+        setIsModalOpen1(true);
+    };
+    const handleOk1 = () => {
+        setIsModalOpen1(false);
+    };
+    const handleCancel1 = () => {
+        setIsModalOpen1(false);
     };
     useEffect(() => {
         if (image.length > 0) {
@@ -64,10 +93,10 @@ export default function Profile() {
     const fetchData = async (pageNumber) => {
         try {
             const response = await getData(`/artwork/user/${token?._doc?._id}?page=${pageNumber}&limit=10`);
-            console.log(response);
+
             return response.data.docs;
         } catch (error) {
-            console.log(error);
+
             return [];
         }
     };
@@ -187,7 +216,7 @@ export default function Profile() {
                 showModal()
                 break;
             case '2':
-                console.log(2);
+                showModal1()
                 break;
             case '3':
                 console.log(3);
@@ -202,7 +231,7 @@ export default function Profile() {
             key: '1',
         },
         {
-            label: 'Đổi mật khẩu',
+            label: 'Đổi thông tin cá nhân',
             key: '2',
         },
     ]
@@ -216,8 +245,8 @@ export default function Profile() {
         setDisabled(true)
         firebaseImgs(image)
             .then((img) => {
-                console.log(img);
-                putData(`/user`,token?._doc?._id, { avatar: img[0] })
+
+                putData(`/user`, token?._doc?._id, { avatar: img[0] })
                     .then((data) => {
                         api["success"]({
                             message: "Thành công",
@@ -225,11 +254,11 @@ export default function Profile() {
                                 "Ảnh đại diện của bạn đã được thanh đổi"
                         });
                         setToken(data)
-                        console.log(data);
+
                         setTimeout(() => {
                             navigate(`/author/${token?._doc?._id}`)
                         }, 2000);
-                       
+
                     })
                     .catch((error) => {
                         setDisabled(false)
@@ -247,6 +276,46 @@ export default function Profile() {
 
 
     }
+
+    const onSubmit1 = (data) => {
+        setError("")
+        putData(`/user`, token?._doc?._id, data)
+            .then((data) => {
+                if (data?.keyValue?.email) {
+                    setError1('Tài khoản mail này đã có người sửa dụng')
+                }
+
+                if (data?.keyValue?.phone) {
+                    setError1('Số điện thoại này đã có người sửa dụng')
+                }
+                if (data?._doc) {
+                    api["success"]({
+                        message: "Thành công",
+                        description:
+                            "Thông tin thay đổi thành công"
+                    });
+                    setToken(data)
+                    setTimeout(() => {
+                        navigate(`/author/${token?._doc?._id}`)
+                    }, 2000);
+                }
+
+
+            })
+            .catch((error) => {
+                setError1(error?.response?.data?.error)
+                if (error?.response?.data?.keyValue?.email) {
+                    setError1('Tài khoản mail này đã có người sửa dụng')
+                }
+
+                if (error?.response?.data?.keyValue?.phone) {
+                    setError1('Số điện thoại này đã có người sửa dụng')
+                }
+                console.error("Error fetching items:", error);
+
+            });
+
+    }
     return (
         <>
             {contextHolder}
@@ -255,7 +324,6 @@ export default function Profile() {
             <div className="bg-white rounded-lg shadow-xl pb-8">
                 <div x-data="{ openSettings: false }" className="absolute right-12 mt-4 rounded">
                     <Dropdown trigger={['click']} menu={menuProps} >
-
                         <button className="border border-gray-400 p-2 rounded text-gray-300 hover:text-gray-300 bg-gray-100 bg-opacity-10 hover:bg-opacity-20" title="Settings">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
@@ -282,7 +350,7 @@ export default function Profile() {
                             },
                         }}
                     />
-                    
+
                     <div className="flex items-center space-x-2 mt-2">
                         <p className="text-2xl">{Author?.name}</p>
                         {/* <span className="bg-blue-500 rounded-full p-1" title="Verified">
@@ -379,7 +447,53 @@ export default function Profile() {
                     disabled={disabled}
                     onClick={onSubmit}
                 >
-                Lưu</ComButton>
+                    Lưu</ComButton>
+
+            </Modal>
+
+
+            <Modal title="Đổi thông tin tài khoản" open={isModalOpen1} onOk={handleOk1} onCancel={handleCancel1}>
+
+                <FormProvider {...methods} >
+                    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit1)}>
+
+                        <ComInput
+                            label={"Tên tài khoản"}
+                            placeholder={"Vui lòng nhập tên tài khoản"}
+                            type="text"
+                            // search
+                            maxLength={26}
+                            onchange={() => { setError("") }}
+                            {...register("name")}
+                            required
+                        />
+                        <ComInput
+                            placeholder={textApp.Reissue.placeholder.phone}
+                            label={textApp.Reissue.label.phone}
+                            type="numbers"
+                            maxLength={16}
+                            {...register("phone")}
+                            required
+                        />
+                        <ComInput
+                            placeholder={textApp.Reissue.placeholder.email}
+                            label={textApp.Reissue.label.email}
+                            type="text"
+                            {...register("email")}
+                            required
+                        />
+                        <h1 className="text-red-500">{error1}</h1>
+                        <ComButton
+                            htmlType="submit"
+                            type="primary"
+                        >
+                            Thay đổi
+                        </ComButton>
+
+
+                    </form>
+                </FormProvider>
+
 
             </Modal>
 
