@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
+import { Link } from "react-router-dom";
 
 export default function Deposit({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -71,7 +72,11 @@ export default function Deposit({activeTab}) {
       <tbody>
         {order?.map((orderData) => (
           <tr key={orderData.index}>
-            <td className="px-6 py-4 whitespace-nowrap">{orderData._id}</td>
+            <td className="px-6 py-4 whitespace-nowrap">
+                  <Link to={`/required/bill/${orderData._id}`}>
+                    View Details
+                  </Link>
+                </td>
             <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>
             <td className="px-6 py-4 whitespace-nowrap">{orderData.phone}</td>
             <td className="px-6 py-4 whitespace-nowrap">{orderData.shippingAddress}</td>

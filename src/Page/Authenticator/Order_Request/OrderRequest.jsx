@@ -35,11 +35,11 @@ const data = [
     desc: <Processing/>,
   },
 
-  {
-    label: textApp.OrderHistory.label.status2,
-    value: textApp.OrderHistory.value.status2,
-    desc: <Transporting/>,
-  },
+  // {
+  //   label: textApp.OrderHistory.label.status2,
+  //   value: textApp.OrderHistory.value.status2,
+  //   desc: <Transporting/>,
+  // },
 
   {
     label: textApp.OrderHistory.label.status3,
@@ -52,11 +52,11 @@ const data = [
     value: textApp.OrderHistory.value.status4,
     desc: <Cancel/>,
   },
-  {
-    label: textApp.OrderHistory.label.status5,
-    value: textApp.OrderHistory.value.status5,
-    desc:<Return/>,
-  },
+  // {
+  //   label: textApp.OrderHistory.label.status5,
+  //   value: textApp.OrderHistory.value.status5,
+  //   desc:<Return/>,
+  // },
   {
     label: textApp.OrderHistory.label.status6,
     value: textApp.OrderHistory.value.status6,

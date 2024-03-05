@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData, putData } from "../../../api/api";
 import { Button } from "antd";
+import { Link } from "react-router-dom";
 export default function Pprocessing({ activeTab }) {
   const [order, setOrder] = useState([]);
   const [products, setProducts] = useState([]);
@@ -113,7 +114,11 @@ export default function Pprocessing({ activeTab }) {
           <tbody>
             {order?.map((orderData) => (
               <tr key={orderData.index}>
-                <td className="px-6 py-4 whitespace-nowrap">{orderData._id}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <Link to={`/required/bill/${orderData._id}`}>
+                    View Details
+                  </Link>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.name}
                 </td>

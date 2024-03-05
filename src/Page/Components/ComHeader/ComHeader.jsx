@@ -550,17 +550,25 @@ export default function ComHeader({ dataCart, updateCart }) {
           <div
             style={{ cursor: "pointer", padding: "5px" }}
             className="shadow-md"
-            onClick={() => handleClick(item?.link)}
+            // onClick={() => handleClick(item?.link)}
             key={key}
           >
-            {item?.pusher?.name} {item?.textType}{" "}
-            <span style={{ color: "#509adb", fontWeight: "500" }}>
+            <Link
+              to={`/author/${item?.pusher?._id}`}
+              style={{ color: "#509adb", fontWeight: "500" }}
+            >
+              {item?.pusher?.name}
+            </Link>{" "}
+            {item?.textType}{" "}
+            <Link
+              to={`/artwork/${item?.artwork?._id}`}
+              style={{ color: "#509adb", fontWeight: "500" }}
+            >
               {renderType(item?.type)} {renderTail(item?.type)}
-            </span>
+            </Link>
           </div>
         ))}
       </Drawer>
-      {console.log(listNotification)}
       <FloatButton.BackTop />
     </>
   );

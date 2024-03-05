@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
+import { Link } from "react-router-dom";
 
 export default function All({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -21,7 +22,24 @@ export default function All({activeTab}) {
 
       getData('/customOrder/user', {})
         .then((orderData) => {
-          setOrder(orderData?.data?.docs);
+                                           const newArray =
+                                             orderData.data.userOrders.length >
+                                             0
+                                               ? orderData.data.userOrders.map(
+                                                   (item) => {
+                                                     const updatedItem = {
+                                                       ...item,
+                                                     };
+                                                     updatedItem.userOrders = true;
+                                                     return updatedItem;
+                                                   }
+                                                 )
+                                               : [];
+                                           const combinedOrders = [
+                                             ...orderData.data.freelancerOrders,
+                                             ...newArray,
+                                           ];
+                                           setOrder(combinedOrders);
     
         })
         .catch((error) => {
@@ -113,7 +131,11 @@ function getStatusText(status) {
         <tbody>
           {order?.map((orderData) => (
               <tr key={orderData.index}>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData._id}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                  <Link to={`/required/bill/${orderData._id}`}>
+                    View Details
+                  </Link>
+                </td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.phone}</td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.shippingAddress}</td>
