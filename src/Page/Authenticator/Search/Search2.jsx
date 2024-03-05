@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../../api/api";
 import ComHeader from "../../Components/ComHeader/ComHeader";
-import {  Radio } from "antd";
+import { Radio } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
@@ -30,7 +30,7 @@ export default function Search() {
             }
             if (checked === 3) {
                 const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=20`);
-               
+
                 return response.data.user;
             }
         } catch (error) {
@@ -86,9 +86,9 @@ export default function Search() {
                 container.removeEventListener('load', handleImageLoad);
             }
         };
-    }, [products,checked]);
+    }, [products, checked]);
 
-  
+
     const onChange = (e) => {
         if (e.target.value === 1) {
             return navigate(`/search/${search}`)
@@ -124,21 +124,36 @@ export default function Search() {
                     >
                         <div className=" pin_container " style={{ width: '70vw' }} ref={containerRef}>
                             {products?.map((artwork, index) => (
-                                <Link to={`/artwork/${artwork._id}`} className={`card`} key={index} >
-                                    <img
-                                        className="rounded-md p-1"
-                                        src={artwork.image}
-                                        style={{ borderRadius: '24px' }}
-                                        alt={artwork.imageAlt}
-
-                                        onLoad={() => containerRef.current.dispatchEvent(new Event('load'))}
-                                    />
+                                <Link to={`/artwork/${artwork._id}`} className={`card`} key={index}>
+                                    <div className="relative group">
+                                        <img
+                                            className="rounded-md p-1 artwork-image"
+                                            src={artwork.image}
+                                            style={{ borderRadius: "24px" }}
+                                            alt={artwork.imageAlt}
+                                            onLoad={() =>
+                                                containerRef.current.dispatchEvent(new Event("load"))
+                                            }
+                                        />
+                                        <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <p className="text-white text-2xl"> Thể Loại:</p>
+                                            {artwork?.genre.map((genre, index) => (
+                                                <p
+                                                    className={`text-white text-xl ${index >= 3 ? "hidden" : ""
+                                                        }`}
+                                                    key={index}
+                                                >
+                                                    {genre}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </Link>
                             ))}
                         </div>
                     </InfiniteScroll> : <div className=" text-center w-screen"> Không tìm thấy bài viết đang tìm kiếm</div>}
 
-             
+
                 </div>
             </div>
         </>

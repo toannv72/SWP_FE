@@ -26,7 +26,7 @@ import axios from 'axios'
 export default function Artwork() {
     const socket = useSocket()
     const [artwork, setArtwork] = useState([])
-    const [openModal, setOpenModal]= useState(false)
+    const [openModal, setOpenModal] = useState(false)
     const [image, setImage] = useState([])
     const [disabled, setDisabled] = useState(false);
     const [dataL, setDataL] = useState(false);
@@ -72,7 +72,7 @@ export default function Artwork() {
     useEffect(() => {
         getData(`/artwork/${id}`)
             .then((artwork) => {
-                if(artwork?.data?.hidden=== false ) {
+                if (artwork?.data?.hidden === false) {
                     setArtwork(artwork.data)
                     const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
                     setLike(userLikes)
@@ -86,7 +86,7 @@ export default function Artwork() {
                 console.log(error);
             })
 
-    }, [id, dataL, like]);
+    }, [id, like]);
 
     const handleLike = (id_artwork, id_user) => {
         if (!token?._doc?._id) {
@@ -94,14 +94,14 @@ export default function Artwork() {
         }
         setLike(true);
         postData(`/artwork/likeArtwork/${id_artwork}/${id_user}`, {})
-          .then((e) => {})
-          .catch((error) => {
-            console.log(error);
-            api["error"]({
-              message: "Lỗi",
-              description: error.response.data.error,
+            .then((e) => { })
+            .catch((error) => {
+                console.log(error);
+                api["error"]({
+                    message: "Lỗi",
+                    description: error.response.data.error,
+                });
             });
-          });
         sendNotification("đã thích", 1)
     };
     const handleUnLike = (id_artwork, id_user) => {
@@ -111,14 +111,14 @@ export default function Artwork() {
         setLike(false);
 
         postData(`/artwork/unlikeArtwork/${id_artwork}/${id_user}`, {})
-          .then((e) => {})
-          .catch((error) => {
-            console.log(error);
-            api["error"]({
-              message: "Lỗi",
-              description: error.response.data.error,
+            .then((e) => { })
+            .catch((error) => {
+                console.log(error);
+                api["error"]({
+                    message: "Lỗi",
+                    description: error.response.data.error,
+                });
             });
-          });
 
     };
     useEffect(() => {
@@ -137,36 +137,65 @@ export default function Artwork() {
         if (!user?._doc?.username) {
             return navigate('/login', { state: location.pathname })
         } else {
-            console.log(data);
+          
             postData(`/artwork/comments/${id}/${token._doc._id}`, { ...data, })
                 .then((r) => {
-                    console.log(r);
+                    getData(`/artwork/${id}`)
+                    .then((artwork) => {
+                        if(artwork?.data?.hidden=== false ) {
+                            setArtwork(artwork.data)
+                            const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
+                            setLike(userLikes)
+                        }
+                        else {
+                            setArtwork()
+                        }
+                    })
+                    .catch((error) => {
+                        setError(true)
+                        console.log(error);
+                    })
                 })
                 .catch((error) => {
                     console.log(error);
-            api["error"]({
-              message: "Lỗi",
-              description: error.response.data.error,
-            });
+                    api["error"]({
+                        message: "Lỗi",
+                        description: error.response.data.error,
+                    });
+                 
                 });
             sendNotification("đã comment", 1)
         }
         clearTextArea()
-        setDataL(!dataL)
-        setValue('content', '');
-        return
-    }
 
+        setValue('content', '');
+        return getData(`/artwork/${id}`)
+            .then((artwork) => {
+                if (artwork?.data?.hidden === false) {
+                    setArtwork(artwork.data)
+                    const userLikes = (artwork?.data?.likes || []).some(like => like.user === token?._doc?._id);
+                    setLike(userLikes)
+                }
+                else {
+                    setArtwork()
+                }
+            })
+            .catch((error) => {
+                setError(true)
+                console.log(error);
+            })
+    }
+    console.log(dataL);
     const sendNotification = async (textType, type) => {
         socket.emit("push_notification", { artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type, link: window.location.href })
-        const res= await axios({
+        const res = await axios({
             url: "http://localhost:5000/api/notification",
             method: "post",
             data: {
                 artwork: artwork, pusher: user._doc, author: artwork?.user, textType, type, link: window.location.href
             }
         })
-        const result= await res.data
+        const result = await res.data
         console.log(result)
     }
 

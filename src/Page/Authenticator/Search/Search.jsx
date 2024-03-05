@@ -150,21 +150,31 @@ export default function SearchGenre() {
                 ref={containerRef}
               >
                 {products?.map((artwork, index) => (
-                  <Link
-                    to={`/artwork/${artwork._id}`}
-                    className={`card`}
-                    key={index}
-                  >
-                    <img
-                      className="rounded-md p-1"
-                      src={artwork.image}
-                      style={{ borderRadius: "24px" }}
-                      alt={artwork.imageAlt}
-                      onLoad={() =>
-                        containerRef.current.dispatchEvent(new Event("load"))
-                      }
-                    />
-                  </Link>
+                  <Link to={`/artwork/${artwork._id}`} className={`card`} key={index}>
+              <div className="relative group">
+                <img
+                  className="rounded-md p-1 artwork-image"
+                  src={artwork.image}
+                  style={{ borderRadius: "24px" }}
+                  alt={artwork.imageAlt}
+                  onLoad={() =>
+                    containerRef.current.dispatchEvent(new Event("load"))
+                  }
+                />
+                <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-white text-2xl"> Thể Loại:</p>
+                  {artwork?.genre.map((genre, index) => (
+                    <p
+                      className={`text-white text-xl ${index >= 3 ? "hidden" : ""
+                        }`}
+                      key={index}
+                    >
+                      {genre}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </Link>
                 ))}
               </div>
             </InfiniteScroll>
