@@ -9,6 +9,7 @@ import {
   Image,
   Input,
   Modal,
+  Popconfirm,
   Select,
   Space,
   Table,
@@ -294,41 +295,43 @@ export default function TableFeedBack() {
       ),
     },
     {
-        title: "Trạng thái",
-        dataIndex: "hidden",
-        key: "hidden",
-        width: 300,
-        // ...getColumnSearchProps("accept", "trạng thái"),
-        // render: (_, record) => (
-  
-        //     <div className="text-sm text-gray-700 line-clamp-4">
-        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-        //     </div>
-  
-        // ),
-        ellipsis: {
-          showTitle: false,
-        },
-        render: (record) => (
-          <>
-            <div>{record=== true && "Đã ẩn"}</div>
-            <div>{record=== false && "Chưa ẩn"}</div>
-          </>
-        ),
+      title: "Trạng thái",
+      key: "artwork",
+      width: 300,
+      // ...getColumnSearchProps("accept", "trạng thái"),
+      // render: (_, record) => (
+
+      //     <div className="text-sm text-gray-700 line-clamp-4">
+      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+      //     </div>
+
+      // ),
+      ellipsis: {
+        showTitle: false,
       },
+      render: (record) => (
+        <>
+          <div>{record?.artwork?.hidden ? "Đã ẩn" : "Chưa ẩn"}</div>
+        </>
+      ),
+    },
     {
       title: "Action",
-      key: "operation",
+      key: "artwork",
       fixed: "right",
       width: 100,
 
       render: (_, record) => (
         <div className="flex items-center flex-col">
           <div>
-            {record?.hidden=== false && 
-              <Typography.Link
-                onClick={async () => {
-                  const result = await hideArtwork("feedback/hide",record._id, {artwork: (record.artwork?._id || record.user?._id)});
+            {record?.artwork?.hidden === false && (
+              <Popconfirm
+                title="Block the artwork"
+                description="Are you sure to block this artwork?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/hide", {
+                    artwork: record.artwork?._id,
+                  });
                   if (result?.hide === true) {
                     swal("Thông báo", "Ẩn bài post thành công", "success");
                     setDataRun(!dataRun);
@@ -336,17 +339,22 @@ export default function TableFeedBack() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Ẩn
-              </Typography.Link>
-            }
+                <Button danger>Ẩn</Button>
+              </Popconfirm>
+            )}
           </div>
           <div>
-            {record?.hidden=== true &&
-              <Typography.Link
-                style={{ whiteSpace: "nowrap" }}
-                onClick={async () => {
-                  const result = await unhideArtwork("feedback/unhide", record._id, {artwork: (record.artwork?._id || record.user?._id)});
+            {record?.artwork?.hidden === true && (
+              <Popconfirm
+                title="UnBlock the artwork"
+                description="Are you sure to Unblock this artwork?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/unhide", {
+                    artwork: record.artwork?._id,
+                  });
                   if (result?.unhide === true) {
                     swal("Thông báo", "Huỷ ẩn post thành công", "success");
                     setDataRun(!dataRun);
@@ -354,10 +362,14 @@ export default function TableFeedBack() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Huỷ ẩn
-              </Typography.Link>
-            }
+                <Button type="primary" ghost>
+                  Hủy Ẩn
+                </Button>
+              </Popconfirm>
+            )}
           </div>
           {/* <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>

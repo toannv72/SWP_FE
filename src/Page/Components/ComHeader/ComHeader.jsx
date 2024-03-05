@@ -159,7 +159,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   };
 
       const changeSelectCate = (value) => {
-       value ==="" ? navigate("/") : navigate(`?cate=${value}`);
+       value ==="" ? navigate("/") : navigate(`/?cate=${value}`);
       };
   return (
     <>
@@ -313,34 +313,32 @@ export default function ComHeader({ dataCart, updateCart }) {
                           </div>
                         </Link>
                       ))}
-                      {location.pathname === "/" && (
-                        <Select
-                          defaultValue=""
-                          style={{
-                            width: 120,
-                          }}
-                          className="head flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
-                          onChange={changeSelectCate}
-                          options={[
-                            {
-                              label: "Tất cả",
-                              value: "",
-                            },
-                            {
-                              label: "Tranh",
-                              value: "Tranh",
-                            },
-                            {
-                              label: "Trang trí",
-                              value: "Trang trí",
-                            },
-                            {
-                              label: "Nghệ thuật",
-                              value: "Nghệ thuật",
-                            },
-                          ]}
-                        />
-                      )}
+                      <Select
+                        defaultValue=""
+                        style={{
+                          width: 120,
+                        }}
+                        className="head flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
+                        onChange={changeSelectCate}
+                        options={[
+                          {
+                            label: "Tất cả",
+                            value: "",
+                          },
+                          {
+                            label: "Tranh",
+                            value: "Tranh",
+                          },
+                          {
+                            label: "Trang trí",
+                            value: "Trang trí",
+                          },
+                          {
+                            label: "Nghệ thuật",
+                            value: "Nghệ thuật",
+                          },
+                        ]}
+                      />
                     </div>
                   </Popover.Group>
 

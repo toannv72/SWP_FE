@@ -5,14 +5,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Highlighter from 'react-highlight-words';
 import * as yup from "yup"
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Radio, Space, Table, Typography, notification } from 'antd';
+import { Button, Input, Modal, Popconfirm, Radio, Space, Table, Typography, notification } from 'antd';
 import moment from 'moment/moment';
 import ComInput from '../../Components/ComInput/ComInput';
 import { textApp } from '../../../TextContent/textApp';
-import { deleteData, getData, postData, unblockData } from '../../../api/api';
+import { deleteData, getData, hideArtwork, postData, unblockData, unhideArtwork } from '../../../api/api';
 import ComButton from '../../Components/ComButton/ComButton';
 import ComHeader from '../../Components/ComHeader/ComHeader';
 import AdminHeader from '../../Components/ComHeader/AdminHeader';
+import swal from 'sweetalert';
 
 
 export default function TableUser() {
@@ -65,26 +66,24 @@ export default function TableUser() {
     };
     const deleteById = () => {
         setDisabled(true)
-        deleteData('user', productRequestDefault.id)
-            .then((data) => {
-                setDisabled(false)
-                handleCancelDelete()
-                api["success"]({
-                    message: textApp.TableProduct.Notification.delete.message,
-                    description:
-                        "Đã khóa tài khoản thành công"
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                setDisabled(false)
-                handleCancelDelete()
-                api["error"]({
-                    message: textApp.TableProduct.Notification.deleteError.message,
-                    description:
-                        "Không thể khóa tài khoản này"
-                });
-            })
+        deleteData("feedback", productRequestDefault.id)
+          .then((data) => {
+            setDisabled(false);
+            handleCancelDelete();
+            api["success"]({
+              message: textApp.TableProduct.Notification.delete.message,
+              description: "Đã khóa tài khoản thành công",
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            setDisabled(false);
+            handleCancelDelete();
+            api["error"]({
+              message: textApp.TableProduct.Notification.deleteError.message,
+              description: "Không thể khóa tài khoản này",
+            });
+          });
         setDataRun(!dataRun)
 
     }
@@ -273,118 +272,138 @@ export default function TableUser() {
             ),
     });
     const columns = [
+      {
+        title: "username",
+        dataIndex: "username",
+        key: "username",
+        width: 100,
+        fixed: "left",
+        ...getColumnSearchProps("name", "tên sản phẩm"),
+      },
+      // {
+      //     title: 'password',
+      //     dataIndex: 'password',
+      //     width: 100,
+      //     key: 'password',
 
-        {
-            title: 'username',
-            dataIndex: 'username',
-            key: 'username',
-            width: 100,
-            fixed: 'left',
-            ...getColumnSearchProps('name', 'tên sản phẩm'),
-
-        },
-        // {
-        //     title: 'password',
-        //     dataIndex: 'password',
-        //     width: 100,
-        //     key: 'password',
-
-        //     render: (_, record) => (
-        //         <div >
-        //             <h1>**********</h1>
-        //         </div>
-        //     ),
-        // },
-        {
-            title: 'Ngày tạo',
-            dataIndex: 'createdAt',
-            width: 110,
-            key: 'createdAt',
-            sorter: (a, b) => moment(a.createdAt).unix() - moment(b.createdAt).unix(),
-            render: (_, record) => (
-                <div className="text-sm text-gray-700 line-clamp-4">
-                    <p>{moment(record.createdAt).format('l')}</p>
-                </div>
-            )
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
-            width: 110,
-            key: 'phone',
-        
-        },
-        {
-            title: 'Gmail',
-            dataIndex: 'email',
-            width: 110,
-            key: 'email',
-        
-        },
-        {
-            title: <div className='flex justify-center '>trạng thái</div>,
-            dataIndex: '',
-            key: '',
-            width: 100,
-            render: (_, record) => (
-                <div className='flex items-center flex-col'>
-                {console.log(record)}
-                {record?.deleted=== true && 
-                    <div className='mt-2'>
-                        
-                            <div className='text-red-600'>Đã khóa</div>
-                       
-                    </div>
-                }
-                {
-                    record?.deleted=== false && 
-                    <div className='mt-2'>
-                        
-                            <div className=''>Hoạt động</div>
-                      
-                    </div>
-                }
-            </div>
-            ),
-
-        },
-        {
-            title: <div className='flex justify-center '>Tài khoản</div>,
-            dataIndex: '',
-            key: '',
-            width: 100,
-            render: (_, record) => (
-                <div >
-                    <div className='flex justify-center text-lg'>{record.role}</div>
-                </div>
-            ),
-
-        },
-        {
-            title: <div className='flex justify-center'>Action</div>,
-            key: 'operation',
-            width: 50,
-            render: (_, record) => (
-                <div className='flex items-center flex-col'>
-                    {console.log(record)}
-                    {record?.deleted=== true && 
-                        <div className='mt-2'>
-                            <Typography.Link onClick={() => showModalUnblock(record)}>
-                                <div className='text-red-600'>Mở khoá</div>
-                            </Typography.Link>
-                        </div>
+      //     render: (_, record) => (
+      //         <div >
+      //             <h1>**********</h1>
+      //         </div>
+      //     ),
+      // },
+      {
+        title: "Ngày tạo",
+        dataIndex: "createdAt",
+        width: 110,
+        key: "createdAt",
+        sorter: (a, b) =>
+          moment(a.createdAt).unix() - moment(b.createdAt).unix(),
+        render: (_, record) => (
+          <div className="text-sm text-gray-700 line-clamp-4">
+            <p>{moment(record.createdAt).format("l")}</p>
+          </div>
+        ),
+      },
+      {
+        title: "Số điện thoại",
+        dataIndex: "phone",
+        width: 110,
+        key: "phone",
+      },
+      {
+        title: "Gmail",
+        dataIndex: "email",
+        width: 110,
+        key: "email",
+      },
+      {
+        title: <div className="flex justify-center ">trạng thái</div>,
+        dataIndex: "",
+        key: "",
+        width: 100,
+        render: (_, record) => (
+          <div className="flex items-center flex-col">
+            {console.log(record)}
+            {record?.hidden === true && (
+              <div className="mt-2">
+                <div className="text-red-600">Đã khóa</div>
+              </div>
+            )}
+            {record?.hidden === false && (
+              <div className="mt-2">
+                <div className="">Hoạt động</div>
+              </div>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: <div className="flex justify-center ">Tài khoản</div>,
+        dataIndex: "",
+        key: "",
+        width: 100,
+        render: (_, record) => (
+          <div>
+            <div className="flex justify-center text-lg">{record.role}</div>
+          </div>
+        ),
+      },
+      {
+        title: <div className="flex justify-center">Action</div>,
+        key: "operation",
+        width: 50,
+        render: (_, record) => (
+          <div className="flex items-center flex-col">
+            {record?.hidden === true && (
+              <div className="mt-2">
+                <Popconfirm
+                  title="UnBlock the user"
+                  description="Are you sure to unblock this user?"
+                  onConfirm={async () => {
+                    const result = await hideArtwork("feedback/unhide", {
+                      accuse: record._id,
+                    });
+                    if (result?.hide === true) {
+                      swal("Thông báo", "Ẩn bài post thành công", "success");
+                      setDataRun(!dataRun);
+                    } else {
+                      swal("Thông báo", "Có lỗi xảy ra", "error");
                     }
-                    {
-                        record?.deleted=== false && 
-                        <div className='mt-2'>
-                            <Typography.Link onClick={() => showModalDelete(record)}>
-                                <div className='text-red-600'>Khóa</div>
-                            </Typography.Link>
-                        </div>
-                    }
-                </div>
-            )
-        },
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="primary" ghost>
+                    Mở khoá
+                  </Button>
+                </Popconfirm>
+              </div>
+            )}
+            {record?.hidden === false && (
+              <Popconfirm
+                title="Block the user"
+                description="Are you sure to block this user?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/hide", {
+                    accuse: record._id,
+                  });
+                  if (result?.hide === true) {
+                    swal("Thông báo", "Ẩn bài post thành công", "success");
+                    setDataRun(!dataRun);
+                  } else {
+                    swal("Thông báo", "Có lỗi xảy ra", "error");
+                  }
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button danger>khoá</Button>
+              </Popconfirm>
+            )}
+          </div>
+        ),
+      },
     ];
 
     return (

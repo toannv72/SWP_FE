@@ -9,6 +9,7 @@ import {
   Image,
   Input,
   Modal,
+  Popconfirm,
   Select,
   Space,
   Table,
@@ -31,6 +32,8 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
 import AdminHeader from "../../Components/ComHeader/AdminHeader";
+import axios from "axios";
+import { Socket } from "socket.io-client";
 
 export default function TableReportUser() {
   const [disabled, setDisabled] = useState(false);
@@ -113,10 +116,10 @@ export default function TableReportUser() {
       .then((data) => {
         setDisabled(false);
         handleCancelDelete();
-        api["success"]({
-          message: textApp.TableProduct.Notification.delete.message,
-          description: textApp.TableProduct.Notification.delete.description,
-        });
+                    api["success"]({
+                      message: textApp.TableProduct.Notification.delete.message,
+                      description: "Đã khóa tài khoản thành công",
+                    });
       })
       .catch((error) => {
         console.log(error);
@@ -124,8 +127,7 @@ export default function TableReportUser() {
         handleCancelDelete();
         api["error"]({
           message: textApp.TableProduct.Notification.deleteError.message,
-          description:
-            textApp.TableProduct.Notification.deleteError.description,
+          description: "Không thể khóa tài khoản này",
         });
       });
     setDataRun(!dataRun);
@@ -293,45 +295,43 @@ export default function TableReportUser() {
       ),
     },
     {
-        title: "Trạng thái",
-        dataIndex: "hidden",
-        key: "hidden",
-        width: 300,
-        // ...getColumnSearchProps("accept", "trạng thái"),
-        // render: (_, record) => (
-  
-        //     <div className="text-sm text-gray-700 line-clamp-4">
-        //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
-        //     </div>
-  
-        // ),
-        ellipsis: {
-          showTitle: false,
-        },
-        render: (record) => (
-          <>
-            <div>{record=== true && "Đã ẩn"}</div>
-            <div>{record=== false && "Chưa ẩn"}</div>
-          </>
-        ),
+      title: "Trạng thái",
+      key: "accuse",
+      width: 300,
+      // ...getColumnSearchProps("accept", "trạng thái"),
+      // render: (_, record) => (
+
+      //     <div className="text-sm text-gray-700 line-clamp-4">
+      //         <p className="text-sm text-gray-700 line-clamp-4">{record.description}</p>
+      //     </div>
+
+      // ),
+      ellipsis: {
+        showTitle: false,
       },
+      render: (record) => (
+        <>
+          <div>{record?.accuse?.hidden ? "Đã ẩn" : "Chưa ẩn"}</div>
+        </>
+      ),
+    },
     {
       title: "Action",
-      key: "operation",
+      key: "accuse",
       fixed: "right",
       width: 100,
 
       render: (_, record) => (
         <div className="flex items-center flex-col">
           <div>
-            {record?.hidden=== false && 
-              <Typography.Link
-                onClick={async () => {
-                  const result = await hideArtwork(
-                    "feedback/hide",
-                    record._id,
-                    { artwork: record.artwork?._id || record.accuse?._id }
-                  );
+            {record?.accuse?.hidden === false && (
+              <Popconfirm
+                title="Block the user"
+                description="Are you sure to block this user?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/hide", {
+                    accuse: record.accuse?._id,
+                  });
                   if (result?.hide === true) {
                     swal("Thông báo", "Ẩn bài post thành công", "success");
                     setDataRun(!dataRun);
@@ -339,22 +339,20 @@ export default function TableReportUser() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Ẩn
-              </Typography.Link>
-            }
-          </div>
-          <div>
-            {
-              record?.hidden=== true && 
-              <Typography.Link
-                style={{ whiteSpace: "nowrap" }}
-                onClick={async () => {
-                  const result = await unhideArtwork(
-                    "feedback/unhide",
-                    record._id,
-                    { artwork: record.artwork?._id || record.accuse?._id }
-                  );
+                <Button danger>Ẩn</Button>
+              </Popconfirm>
+            )}
+            {record?.accuse?.hidden === true && (
+              <Popconfirm
+                title="Block the user"
+                description="Are you sure to block this user?"
+                onConfirm={async () => {
+                  const result = await hideArtwork("feedback/unhide", {
+                    accuse: record.accuse?._id,
+                  });
                   if (result?.unhide === true) {
                     swal("Thông báo", "Huỷ ẩn post thành công", "success");
                     setDataRun(!dataRun);
@@ -362,10 +360,14 @@ export default function TableReportUser() {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
                   }
                 }}
+                okText="Yes"
+                cancelText="No"
               >
-                Huỷ ẩn
-              </Typography.Link>
-            }
+                <Button type="primary" ghost>
+                  Hủy Ẩn
+                </Button>
+              </Popconfirm>
+            )}
           </div>
           {/* <div className="mt-2">
             <Typography.Link onClick={() => showModalDelete(record)}>
@@ -376,7 +378,6 @@ export default function TableReportUser() {
       ),
     },
   ];
-
   return (
     <>
       {contextHolder}

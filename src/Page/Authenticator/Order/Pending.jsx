@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData, putData } from '../../../api/api';
 import { notification, Button, Modal } from "antd";
+import { Link } from "react-router-dom";
 
 export default function Pending({ activeTab }) {
   const [order, setOrder] = useState([]);
@@ -71,10 +72,15 @@ export default function Pending({ activeTab }) {
     <div className="container mx-auto p-4">
       {contextHolder}
 
-      <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
+      <h1 className="text-2xl font-semibold mb-4">
+        {textApp.OrderHistory.title}
+      </h1>
       {order?.length === 0 ? (
         <div className="flex items-center justify-center">
-          <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95" alt="" />
+          <img
+            src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95"
+            alt=""
+          />
         </div>
       ) : order?.error ? (
         <p>Error: {order?.error.message}</p>
@@ -84,27 +90,37 @@ export default function Pending({ activeTab }) {
             <li key={orderData.index} className="py-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                 <div className="col-span-2">
-                  <h2 className="text-lg font-semibold mb-2">{textApp.OrderHistory.product.amount} {formatCurrency(orderData.totalAmount)}</h2>
+                  <h2 className="text-lg font-semibold mb-2">
+                    {textApp.OrderHistory.product.amount}{" "}
+                    {formatCurrency(orderData.totalAmount)}
+                  </h2>
                   <ul className="space-y-4">
                     {orderData.products.map((product, id) => {
                       const productInfo = getProductById(product.product);
-                      const materials = productInfo?.material?.join(', ');
+                      const materials = productInfo?.material?.join(", ");
                       return (
                         <li key={id} className="flex items-center space-x-4">
-                          <img
-                            className="w-16 h-16 rounded-full bg-gray-200"
-                            src={productInfo?.image}
-                            alt=""
-                          />
+                          <Link to={`/product/${productInfo._id}`}>
+                            <img
+                              className="w-16 h-16 rounded-full bg-gray-200"
+                              src={productInfo?.image}
+                              alt=""
+                            />
+                          </Link>
+
                           <div className="flex-1">
-                            <p className="text-lg font-semibold">{productInfo?.name}</p>
+                            <p className="text-lg font-semibold">
+                              {productInfo?.name}
+                            </p>
                             <p className="text-gray-500">{materials}</p>
                           </div>
                           <div className="text-sm text-gray-500">
-                            {textApp.OrderHistory.product.quantity} {product?.quantity}
+                            {textApp.OrderHistory.product.quantity}{" "}
+                            {product?.quantity}
                           </div>
                           <div className="text-sm text-gray-900">
-                            {textApp.OrderHistory.product.price} {formatCurrency(productInfo?.price)}
+                            {textApp.OrderHistory.product.price}{" "}
+                            {formatCurrency(productInfo?.price)}
                           </div>
                         </li>
                       );
@@ -121,16 +137,20 @@ export default function Pending({ activeTab }) {
                 <div className="col-span-3 mt-4 md:mt-0">
                   <div className="flex flex-col items-end mb-4">
                     <div className="flex items-center space-x-2">
-                      {orderData.status !== 'Canceled' && (
+                      {orderData.status !== "Canceled" && (
                         <button
                           className="bg-orange-400 text-white rounded-md px-2 py-1"
-                          onClick={() => showCancelConfirm(orderData._id)}>
+                          onClick={() => showCancelConfirm(orderData._id)}
+                        >
                           {textApp.OrderHistory.button.cancel}
                         </button>
                       )}
-                      <button className="text-gray-900 font-semibold rounded-md">
+                      <Link
+                        to={`/author/${orderData.seller}`}
+                        className="text-gray-900 font-semibold rounded-md"
+                      >
                         {textApp.OrderHistory.button.contact}
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -147,21 +167,12 @@ export default function Pending({ activeTab }) {
         onCancel={handleCancel}
       >
         <p>Bạn có chắc chắn muốn hủy đơn hàng?</p>
-        <Button
-
-                        type="primary"
-                        danger
-                        onClick={handleOk}
-                    >
-                        Xác nhận
-                    </Button>
-                    <Button
-                        type="default"
-                        primary
-                        onClick={handleCancel}
-                    >
-                       Hủy
-                    </Button>
+        <Button type="primary" danger onClick={handleOk}>
+          Xác nhận
+        </Button>
+        <Button type="default" primary onClick={handleCancel}>
+          Hủy
+        </Button>
       </Modal>
     </div>
   );

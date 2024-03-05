@@ -84,12 +84,12 @@ export default function ComPost({ }) {
                         setDisabled(false)
                     })
                     .catch((error) => {
+                        
                         setDisabled(false)
 
                         api["error"]({
-                            message: "Lỗi",
-                            description:
-                                "Hiện đang gặp phải vấn đề vui lòng thử lại sau"
+                          message: "Lỗi",
+                          description: error.response.data.error,
                         });
 
                     });
