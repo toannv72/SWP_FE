@@ -316,7 +316,7 @@ export default function AdminHeader({ dataCart, updateCart }) {
 
                   <div className="ml-auto flex items-center">
                     {/* Search */}
-                    <div className="flex lg:ml-6">
+                    {/* <div className="flex lg:ml-6">
                       <FormProvider {...methods}>
                         <form
                           onSubmit={handleSubmit(onSubmit)}
@@ -330,8 +330,8 @@ export default function AdminHeader({ dataCart, updateCart }) {
                           />
                         </form>
                       </FormProvider>
-                    </div>
-                    <div className="ml-4 flow-root lg:ml-6">
+                    </div> */}
+                    {/* <div className="ml-4 flow-root lg:ml-6">
                       <button
                         type="button"
                         className="group -m-2 flex items-center p-2"
@@ -342,13 +342,13 @@ export default function AdminHeader({ dataCart, updateCart }) {
                           aria-hidden="true"
                         />
 
-                        {/* <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                           {dataCart?.length || cart.length}
-                        </span> */}
+                        </span>
                       </button>
-                    </div>
+                    </div> */}
                     {/* Cart */}
-                    <div className="ml-4 flow-root lg:ml-6">
+                    {/* <div className="ml-4 flow-root lg:ml-6">
                       <button
                         onClick={() => {
                           setShoppingCart(true);
@@ -364,7 +364,7 @@ export default function AdminHeader({ dataCart, updateCart }) {
                         </span>
                         <span className="sr-only">items in cart, view bag</span>
                       </button>
-                    </div>
+                    </div> */}
                     {/* login */}
                     {!sttLogin?._doc && (
                       <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 lg:ml-6">

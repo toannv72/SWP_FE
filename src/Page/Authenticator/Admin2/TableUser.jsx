@@ -389,7 +389,7 @@ export default function TableUser() {
                     accuse: record._id,
                   });
                   if (result?.hide === true) {
-                    swal("Thông báo", "Ẩn bài post thành công", "success");
+                    swal("Thông báo", "Ẩn user thành công", "success");
                     setDataRun(!dataRun);
                   } else {
                     swal("Thông báo", "Có lỗi xảy ra", "error");
