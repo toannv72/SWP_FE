@@ -278,7 +278,15 @@ export default function TableUser() {
         key: "username",
         width: 100,
         fixed: "left",
-        ...getColumnSearchProps("name", "tên sản phẩm"),
+        ...getColumnSearchProps("name", ""),
+      },
+      {
+        title: "name",
+        dataIndex: "name",
+        key: "name",
+        width: 100,
+        fixed: "left",
+        ...getColumnSearchProps("name", ""),
       },
       // {
       //     title: 'password',
