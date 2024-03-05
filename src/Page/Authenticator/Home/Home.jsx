@@ -50,11 +50,11 @@ export default function Home() {
       setPage(page + 1);
     }
   };
-
+console.log(products);
   useEffect(() => {
     const loadInitialData = async () => {
       const initialProducts = await fetchData(page);
-      setProducts(initialProducts);
+      setProducts([...products,...initialProducts]);
     };
     loadInitialData();
   }, [params["cate"], page]); // Run only once on component mount
@@ -68,19 +68,15 @@ export default function Home() {
         const aspectRatio = img.naturalHeight / img.naturalWidth;
         const cardHeight = card.offsetWidth * aspectRatio;
         const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
-
         // Áp dụng giá trị cho grid-row-end
         card.style.gridRowEnd = `span ${rowSpan}`;
       });
     };
-
     const container = containerRef.current;
-
     if (container) {
       // Kiểm tra khi các hình ảnh được tải xong
       container.addEventListener("load", handleImageLoad);
     }
-
     return () => {
       if (container) {
         // Cleanup event listener when component unmounts
@@ -90,7 +86,7 @@ export default function Home() {
   }, [products]);
 
   // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
-  console.log(token);
+
   return (
     <>
       <ComHeader />

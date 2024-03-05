@@ -17,22 +17,21 @@ export default function Search() {
     const containerRef = useRef(null);
     const navigate = useNavigate();
 
-    console.log(products);
     const fetchData = async (pageNumber) => {
         try {
-            if (checked === 1) {
-                const response = await getData(`/artwork/search?name=${search}&page=${pageNumber}&limit=20`);
-                return response.data.products;
-            }
-            if (checked === 2) {
-                const response = await getData(`/artwork/searchGenre?name=${search}&page=${pageNumber}&limit=20`);
-                return response.data.products;
-            }
-            if (checked === 3) {
-                const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=20`);
 
-                return response.data.user;
-            }
+            const response = await getData(
+                `/artwork/searchGenre?name=${search}&page=${pageNumber}&limit=20`
+            );
+            console.log(response);
+
+            const newArray =
+                response.data.products.length > 0
+                    ? response.data.products.filter((item) => item.hidden !== true)
+                    : [];
+            return newArray;
+
+
         } catch (error) {
             console.log(error);
             return [];
@@ -55,7 +54,6 @@ export default function Search() {
             setProducts(initialProducts);
         };
         loadInitialData();
-        setPage(1);
     }, [search, checked]); // Run only once on component mount
 
     useEffect(() => {
