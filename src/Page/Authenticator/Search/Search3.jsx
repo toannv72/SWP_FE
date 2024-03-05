@@ -73,13 +73,11 @@ export default function SearchUser() {
       useEffect(() => {
         const handleImageLoad = () => {
           const cards = containerRef.current.querySelectorAll(".card");
-    
           cards.forEach((card) => {
             const img = card.querySelector("img");
             const aspectRatio = img.naturalHeight / img.naturalWidth;
             const cardHeight = card.offsetWidth * aspectRatio;
             const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
-    
             // Áp dụng giá trị cho grid-row-end
             card.style.gridRowEnd = `span ${rowSpan}`;
           });

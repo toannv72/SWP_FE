@@ -14,7 +14,6 @@ export default function SearchGenre() {
   const [checked, setChecked] = useState(1);
   const containerRef = useRef(null);
   const navigate = useNavigate();
-
   const fetchData = async (pageNumber) => {
     try {
       if (checked === 1) {
@@ -50,7 +49,9 @@ export default function SearchGenre() {
   };
 
   const fetchMoreProducts = async () => {
+    
     const newProducts = await fetchData(page + 1);
+    console.log(newProducts);
     if (newProducts.length === 0) {
       setHasMore(false); // No more data to load
     } else {
@@ -60,6 +61,8 @@ export default function SearchGenre() {
   };
 
   useEffect(() => {
+console.log(3);
+
     const loadInitialData = async () => {
       const initialProducts = await fetchData(page);
       setProducts(initialProducts);
@@ -69,6 +72,8 @@ export default function SearchGenre() {
   }, [search, checked]); // Run only once on component mount
 
   useEffect(() => {
+console.log(4);
+
     const handleImageLoad = () => {
       const cards = containerRef.current.querySelectorAll(".card");
       cards.forEach((card) => {
@@ -98,10 +103,13 @@ export default function SearchGenre() {
   }, [products, checked]);
 
   const onChange = (e) => {
+
+
     if (e.target.value === 1) {
       return navigate(`/search/${search}`);
     }
     if (e.target.value === 2) {
+      
       return navigate(`/searchGenre/${search}`);
     }
     if (e.target.value === 3) {
@@ -142,7 +150,7 @@ export default function SearchGenre() {
               dataLength={products?.length}
               next={fetchMoreProducts}
               hasMore={hasMore}
-              // loader={<h4>Loading...</h4>}
+            // loader={<h4>Loading...</h4>}
             >
               <div
                 className=" pin_container "
@@ -151,30 +159,30 @@ export default function SearchGenre() {
               >
                 {products?.map((artwork, index) => (
                   <Link to={`/artwork/${artwork._id}`} className={`card`} key={index}>
-              <div className="relative group">
-                <img
-                  className="rounded-md p-1 artwork-image"
-                  src={artwork.image}
-                  style={{ borderRadius: "24px" }}
-                  alt={artwork.imageAlt}
-                  onLoad={() =>
-                    containerRef.current.dispatchEvent(new Event("load"))
-                  }
-                />
-                <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-white text-2xl"> Thể Loại:</p>
-                  {artwork?.genre.map((genre, index) => (
-                    <p
-                      className={`text-white text-xl ${index >= 3 ? "hidden" : ""
-                        }`}
-                      key={index}
-                    >
-                      {genre}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </Link>
+                    <div className="relative group">
+                      <img
+                        className="rounded-md p-1 artwork-image"
+                        src={artwork.image}
+                        style={{ borderRadius: "24px" }}
+                        alt={artwork.imageAlt}
+                        onLoad={() =>
+                          containerRef.current.dispatchEvent(new Event("load"))
+                        }
+                      />
+                      <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p className="text-white text-2xl"> Thể Loại:</p>
+                        {artwork?.genre.map((genre, index) => (
+                          <p
+                            className={`text-white text-xl ${index >= 3 ? "hidden" : ""
+                              }`}
+                            key={index}
+                          >
+                            {genre}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </InfiniteScroll>
