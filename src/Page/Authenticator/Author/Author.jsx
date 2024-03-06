@@ -224,33 +224,36 @@ export default function Author() {
               alt=""
             />
           </div>
-          <div className="flex flex-col items-center -mt-20">
-            <img
-              src={Author?.avatar}
-              className="w-40  h-40 border-4 border-white rounded-full"
-              alt=""
-            />
-            <div className="flex items-center space-x-2 mt-2">
-              <p className="text-2xl">{Author?.name}</p>
-              <span className="bg-blue-500 rounded-full p-1" title="Verified">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-gray-100 h-2.5 w-2.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="4"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </span>
-            </div>
+          <>
             {!Author.hidden ? (
-              <>
+              <div className="flex flex-col items-center -mt-20">
+                <img
+                  src={Author?.avatar}
+                  className="w-40  h-40 border-4 border-white rounded-full"
+                  alt=""
+                />
+                <div className="flex items-center space-x-2 mt-2">
+                  <p className="text-2xl">{Author?.name}</p>
+                  <span
+                    className="bg-blue-500 rounded-full p-1"
+                    title="Verified"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-gray-100 h-2.5 w-2.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="4"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                  </span>
+                </div>
                 <p className="text-gray-700">
                   {Author?.follow?.length} người theo dõi ·{" "}
                   {Author?.followAdd?.length} người đang theo dõi
@@ -276,29 +279,31 @@ export default function Author() {
                   accuse={Author}
                   user={token}
                 />
-              </>
-            ):"tài khoản này đã bị khóa"}
-          </div>
+                <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
+                  <div className="flex items-center space-x-4 mt-2">
+                    {!follow ? (
+                      <button
+                        onClick={handFollow}
+                        className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                      >
+                        <span>Theo dõi</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handUndFollow}
+                        className="flex items-center bg-slate-500 hover:bg-slate-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                      >
+                        <span>Hủy theo dõi</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              "tài khoản này đã bị khóa"
+            )}
+          </>
 
-          <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
-            <div className="flex items-center space-x-4 mt-2">
-              {!follow ? (
-                <button
-                  onClick={handFollow}
-                  className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-                >
-                  <span>Theo dõi</span>
-                </button>
-              ) : (
-                <button
-                  onClick={handUndFollow}
-                  className="flex items-center bg-slate-500 hover:bg-slate-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-                >
-                  <span>Hủy theo dõi</span>
-                </button>
-              )}
-            </div>
-          </div>
           <InfiniteScroll
             dataLength={products.length}
             next={fetchMoreProducts}
