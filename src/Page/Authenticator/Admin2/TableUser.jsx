@@ -360,7 +360,7 @@ export default function TableUser() {
       {
         title: <div className="flex justify-center">Action</div>,
         key: "operation",
-        width: 50,
+        width: 100,
         render: (_, record) => (
           <div className="flex items-center flex-col">
             {record?.hidden === true && (
@@ -388,7 +388,7 @@ export default function TableUser() {
                 </Popconfirm>
               </div>
             )}
-            {record?.hidden === false && (
+            {record?.hidden === false && record?.role !== "admin" && (
               <Popconfirm
                 title="Block the user"
                 description="Are you sure to block this user?"

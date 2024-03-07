@@ -105,7 +105,7 @@ export default function Pending({ activeTab }) {
             {order?.map((orderData) => (
               <tr key={orderData.index}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <Link to={`/required/bill/${orderData._id}`}>
+                  <Link to={`/required/bill/${orderData._id}?view=true`}>
                     View Details
                   </Link>
                 </td>
@@ -126,7 +126,7 @@ export default function Pending({ activeTab }) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.price === 0
-                    ? "0"
+                    ? "thỏa thuận"
                     : formatCurrency(orderData.price)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

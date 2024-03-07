@@ -69,15 +69,15 @@ export default function Card({ artwork, load,setLoad, index }) {
       .email(textApp.Reissue.message.emailFormat)
       .required(textApp.Reissue.message.email),
   });
-  //   const methods = useForm({
-  //     resolver: yupResolver(loginMessenger),
-  //     defaultValues: {
-  //       // code: "",
-  //       name: token?._doc?.name,
-  //       phone: token?._doc?.phone,
-  //       email: token?._doc?.email,
-  //     },
-  //   });
+    // const methods = useForm({
+    //   resolver: yupResolver(loginMessenger),
+    //   defaultValues: {
+    //     // code: "",
+    //     name: token?._doc?.name,
+    //     phone: token?._doc?.phone,
+    //     email: token?._doc?.email,
+    //   },
+    // });
   const methods = useForm();
   useEffect(() => {
     if (productUpdate) {

@@ -24,7 +24,11 @@ export default function Follow() {
             const responseUser = await getData(
               `/artwork/userFollow/${token?._doc?._id}?page=${pageNumber}&limit=20`
             );
-            return response.data.docs;
+                 const newArray =
+                   response.data.docs.length > 0
+                     ? response.data.docs.filter((item) => item.hidden !== true)
+                     : [];
+                 return newArray;
 
         } catch (error) {
             console.log(error);

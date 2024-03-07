@@ -115,7 +115,7 @@ export default function Pprocessing({ activeTab }) {
             {order?.map((orderData) => (
               <tr key={orderData.index}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <Link to={`/required/bill/${orderData._id}`}>
+                  <Link to={`/required/bill/${orderData._id}?view=true`}>
                     View Details
                   </Link>
                 </td>
@@ -135,7 +135,8 @@ export default function Pprocessing({ activeTab }) {
                   {orderData.quantity}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.price}
+                  {/* {orderData.price} */}
+                  thỏa thuận
                 </td>
 
                 {orderData?.freelancerOrders && (

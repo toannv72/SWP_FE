@@ -54,7 +54,7 @@ console.log(products);
   useEffect(() => {
     const loadInitialData = async () => {
       const initialProducts = await fetchData(page);
-      setProducts([...products,...initialProducts]);
+      setProducts(initialProducts);
     };
     loadInitialData();
   }, [params["cate"], page]); // Run only once on component mount
