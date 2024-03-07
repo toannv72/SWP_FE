@@ -9,7 +9,7 @@ import {
 import ShoppingCart from "../../Authenticator/ShoppingCart/ShoppingCart";
 import { routs } from "../../../constants/ROUT";
 import { ComLink } from "../ComLink/ComLink";
-import { Affix, Drawer, Dropdown, FloatButton, Select } from "antd";
+import { Affix, Drawer, Dropdown, FloatButton, Select, Space } from "antd";
 import images from "../../../img";
 import ComInput from "../ComInput/ComInput";
 import { FormProvider, useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { useSocket } from "../../../App";
 import axios from "axios";
-
+import { DownOutlined } from '@ant-design/icons';
 const navigation = {
   pages: [
     { name: textApp.Header.home, href: "/" },
@@ -28,6 +28,32 @@ const navigation = {
     { name: "Cửa hàng", href: "/product" },
   ],
 };
+const items = [
+  {
+    label: (
+      <Link rel="noopener noreferrer" to="/category/painting">
+        Tranh
+      </Link>
+    ),
+    key: '0',
+  },
+  {
+    label: (
+      <Link to="/category/decorate">
+        Trang trí
+      </Link>
+    ),
+    key: '1',
+  },
+  {
+    label: (
+      <Link to="/category/art">
+        Nghệ thuật
+      </Link>
+    ),
+    key: '3',
+  },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -303,10 +329,10 @@ export default function ComHeader({ dataCart, updateCart }) {
                             style={
                               location.pathname === page.href
                                 ? {
-                                    padding: "5px",
-                                    background: "#d3e7ff",
-                                    borderRadius: "10px",
-                                  }
+                                  padding: "5px",
+                                  background: "#d3e7ff",
+                                  borderRadius: "10px",
+                                }
                                 : { padding: "5px" }
                             }
                           >
@@ -315,32 +341,18 @@ export default function ComHeader({ dataCart, updateCart }) {
                           </div>
                         </Link>
                       ))}
-                      <Select
-                        defaultValue=""
-                        style={{
-                          width: 120,
+                      <Dropdown
+                        menu={{
+                          items,
                         }}
-                        className="head flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
-                        onChange={changeSelectCate}
-                        options={[
-                          {
-                            label: "Tất cả",
-                            value: "",
-                          },
-                          {
-                            label: "Tranh",
-                            value: "Tranh",
-                          },
-                          {
-                            label: "Trang trí",
-                            value: "Trang trí",
-                          },
-                          {
-                            label: "Nghệ thuật",
-                            value: "Nghệ thuật",
-                          },
-                        ]}
-                      />
+                      >
+                        <Link className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800" onClick={(e) => e.preventDefault()}>
+                          <Space>
+                            Thể loại
+                            <DownOutlined />
+                          </Space>
+                        </Link>
+                      </Dropdown>
                     </div>
                   </Popover.Group>
 
