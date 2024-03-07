@@ -28,6 +28,9 @@ import TableProductAdmin from "./Page/Authenticator/Admin2/TableProduct";
 import TableFeedBack from "./Page/Authenticator/Admin2/TableFeedBack";
 import TableReportUser from "./Page/Authenticator/Admin2/TableReportUser";
 import TableArtwork from "./Page/Authenticator/Admin2/TableArtwork";
+import Painting from "./Page/Authenticator/Home/Painting";
+import Art from "./Page/Authenticator/Home/Art";
+import Decorate from "./Page/Authenticator/Home/Decorate";
 
 export const routers = createBrowserRouter([ 
   { 
@@ -145,5 +148,17 @@ export const routers = createBrowserRouter([
   { 
     path: "/searchUser/:search", 
     element: <SearchUser/>, 
+  },
+  { 
+    path: "/category/painting", 
+    element: <Painting/>, 
+  },
+  { 
+    path: "/category/decorate", 
+    element: <Decorate/>, 
+  },
+  { 
+    path: "/category/art", 
+    element: <Art/>, 
   },
 ]); 
