@@ -56,6 +56,9 @@ export default function ComPost({ }) {
     };
     const handleOpen = () => {
         setIsModalOpen(true);
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
     };
     const methods = useForm({
         defaultValues: {

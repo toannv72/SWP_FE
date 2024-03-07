@@ -50,11 +50,11 @@ export default function Home() {
       setPage(page + 1);
     }
   };
-console.log(products);
+  console.log(products);
   useEffect(() => {
     const loadInitialData = async () => {
       const initialProducts = await fetchData(page);
-      setProducts(initialProducts);
+      setProducts([...products, ...initialProducts]);
     };
     loadInitialData();
   }, [params["cate"], page]); // Run only once on component mount
