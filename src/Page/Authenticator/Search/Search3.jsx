@@ -12,7 +12,7 @@ export default function SearchUser() {
 
     const [products, setProducts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
-    const [page, setPage] = useState(1);
+
     const [checked, setChecked] = useState(3);
     const containerRef = useRef(null);
     const navigate = useNavigate();
@@ -20,69 +20,46 @@ export default function SearchUser() {
     const encodedString = location.search;
     const queryString = encodedString.substring(1);
     const queryParams = queryString.split("&");
+    const [users, setUsers] = useState([]);
     const params = {};
     for (let i = 0; i < queryParams.length; i++) {
-      const pair = queryParams[i].split("=");
-      const key = decodeURIComponent(pair[0]);
-      const value = decodeURIComponent(pair[1]);
-      params[key] = value;
+        const pair = queryParams[i].split("=");
+        const key = decodeURIComponent(pair[0]);
+        const value = decodeURIComponent(pair[1]);
+        params[key] = value;
     }
     const fetchData = async (pageNumber) => {
         try {
-            if (checked === 1) {
-                const response = await getData(`/artwork/search?name=${search}&page=${pageNumber}&limit=20${params["cate"] && `&cate=${params["cate"]}`}`);
-                const newArray =
-                response.data.docs.length > 0
-                  ? response.data.docs.filter((item) => item.hidden !== true)
-                  : [];
-              return newArray;
-            }
-            if (checked === 2) {
-                const response = await getData(`/artwork/searchGenre?name=${search}&page=${pageNumber}&limit=20`);
-                return response.data.products;
-            }
-            if (checked === 3) {
-                const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=20`);
-
-                return response.data.user;
-            }
+            const response = await getData(`/user/search?name=${search}&page=${pageNumber}&limit=200000000`);
+            console.log(response.data.user)
+            const newArray =response.data.user.filter((item) => item.hidden !== true)
+                
+            setUsers(newArray)
         } catch (error) {
             console.log(error);
             return [];
         }
     };
 
-    const fetchMoreProducts = async () => {
-        const newProducts = await fetchData(page + 1);
-        if (newProducts.length === 0) {
-            setHasMore(false); // No more data to load
-        } else {
-            setProducts([...products, ...newProducts]);
-            setPage(page + 1);
-        }
-    };
+
+    console.log(users);
+    useEffect(() => {
+        fetchData()
+    }, []); // Run only once on component mount
 
     useEffect(() => {
-        const loadInitialData = async () => {
-          const initialProducts = await fetchData(page);
-          setProducts(initialProducts);
-        };
-        loadInitialData();
-      }, [params["cate"], page]); // Run only once on component mount
-    
-      useEffect(() => {
         const handleImageLoad = () => {
-          const cards = containerRef.current.querySelectorAll(".card");
-          cards.forEach((card) => {
-            const img = card.querySelector("img");
-            const aspectRatio = img.naturalHeight / img.naturalWidth;
-            const cardHeight = card.offsetWidth * aspectRatio;
-            const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
-            // Áp dụng giá trị cho grid-row-end
-            card.style.gridRowEnd = `span ${rowSpan}`;
-          });
+            const cards = containerRef.current.querySelectorAll(".card");
+            cards.forEach((card) => {
+                const img = card.querySelector("img");
+                const aspectRatio = img.naturalHeight / img.naturalWidth;
+                const cardHeight = card.offsetWidth * aspectRatio;
+                const rowSpan = Math.ceil(cardHeight / 10); // 10 là giá trị --row_increment
+                // Áp dụng giá trị cho grid-row-end
+                card.style.gridRowEnd = `span ${rowSpan}`;
+            });
         };
-    
+
         const container = containerRef.current;
 
         if (container) {
@@ -126,42 +103,30 @@ export default function SearchUser() {
                 </div>
 
                 <div className="p-4 flex items-center">
-                    {products?.length !== 0 ? <InfiniteScroll
-                        dataLength={products?.length}
-                        next={fetchMoreProducts}
-                        hasMore={hasMore}
-                    // loader={<h4>Loading...</h4>}
-                    >
-                        <div className=" pin_container " style={{ width: '70vw' }} ref={containerRef}>
-                            {products?.map((artwork, index) => (
-                                <Link to={`/artwork/${artwork._id}`} className={`card`} key={index}>
-                                    <div className="relative group">
+                    {users?.length !== 0 ?
+                        <div className="pin_container" ref={containerRef}>
+                            {users.map((user, index) => (
+                                <div>
+                                    <Link
+                                        to={`/author/${user._id}`}
+                                        className={`card`}
+                                        key={index}
+                                        style={{ display: "flex", alignItems: "center" }}
+                                    >
                                         <img
-                                            className="rounded-md p-1 artwork-image"
-                                            src={artwork.image}
-                                            style={{ borderRadius: "24px" }}
-                                            alt={artwork.imageAlt}
+                                            className="rounded-md p-1"
+                                            src={user.avatar}
+                                            style={{ borderRadius: "50%", width: "60px" }}
+                                            alt={user.avatar}
                                             onLoad={() =>
                                                 containerRef.current.dispatchEvent(new Event("load"))
                                             }
                                         />
-                                        <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <p className="text-white text-2xl"> Thể Loại:</p>
-                                            {artwork?.genre.map((genre, index) => (
-                                                <p
-                                                    className={`text-white text-xl ${index >= 3 ? "hidden" : ""
-                                                        }`}
-                                                    key={index}
-                                                >
-                                                    {genre}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </Link>
+                                        <span>{user.username}</span>
+                                    </Link>
+                                </div>
                             ))}
-                        </div>
-                    </InfiniteScroll> : <div className=" text-center w-screen"> Không tìm thấy bài viết đang tìm kiếm</div>}
+                        </div> : <div className=" text-center w-screen"> Không tìm tài khoản đang tìm kiếm</div>}
 
 
                 </div>

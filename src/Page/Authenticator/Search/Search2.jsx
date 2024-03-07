@@ -30,8 +30,6 @@ export default function Search() {
                     ? response.data.products.filter((item) => item.hidden !== true)
                     : [];
             return newArray;
-
-
         } catch (error) {
             console.log(error);
             return [];
