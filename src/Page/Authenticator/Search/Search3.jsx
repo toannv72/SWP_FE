@@ -118,7 +118,6 @@ export default function SearchUser() {
                                             src={user.avatar}
                                             style={{ borderRadius: "50%", width: "60px" }}
                                             alt={user.avatar}
-                                           
                                         />
                                         <span>{user.username}</span>
                                     </Link>

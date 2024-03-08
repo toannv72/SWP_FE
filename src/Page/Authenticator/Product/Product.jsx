@@ -4,7 +4,7 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import ComHeader from '../../Components/ComHeader/ComHeader'
 import ComImage from '../../Components/ComImage/ComImage'
 import { getData } from '../../../api/api'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { textApp } from '../../../TextContent/textApp'
 import { FormProvider, useForm } from 'react-hook-form'
 import * as yup from "yup"
@@ -23,6 +23,7 @@ export default function Product() {
     const [api, contextHolder] = notification.useNotification();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || []);
     const [error, setError] = useState(false);
+    const [allUser, setAllUser] = useState([]);
 
     const location = useLocation();
 
@@ -42,7 +43,16 @@ export default function Product() {
         values: LoginRequestDefault
     })
     const { handleSubmit, register, setFocus, watch, setValue } = methods
-
+    useEffect(() => {
+        getData('/user', {})
+            .then((data) => {
+                setAllUser(data?.data?.docs)
+            })
+            .catch((error) => {
+                console.error("Error fetching items:", error);
+            });
+        // return response.data.docs;
+    }, []);
     useEffect(() => {
         getData(`/product/${slug}`)
             .then((product) => {
@@ -138,6 +148,14 @@ export default function Product() {
     if (error || !Product) {
         return <PageNotFound />;
     }
+    const getUserById = (array, userId) => {
+        // Sử dụng find để tìm user với _id tương ứng
+        const user = array.find(item => item._id === userId);
+        return user;
+    };
+    console.log('====================================');
+    console.log(Product);
+    console.log('====================================');
     return (
         <>
             {contextHolder}
@@ -150,7 +168,7 @@ export default function Product() {
 
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{Product?.name}</h3>
-
+                            <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Người Bán: <Link to={`/author/${Product.user}`} className="text-2xl font-bold tracking-tight text-cyan-600 sm:text-3xl">{getUserById(allUser, Product.user)?.name}</Link></h3>
                             <div className='flex gap-6'>
 
                                 <p className="text-3xl tracking-tight text-gray-900 ">
