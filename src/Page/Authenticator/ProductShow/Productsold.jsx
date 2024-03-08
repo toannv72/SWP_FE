@@ -229,7 +229,7 @@ export default function ProductSold() {
           </div>
         </div>
         <ProductBest />
-        <ComFooter />
+       
       </>
     );
 }
