@@ -204,7 +204,7 @@ export default function Product() {
               <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
                 Người Bán:{" "}
                 <Link
-                  to={`/author/${Product.user}`}
+                  to={`/author/${Product?.user?._id}`}
                   className="text-2xl font-bold tracking-tight text-cyan-600 sm:text-3xl"
                 >
                   {/* {getUserById(allUser, Product.user)?.name} */}
