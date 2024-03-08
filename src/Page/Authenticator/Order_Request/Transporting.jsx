@@ -136,7 +136,8 @@ export default function Transporting({activeTab}) {
                   {orderData.quantity}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.price}
+                  {/* {orderData.price} */}
+                  Thỏa thuận
                 </td>
                 {orderData?.userOrders && (
                   <td className="px-6 py-4 whitespace-nowrap">

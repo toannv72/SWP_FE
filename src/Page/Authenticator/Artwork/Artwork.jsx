@@ -102,7 +102,9 @@ export default function Artwork() {
                     description: error.response.data.error,
                 });
             });
-        sendNotification("đã thích", 1)
+            if (artwork.user !== token?._doc?._id) {
+              sendNotification("đã thích", 1);
+            }
     };
     const handleUnLike = (id_artwork, id_user) => {
         if (!token?._doc?._id) {
@@ -164,7 +166,9 @@ export default function Artwork() {
                     });
                  
                 });
-            sendNotification("đã comment", 1)
+            if (artwork.user !== token?._doc?._id) {
+              sendNotification("đã comment", 1);
+            }
         }
         clearTextArea()
 
@@ -238,7 +242,7 @@ export default function Artwork() {
         items,
         onClick: handleMenuClick,
     };
-    console.log(token)
+    console.log("token",token)
     return (
         <>
             {contextHolder}
