@@ -93,7 +93,7 @@ export default function SearchUser() {
         <>
             <ComHeader />
             <div className="flex gap-10">
-                <div className=" items-center mb-2 pl-20 pt-10 " style={{ position: 'fixed' }}>
+                <div className=" items-center mb-2 pl-20 pt-10 " >
                     <p className="text-xl font-bold text-slate-900 mb-4"> Bộ lọc</p>
                     <Radio.Group onChange={onChange} value={checked} className="grid ">
                         <Radio value={1}><p className="text-sm font-semibold leading-6 text-slate-900">Từ khóa</p></Radio>
@@ -104,7 +104,7 @@ export default function SearchUser() {
 
                 <div className="p-4 flex items-center">
                     {users?.length !== 0 ?
-                        <div className="pin_container" ref={containerRef}>
+                        <div className='flex'>
                             {users.map((user, index) => (
                                 <div>
                                     <Link
@@ -118,9 +118,7 @@ export default function SearchUser() {
                                             src={user.avatar}
                                             style={{ borderRadius: "50%", width: "60px" }}
                                             alt={user.avatar}
-                                            onLoad={() =>
-                                                containerRef.current.dispatchEvent(new Event("load"))
-                                            }
+                                           
                                         />
                                         <span>{user.username}</span>
                                     </Link>
