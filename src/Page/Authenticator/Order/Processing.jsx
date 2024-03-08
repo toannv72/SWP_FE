@@ -2,46 +2,50 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
 
-export default function Pprocessing({activeTab}) {
+export default function Pprocessing({ activeTab }) {
   const [order, setOrder] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-  
-      getData('/product/staff', {})
-        .then((productData) => {
-       
-            setProducts(productData?.data);
-          
+
+    getData('/product/staff', {})
+    .then((productData) => {
+      getData('/product/trash', {})
+        .then((productDatas) => {
+          setProducts([...productData?.data?.docs, ...productDatas?.data]);
         })
         .catch((error) => {
           console.error("Error fetching products:", error);
         });
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
 
-      getData('/order/user/processing', {})
-        .then((orderData) => {
-          setOrder(orderData?.data?.docs);
-    
-        })
-        .catch((error) => {
-          console.error("Error fetching items:", error);
-    
-        });
+    getData('/order/user/processing', {})
+      .then((orderData) => {
+        setOrder(orderData?.data?.docs);
+
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+
+      });
     // }
   }, [activeTab]);
   function formatCurrency(number) {
     // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.
     if (typeof number === "number") {
-      
+
       return number.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'VND',
+        style: 'currency',
+        currency: 'VND',
       });
     }
-}
+  }
   const getProductById = (productId) => {
     // Tìm sản phẩm theo ID trong danh sách sản phẩm
-    return products?.docs?.find(product => product._id === productId);
+    return products?.find(product => product._id === productId);
   };
 
   return (
@@ -59,7 +63,7 @@ export default function Pprocessing({activeTab}) {
             <li key={orderData.index} className="py-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                 <div className="col-span-2">
-                  <h2 className="text-lg font-semibold mb-2">{textApp.OrderHistory.product.amount} {orderData.totalAmount&&formatCurrency(orderData.totalAmount)}</h2>
+                  <h2 className="text-lg font-semibold mb-2">{textApp.OrderHistory.product.amount} {orderData.totalAmount && formatCurrency(orderData.totalAmount)}</h2>
                   <ul className="space-y-4">
                     {orderData.products.map((product, id) => {
                       // Sử dụng ID sản phẩm để lấy thông tin sản phẩm tương ứng
@@ -90,7 +94,7 @@ export default function Pprocessing({activeTab}) {
                 <div className="col-span-1 mt-4 md:mt-0">
                   <div className="flex flex-col items-end mb-4">
                     <div className="flex-none bg-yellow-400 text-white rounded-full px-3 py-1 mb-2">
-                    {textApp.OrderHistory.label.status1}
+                      {textApp.OrderHistory.label.status1}
                     </div>
                   </div>
                 </div>

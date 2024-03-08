@@ -7,16 +7,19 @@ export default function Transporting({activeTab}) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-  
-      getData('/product/staff', {})
-        .then((productData) => {
-       
-            setProducts(productData?.data);
-          
+    getData('/product/staff', {})
+    .then((productData) => {
+      getData('/product/trash', {})
+        .then((productDatas) => {
+          setProducts([...productData?.data?.docs, ...productDatas?.data]);
         })
         .catch((error) => {
           console.error("Error fetching products:", error);
         });
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
 
       getData('/order/user/shipped', {})
         .then((orderData) => {
@@ -41,7 +44,7 @@ export default function Transporting({activeTab}) {
 }
   const getProductById = (productId) => {
     // Tìm sản phẩm theo ID trong danh sách sản phẩm
-    return products?.docs?.find(product => product._id === productId);
+    return products.find(product => product._id === productId);
   };
 
   return (

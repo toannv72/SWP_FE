@@ -8,15 +8,19 @@ export default function Cancel({activeTab}) {
 
   useEffect(() => {
   
-      getData('/product/staff', {})
-        .then((productData) => {
-       
-            setProducts(productData?.data);
-          
+    getData('/product/staff', {})
+    .then((productData) => {
+      getData('/product/trash', {})
+        .then((productDatas) => {
+          setProducts([...productData?.data?.docs, ...productDatas?.data]);
         })
         .catch((error) => {
           console.error("Error fetching products:", error);
         });
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
 
       getData('/order/user/canceled', {})
         .then((orderData) => {
@@ -32,7 +36,7 @@ export default function Cancel({activeTab}) {
 
   const getProductById = (productId) => {
     // Tìm sản phẩm theo ID trong danh sách sản phẩm
-    return products?.docs?.find(product => product._id === productId);
+    return products.find(product => product._id === productId);
   };
   function formatCurrency(number) {
     // Sử dụng hàm toLocaleString() để định dạng số thành chuỗi với ngăn cách hàng nghìn và mặc định là USD.

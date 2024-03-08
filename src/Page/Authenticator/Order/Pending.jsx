@@ -15,12 +15,17 @@ export default function Pending({ activeTab }) {
   useEffect(() => {
     getData('/product/staff', {})
       .then((productData) => {
-        setProducts(productData?.data);
+        getData('/product/trash', {})
+          .then((productDatas) => {
+            setProducts([...productData?.data?.docs, ...productDatas?.data]);
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-
     getData('/order/user/pending', {})
       .then((orderData) => {
         setOrder(orderData?.data?.docs);
@@ -31,7 +36,7 @@ export default function Pending({ activeTab }) {
   }, [activeTab, runData]);
 
   const getProductById = (productId) => {
-    return products?.docs?.find(product => product._id === productId);
+    return products.find(product => product?._id === productId);
   };
 
   const formatCurrency = (number) => {
@@ -100,7 +105,7 @@ export default function Pending({ activeTab }) {
                       const materials = productInfo?.material?.join(", ");
                       return (
                         <li key={id} className="flex items-center space-x-4">
-                          <Link to={`/product/${productInfo._id}`}>
+                          <Link to={`/product/${productInfo?._id}`}>
                             <img
                               className="w-16 h-16 rounded-full bg-gray-200"
                               src={productInfo?.image}
@@ -140,7 +145,7 @@ export default function Pending({ activeTab }) {
                       {orderData.status !== "Canceled" && (
                         <button
                           className="bg-orange-400 text-white rounded-md px-2 py-1"
-                          onClick={() => showCancelConfirm(orderData._id)}
+                          onClick={() => showCancelConfirm(orderData?._id)}
                         >
                           {textApp.OrderHistory.button.cancel}
                         </button>
