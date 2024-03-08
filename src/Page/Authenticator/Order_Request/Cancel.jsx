@@ -130,9 +130,7 @@ export default function Cancel({activeTab}) {
                   {orderData.quantity}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.amount === 0
-                    ? "thỏa thuận"
-                    : formatCurrency(orderData.amount)}
+                Thỏa thuận
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.status}

@@ -140,7 +140,8 @@ function getStatusText(status) {
               <td className="px-6 py-4 whitespace-nowrap">{orderData.phone}</td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.shippingAddress}</td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.createdAt}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.quantity}</td><td className="px-6 py-4 whitespace-nowrap">{orderData.quantity}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{orderData.quantity}</td>
+              <td className="px-6 py-4 whitespace-nowrap">Thỏa thuận</td>
               <td className="px-6 py-4 whitespace-nowrap">
               <div className="col-span-1 mt-4 md:mt-0">
                   <div className="flex flex-col items-end mb-4">
