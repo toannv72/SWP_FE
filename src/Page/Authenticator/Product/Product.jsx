@@ -207,7 +207,8 @@ export default function Product() {
                   to={`/author/${Product.user}`}
                   className="text-2xl font-bold tracking-tight text-cyan-600 sm:text-3xl"
                 >
-                  {getUserById(allUser, Product.user)?.name}
+                  {/* {getUserById(allUser, Product.user)?.name} */}
+                  {Product?.user?.name}
                 </Link>
               </h3>
               <div className="flex gap-6">
