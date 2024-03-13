@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ComNumber from "../../Components/ComInput/ComNumber";
 import { Button, notification } from "antd";
 import PageNotFound from "../404/PageNotFound";
+import { useStorage } from "../../../hooks/useLocalStorage";
 
 export default function Product() {
   const [Product, setProduct] = useState([]);
@@ -20,6 +21,7 @@ export default function Product() {
   const [cart, setCart] = useState(
     JSON.parse(localStorage.getItem("cart")) || []
   );
+  const [token, setToken] = useStorage("user", {});
   const [sttCart, setSttCart] = useState(true);
   const [api, contextHolder] = notification.useNotification();
   const [user, setUser] = useState(
@@ -248,6 +250,7 @@ export default function Product() {
                       <Button
                         type="button"
                         onClick={addToCart}
+                        disabled={token?._doc?._id === Product?.user?._id}
                         className={`flex h-10 items-center justify-center rounded-md border border-transparent  px-4 py-2 text-base font-medium text-white  focus:outline-none 
                                                  hover:to-orange-500 hover:from-orange-600 bg-gradient-to-b from-orange-400 to-orange-500`}
                       >
@@ -257,7 +260,9 @@ export default function Product() {
                   </div>
 
                   <Button
-                    disabled={disabled}
+                    disabled={
+                      disabled || token?._doc?._id === Product?.user?._id
+                    }
                     htmlType="submit"
                     type="primary"
                     className={`mt-10 flex w-full h-12 items-center justify-center rounded-md border border-transparent  px-8 py-3 text-base font-medium text-white ${

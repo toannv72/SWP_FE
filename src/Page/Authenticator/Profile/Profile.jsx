@@ -28,6 +28,7 @@ import ComInput from '../../Components/ComInput/ComInput'
 import ComTextArea from '../../Components/ComInput/ComTextArea'
 import ComSelect from '../../Components/ComInput/ComSelect'
 import Card from './card'
+import ChangePassword from './changePassword'
 export default function Profile() {
   const [Author, setAuthor] = useState([])
   const { id } = useParams();
@@ -51,6 +52,7 @@ export default function Profile() {
   const [disabled, setDisabled] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const [isModalOpen3, setIsModalOpen3] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [load, setLoad] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState();
@@ -98,6 +100,9 @@ export default function Profile() {
   const showModal1 = () => {
     setIsModalOpen1(true);
   };
+    const showModal3 = () => {
+      setIsModalOpen3(true);
+    };
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
@@ -107,6 +112,12 @@ export default function Profile() {
   const handleCancel1 = () => {
     setIsModalOpen1(false);
   };
+    const handleOk3 = () => {
+      setIsModalOpen3(false);
+    };
+    const handleCancel3 = () => {
+      setIsModalOpen3(false);
+    };
   const handleOk2 = () => {
     setIsModalOpen2(false);
   };
@@ -258,7 +269,7 @@ export default function Profile() {
         showModal1()
         break;
       case '3':
-        console.log(3);
+         showModal3();
         break;
       default:
         break;
@@ -288,10 +299,10 @@ export default function Profile() {
       label: 'Đổi thông tin cá nhân',
       key: '2',
     },
-    // {
-    //     label: 'Đổi mật khẩu',
-    //     key: '2',
-    // },
+    {
+      label: 'Đổi mật khẩu',
+      key: '3',
+    },
   ]
   const itemPosts = [
     {
@@ -534,14 +545,18 @@ export default function Profile() {
           >
             <div className="grid gap-4 justify-center ">
               {products?.map((artwork, index) => (
-                <Card artwork={artwork} load={load} setLoad={setLoad} index={index} />
+                <Card
+                  artwork={artwork}
+                  load={load}
+                  setLoad={setLoad}
+                  index={index}
+                />
               ))}
             </div>
           </InfiniteScroll>
         ) : (
           <></>
         )}
-
       </div>
       <Modal
         title="Đổi ảnh đại diện"
@@ -639,6 +654,14 @@ export default function Profile() {
             </ComButton>
           </form>
         </FormProvider>
+      </Modal>
+      <Modal
+        title="Đổi mật khẩu"
+        open={isModalOpen3}
+        onOk={handleOk3}
+        onCancel={handleCancel3}
+      >
+        <ChangePassword handleCancel3={handleCancel3} />
       </Modal>
     </>
   );

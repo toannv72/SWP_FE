@@ -116,7 +116,7 @@ export default function Pprocessing({ activeTab }) {
               <tr key={orderData.index}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    View Details
+                    {orderData.bird}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -150,6 +150,39 @@ export default function Pprocessing({ activeTab }) {
                     </Button>
                   </td>
                 )}
+                <td>
+                  <Link to={`/required/bill/${orderData._id}?view=true`}>
+                    <svg
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                      width="32px"
+                      height="32px"
+                      viewBox="0,0,256,256"
+                    >
+                      <g
+                        fill="#000000"
+                        fillRule="nonzero"
+                        stroke="none"
+                        strokeWidth={1}
+                        strokeLinecap="butt"
+                        strokeLinejoin="miter"
+                        strokeMiterlimit={10}
+                        strokeDasharray
+                        strokeDashoffset={0}
+                        fontFamily="none"
+                        fontWeight="none"
+                        fontSize="none"
+                        textAnchor="none"
+                        style={{ mixBlendMode: "normal" }}
+                      >
+                        <g transform="scale(8,8)">
+                          <path d="M6,3v26h10.77148l2,-2h-10.77148v-22h10v6h6v5.4375c0.633,-0.225 1.303,-0.36611 2,-0.41211v-6.43945l-6.58594,-6.58594zM20,6.41406l2.58594,2.58594h-2.58594zM11,14v2h10v-2zM11,18v2h10v-2zM26.5,18c-3,0 -5.5,2.5 -5.5,5.5c0,1.2 0.4,2.19961 1,3.09961l-4,4l1.40039,1.40039l4,-4c0.9,0.6 1.99961,1 3.09961,1c3,0 5.5,-2.5 5.5,-5.5c0,-3 -2.5,-5.5 -5.5,-5.5zM26.5,20c1.9,0 3.5,1.6 3.5,3.5c0,1.9 -1.6,3.5 -3.5,3.5c-1.9,0 -3.5,-1.6 -3.5,-3.5c0,-1.9 1.6,-3.5 3.5,-3.5zM11,22v2h6v-2z" />
+                        </g>
+                      </g>
+                    </svg>
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

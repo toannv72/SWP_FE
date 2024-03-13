@@ -94,70 +94,74 @@ export default function Login() {
     }
 
     return (
-        <>
-            <ComHeader />
-            {contextHolder}
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+      <>
+        <ComHeader />
+        {contextHolder}
+        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+              Đăng nhập
+            </h2>
+          </div>
 
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Đăng nhập
-                    </h2>
-                </div>
+          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <FormProvider {...methods}>
+              <form
+                className="flex flex-col gap-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <ComInput
+                  placeholder={textApp.Login.placeholder.username}
+                  label={textApp.Login.label.username}
+                  type="text"
+                  // search
+                  maxLength={15}
+                  {...register("username")}
+                  required
+                />
+                <ComInput
+                  placeholder={textApp.Login.placeholder.password}
+                  label={textApp.Login.label.password}
+                  type="password"
+                  maxLength={16}
+                  {...register("password")}
+                  required
+                />
+                <ComLink to="/forgotPassword">
+                  <>Quên mật khẩu</>
+                </ComLink>
+                <FieldError className="text-red-500 text-center">
+                  {Login ? textApp.Login.message.error : ""}
+                </FieldError>
+                <FieldError className="text-red-500 text-center">
+                  {LoginError ? textApp.Login.message.error1 : ""}
+                </FieldError>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <FormProvider {...methods} >
-                        <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+                <ComButton disabled={disabled} htmlType="submit" type="primary">
+                  {textApp.Login.pageTitle}
+                </ComButton>
 
-                            <ComInput
-                                placeholder={textApp.Login.placeholder.username}
-                                label={textApp.Login.label.username}
-                                type="text"
-                                // search
-                                maxLength={15}
-                                {...register("username")}
-                                required
-                            />
-                            <ComInput
-                                placeholder={textApp.Login.placeholder.password}
-                                label={textApp.Login.label.password}
-                                type="password"
-                                maxLength={16}
-                                {...register("password")}
-                                required
-                            />
-                            <FieldError className="text-red-500 text-center">{Login ? textApp.Login.message.error : ''}</FieldError>
-                            <FieldError className="text-red-500 text-center">{LoginError ? textApp.Login.message.error1 : ''}</FieldError>
-                            <ComButton
-
-                                disabled={disabled}
-                                htmlType="submit"
-                                type="primary"
-                            >
-                                {textApp.Login.pageTitle}
-                            </ComButton>
-
-                            {/* <ComButton
+                {/* <ComButton
                                 htmlType="submit"
                                 type="primary"
                                 className="bg-black hover:bg-white"
                             >
                                 cancel
                             </ComButton> */}
-                        </form>
-                    </FormProvider>
+              </form>
+            </FormProvider>
 
-                    <p className="mt-10 text-center text-sm text-gray-500">
-                        Chưa có tài khoản?{' '}
-                        <ComLink to={routs["/reissue"].link} >
-                            <>{routs["/reissue"].name}</>
-                        </ComLink>
-                    </p>
-                </div>
-            </div>
-            <ComFooter />
-        </>
-    )
+            <p className="mt-10 text-center text-sm text-gray-500">
+              Chưa có tài khoản?{" "}
+              <ComLink to={routs["/reissue"].link}>
+                <>{routs["/reissue"].name}</>
+              </ComLink>
+            </p>
+          </div>
+        </div>
+        <ComFooter />
+      </>
+    );
 
 }
 

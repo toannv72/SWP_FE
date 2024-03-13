@@ -133,7 +133,7 @@ function getStatusText(status) {
               <tr key={orderData.index}>
               <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    View Details
+                    {orderData.bird}
                   </Link>
                 </td>
               <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>

@@ -31,67 +31,77 @@ import TableArtwork from "./Page/Authenticator/Admin2/TableArtwork";
 import Painting from "./Page/Authenticator/Home/Painting";
 import Art from "./Page/Authenticator/Home/Art";
 import Decorate from "./Page/Authenticator/Home/Decorate";
+import ForgotPassword from "./Page/Authenticator/Login/forgotPassword";
+import ResetPassword from "./Page/Authenticator/Login/resetPassword";
 
-export const routers = createBrowserRouter([ 
-  { 
-    path: "*", 
-    element: <PageNotFound />, 
-  }, 
-  { 
-    path: "/login", 
-    element: <Login />, 
+export const routers = createBrowserRouter([
+  {
+    path: "*",
+    element: <PageNotFound />,
   },
-  { 
-    path: "/reissue", 
-    element: <Reissue />, 
+  {
+    path: "/login",
+    element: <Login />,
   },
-  { 
-    path: "/", 
-    element: <Home />, 
-  },  
-  { 
-    path: "/artwork/:id", 
-    element: <Artwork />, 
-  }, 
-  { 
-    path: "/Table", 
-    element: <TableUser />, 
+  {
+    path: "/forgotPassword",
+    element: <ForgotPassword />,
   },
-  { 
-    path: "/product/:slug", 
-    element: <Product />, 
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
-  { 
-    path: "/author/:id", 
-    element: <Author />, 
+  {
+    path: "/reissue",
+    element: <Reissue />,
   },
-  { 
-    path: "/profile", 
-    element: <Profile />, 
+  {
+    path: "/",
+    element: <Home />,
   },
-  { 
-    path: "/payment", 
-    element: <Payment />, 
+  {
+    path: "/artwork/:id",
+    element: <Artwork />,
+  },
+  {
+    path: "/Table",
+    element: <TableUser />,
+  },
+  {
+    path: "/product/:slug",
+    element: <Product />,
+  },
+  {
+    path: "/author/:id",
+    element: <Author />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
   },
   {
     path: "/payment/bill/:id",
     element: <InvoicePage />,
   },
   {
-    path: "/my/product/table", 
-    element: <TableProduct />, 
-  }, 
-  { 
-    path: "/product", 
-    element: <ProductSold/>, 
+    path: "/my/product/table",
+    element: <TableProduct />,
   },
-  { 
-    path: "/SendCode", 
-    element: <SendCode />, 
+  {
+    path: "/product",
+    element: <ProductSold />,
   },
-  { 
-    path: "/logout", 
-    element: <Logout />, 
+  {
+    path: "/SendCode",
+    element: <SendCode />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
   },
   {
     path: "/admin/tableUser",
@@ -116,49 +126,49 @@ export const routers = createBrowserRouter([
   {
     path: "/order",
     element: <Order />,
-  }, 
+  },
   {
     path: "/orderRequest",
     element: <OrderRequest />,
-  }, 
+  },
   {
     path: "/require",
     element: <Required />,
-  }, 
+  },
   {
     path: "/required/bill/:id",
     element: <RequiredSuccess />,
-  }, 
+  },
   {
     path: "/follow",
     element: <Follow />,
-  }, 
+  },
   {
     path: "/my/order",
     element: <TableOrder />,
   },
-  { 
-    path: "/search/:search", 
-    element: <Search/>, 
+  {
+    path: "/search/:search",
+    element: <Search />,
   },
-  { 
-    path: "/searchGenre/:search", 
-    element: <SearchGenre/>, 
+  {
+    path: "/searchGenre/:search",
+    element: <SearchGenre />,
   },
-  { 
-    path: "/searchUser/:search", 
-    element: <SearchUser/>, 
+  {
+    path: "/searchUser/:search",
+    element: <SearchUser />,
   },
-  { 
-    path: "/category/painting", 
-    element: <Painting/>, 
+  {
+    path: "/category/painting",
+    element: <Painting />,
   },
-  { 
-    path: "/category/decorate", 
-    element: <Decorate/>, 
+  {
+    path: "/category/decorate",
+    element: <Decorate />,
   },
-  { 
-    path: "/category/art", 
-    element: <Art/>, 
+  {
+    path: "/category/art",
+    element: <Art />,
   },
 ]); 

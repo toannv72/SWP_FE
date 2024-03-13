@@ -31,7 +31,10 @@ const [visible, setVisible] = useState(false);
     <>
       <ComHeader />
       <div className="flex items-center justify-center">
-        <div className="bg-white p-4 md:p-8 lg:p-12 rounded-lg shadow-md w-full md:w-3/4 lg-w-1/2 xl:w-1/3">
+        <div
+          className="bg-white p-4 md:p-8 lg:p-12 rounded-lg shadow-md w-full md:w-3/4 lg-w-1/2 xl:w-1/3"
+          style={{ margin: "100px" }}
+        >
           <h1 className="bg-blue-500 text-white py-2 px-4 rounded-md text-center block w-full text-2xl font-semibold mb-4">
             {location.search ? "Thông Tin Đơn Hàng" : textApp.Invoice.title}
           </h1>
