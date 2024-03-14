@@ -42,7 +42,13 @@ export default function TableProduct() {
     const searchInput = useRef(null);
     const [token, setToken] = useStorage("user", {});
     const navigate = useNavigate();
-  
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        getData("/category")
+            .then((data) => {
+                setCategory([...data.data, ...options])
+            })
+    }, []);
     useEffect(() => {
         if (!token?._doc?._id) {
             return navigate('/login')
@@ -655,7 +661,7 @@ export default function TableProduct() {
                                         onChangeValue={handleChange}
                                         value={selectedMaterials}
                                         mode="tags"
-                                        options={options}
+                                        options={category}
                                         {...register("genre")}
 
                                     />

@@ -79,6 +79,13 @@ export default function Card({ artwork, load, setLoad, index }) {
   //   },
   // });
   const methods = useForm();
+  const [category, setCategory] = useState([]);
+  useEffect(() => {
+      getData("/category")
+          .then((data) => {
+              setCategory([...data.data, ...options])
+          })
+  }, []);
   useEffect(() => {
     if (productUpdate) {
       setSelectedMaterials(productUpdate.genre);
@@ -504,7 +511,7 @@ export default function Card({ artwork, load, setLoad, index }) {
                 onChangeValue={handleChange}
                 value={selectedMaterials}
                 mode="tags"
-                options={options}
+                options={category}
                 {...register("genre")}
               />
             </div>

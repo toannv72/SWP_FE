@@ -6,7 +6,7 @@ import { Input, Modal, notification } from "antd";
 import { useEffect, useState } from "react";
 import ComButton from "../ComButton/ComButton";
 import { firebaseImgs } from "../../../upImgFirebase/firebaseImgs";
-import { postData } from "../../../api/api";
+import { getData, postData } from "../../../api/api";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 import ComUpImgOne from "../ComUpImg/ComUpImgOne";
@@ -18,6 +18,7 @@ export default function ComPost({ }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [disabled, setDisabled] = useState(true);
     const [image, setImages] = useState([]);
+    const [category, setCategory] = useState([]);
     const [token, setToken] = useStorage("user", {});
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
@@ -50,6 +51,12 @@ export default function ComPost({ }) {
         },
     ];
 
+    useEffect(() => {
+        getData("/category")
+            .then((data) => {
+                setCategory([...data.data, ...options])
+            })
+    }, []);
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -87,12 +94,12 @@ export default function ComPost({ }) {
                         setDisabled(false)
                     })
                     .catch((error) => {
-                        
+
                         setDisabled(false)
 
                         api["error"]({
-                          message: "Lỗi",
-                          description: error.response.data.error,
+                            message: "Lỗi",
+                            description: error.response.data.error,
                         });
 
                     });
@@ -104,7 +111,7 @@ export default function ComPost({ }) {
     }
     const onChange = (data) => {
         const selectedImages = data;
-    
+
         // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
         // const newImages = selectedImages.map((file) => file.originFileObj);
         // Cập nhật trạng thái 'image' bằng danh sách tệp mới
@@ -145,22 +152,22 @@ export default function ComPost({ }) {
                                 rows={6}
                                 {...register("content")}
                             />
-                                <div className="sm:col-span-2">
-                                    <ComSelect
-                                        size={"large"}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        label="Thể loại"
-                                        placeholder="Thể loại"
-                                        onChangeValue={handleChange}
-                                        value={selectedMaterials}
-                                        mode="tags"
-                                        options={options}
-                                        {...register("genre")}
+                            <div className="sm:col-span-2">
+                                <ComSelect
+                                    size={"large"}
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                    label="Thể loại"
+                                    placeholder="Thể loại"
+                                    onChangeValue={handleChange}
+                                    value={selectedMaterials}
+                                    mode="tags"
+                                    options={category}
+                                    {...register("genre")}
 
-                                    />
-                                </div>
+                                />
+                            </div>
                             <ComUpImgOne numberImg={1} onChange={onChange} />
                             <ComButton
                                 disabled={disabled}

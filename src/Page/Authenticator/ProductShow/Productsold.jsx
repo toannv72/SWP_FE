@@ -18,7 +18,27 @@ export default function ProductSold() {
     const [sortCate, setSortCate] = useState("all");
     const [minPrice, setMinPrice] = useState(1000)
     const [maxPrice, setMaxPrice] = useState(10000000)
-   
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        getData("/category")
+            .then((data) => {
+                setCategory([{ label: "Tất cả", value: "all"},...data.data, ...options])
+            })
+    }, []);
+    const options = [
+      {
+          label: "Tranh",
+          value: "Tranh"
+      },
+      {
+          label: "Trang trí",
+          value: "Trang trí"
+      },
+      {
+          label: "Nghệ thuật",
+          value: "Nghệ thuật"
+      },
+  ];
     useEffect(() => {
       getData(
         `/product?limit=8&page=${page}&sortPrice=${sortPrice}&sortCate=${sortCate}&minPrice=${minPrice}&maxPrice=${maxPrice}`
@@ -137,24 +157,7 @@ export default function ProductSold() {
                   width: 120,
                 }}
                 onChange={changeSelectCate}
-                options={[
-                  {
-                    label: "Tất cả",
-                    value: "all",
-                  },
-                  {
-                    label: "Tranh",
-                    value: "Tranh",
-                  },
-                  {
-                    label: "Trang trí",
-                    value: "Trang trí",
-                  },
-                  {
-                    label: "Nghệ thuật",
-                    value: "Nghệ thuật",
-                  },
-                ]}
+                options={category}
               />
             </div>
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-8">

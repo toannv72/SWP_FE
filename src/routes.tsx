@@ -34,6 +34,7 @@ import Decorate from "./Page/Authenticator/Home/Decorate";
 import ForgotPassword from "./Page/Authenticator/Login/forgotPassword";
 import ResetPassword from "./Page/Authenticator/Login/resetPassword";
 import Dashboard from "./Page/Dashboard/Dashboard";
+import TableCategory from "./Page/Authenticator/Category/TableCategory";
 
 export const routers = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ export const routers = createBrowserRouter([
   {
     path: "/admin/tableUser",
     element: <TableUser />,
+  },
+  {
+    path: "/admin/category",
+    element: <TableCategory />,
   },
   {
     path: "/admin/tableProduct",

@@ -5,12 +5,12 @@ import * as yup from "yup"
 
 import { Select, notification } from 'antd'
 import { textApp } from '../../../TextContent/textApp';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { firebaseImgs } from '../../../upImgFirebase/firebaseImgs';
 import ComNumber from '../../Components/ComInput/ComNumber';
 import ComInput from '../../Components/ComInput/ComInput';
 import ComHeader from '../../Components/ComHeader/ComHeader';
-import { postData } from '../../../api/api';
+import { getData, postData } from '../../../api/api';
 import ComSelect from '../../Components/ComInput/ComSelect';
 import ComTextArea from '../../Components/ComInput/ComTextArea';
 import ComButton from '../../Components/ComButton/ComButton';
@@ -39,7 +39,16 @@ export default function CreateProduct({ onCancel }) {
     const [api, contextHolder] = notification.useNotification();
     const [token, setToken] = useStorage("user", {});
 
-
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        getData("/category")
+            .then((data) => {
+                setCategory([...data.data, ...options])
+            })
+    }, []);
+    console.log('====================================');
+    console.log(category);
+    console.log('====================================');
     const CreateProductMessenger = yup.object({
         name: yup.string().required(textApp.CreateProduct.message.name),
         // price: yup.number().min(1, textApp.CreateProduct.message.priceMin).typeError(textApp.CreateProduct.message.price),
@@ -237,7 +246,7 @@ export default function CreateProduct({ onCancel }) {
                                     placeholder="Thể loại"
                                     required
                                     onChangeValue={handleValueChangeSelect}
-                                    options={options}
+                                    options={category}
                                     {...register("genre")}
 
                                 />
