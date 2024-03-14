@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import ComImage from "../../Components/ComImage/ComImage";
-import { getData, postData, putData } from "../../../api/api";
+import { getData, hideArtwork, postData, putData } from "../../../api/api";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { textApp } from "../../../TextContent/textApp";
 import { FormProvider, useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ import { FieldError } from "../../Components/FieldError/FieldError";
 import ComInput from "../../Components/ComInput/ComInput";
 import ComTextArea from "../../Components/ComInput/ComTextArea";
 import ComSelect from "../../Components/ComInput/ComSelect";
-export default function Card({ artwork, load,setLoad, index }) {
+export default function Card({ artwork, load, setLoad, index }) {
   const [Author, setAuthor] = useState([]);
   const { id } = useParams();
   const [api, contextHolder] = notification.useNotification();
@@ -45,7 +45,7 @@ export default function Card({ artwork, load,setLoad, index }) {
   const [token, setToken] = useStorage("user", {});
   const [likedProductIds, setLikedProductIds] = useState([]);
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
+  const [idArtwork, setIdArtwork] = useState(null);
   const [image, setImages] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,15 +69,15 @@ export default function Card({ artwork, load,setLoad, index }) {
       .email(textApp.Reissue.message.emailFormat)
       .required(textApp.Reissue.message.email),
   });
-    // const methods = useForm({
-    //   resolver: yupResolver(loginMessenger),
-    //   defaultValues: {
-    //     // code: "",
-    //     name: token?._doc?.name,
-    //     phone: token?._doc?.phone,
-    //     email: token?._doc?.email,
-    //   },
-    // });
+  // const methods = useForm({
+  //   resolver: yupResolver(loginMessenger),
+  //   defaultValues: {
+  //     // code: "",
+  //     name: token?._doc?.name,
+  //     phone: token?._doc?.phone,
+  //     email: token?._doc?.email,
+  //   },
+  // });
   const methods = useForm();
   useEffect(() => {
     if (productUpdate) {
@@ -184,7 +184,7 @@ export default function Card({ artwork, load,setLoad, index }) {
     updatedLikedProductIds[index] = updatedLikedProductIds[index] + 1;
     setLikedProductIds(updatedLikedProductIds);
     postData(`/artwork/likeArtwork/${id_artwork}/${id_user}`, {})
-      .then((e) => {})
+      .then((e) => { })
       .catch((err) => {
         console.log(err);
       });
@@ -199,7 +199,7 @@ export default function Card({ artwork, load,setLoad, index }) {
     updatedLikedProductIds[index] = updatedLikedProductIds[index] - 1;
     setLikedProductIds(updatedLikedProductIds);
     postData(`/artwork/unlikeArtwork/${id_artwork}/${id_user}`, {})
-      .then((e) => {})
+      .then((e) => { })
       .catch((err) => {
         console.log(err);
       });
@@ -234,7 +234,8 @@ export default function Card({ artwork, load,setLoad, index }) {
         showModal2();
         break;
       case "2":
-        console.log(3);
+
+        showModal();
         break;
       case "3":
         console.log(3);
@@ -248,6 +249,10 @@ export default function Card({ artwork, load,setLoad, index }) {
     {
       label: "Chỉnh sửa bài",
       key: "1",
+    },
+    {
+      label: "Xóa bài viết",
+      key: "2",
     },
   ];
   const options = [
@@ -264,6 +269,20 @@ export default function Card({ artwork, load,setLoad, index }) {
       value: "Nghệ thuật",
     },
   ];
+  const deleteArtwork = (id) => {
+    hideArtwork("feedback/hide", {
+      artwork: id,
+    });
+    handleCancel();
+    api["success"]({
+      message: "chỉnh sửa bài thành công",
+      description: "Bài viết của bạn đã chỉnh sửa thành công",
+    });
+    setTimeout(() => {
+      setLoad(!load);
+    }, 1500);
+  }
+
   const handleChange = (e, value) => {
     console.log(value);
     setSelectedMaterials(value);
@@ -287,7 +306,7 @@ export default function Card({ artwork, load,setLoad, index }) {
         content: undefined,
         genre: undefined,
       });
-      putData("/artwork",artwork._id, {
+      putData("/artwork", artwork._id, {
         content: data.content,
         genre: data.genre,
         image: img.length > 0 ? img : artwork.image,
@@ -432,9 +451,8 @@ export default function Card({ artwork, load,setLoad, index }) {
         </div>
         <div className="flex justify-around mb-1 p-1 gap-2">
           <button
-            className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${
-              likedProducts[index] ? "text-[#08c]" : ""
-            }`}
+            className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${likedProducts[index] ? "text-[#08c]" : ""
+              }`}
             onClick={() => {
               !likedProducts[index]
                 ? handleLike(index, artwork._id, token?._doc?._id)
@@ -496,6 +514,17 @@ export default function Card({ artwork, load,setLoad, index }) {
             </ComButton>
           </form>
         </FormProvider>
+      </Modal>
+      <Modal
+        title="Xác nhận xóa bài viết"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p className=" font-semibold text-3xl p-4 ">Bạn có chắc chắn muốn xóa bài viết không?</p>
+        <ComButton onClick={() => deleteArtwork(productUpdate?._id)} htmlType="submit" type="primary">
+          Xác nhận
+        </ComButton>
       </Modal>
     </>
   );
