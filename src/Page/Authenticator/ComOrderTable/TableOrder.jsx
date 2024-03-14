@@ -6,7 +6,7 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { textApp } from "../../../TextContent/textApp";
 import OrderPending from "./OrderPending";
@@ -17,6 +17,8 @@ import OrderCanceled from "./OrderCanceled";
 import OrderReturned from "./OrderReturned";
 import OrderAll from "./OrderAll";
 import ComHeader from "../../Components/ComHeader/ComHeader";
+import { useStorage } from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 const data = [
     {
         label: textApp.OrderHistory.label.status,
@@ -59,7 +61,14 @@ const data = [
 ];
 export default function TableOrder() {
     const [activeTab, setActiveTab] = useState(data[0].value);
-    
+    const [token, setToken] = useStorage("user", {});
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
+    }, []);
     return (
         <>
             <ComHeader/>

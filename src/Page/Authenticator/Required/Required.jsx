@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { postData } from "../../../api/api";
 import { textApp } from "../../../TextContent/textApp";
 import ComInput from "../../Components/ComInput/ComInput";
@@ -18,6 +18,7 @@ import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSocket } from "../../../App";
 import axios from "axios";
+import { useStorage } from "../../../hooks/useLocalStorage";
 const options = [
   {
     label: "Tranh",
@@ -41,6 +42,14 @@ export default function Required() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || []);
   const navigate = useNavigate();
   const [searchParams, setSearchParams]= useSearchParams()
+  const [token, setToken] = useStorage("user", {});
+
+
+  useEffect(() => {
+      if (!token?._doc?._id) {
+          return navigate('/login')
+      }
+  }, []);
   const CreateProductMessenger = yup.object({
     name: yup.string().required(textApp.Payment.information.message.name),
     bird: yup.string().required(textApp.Payment.information.message.name),

@@ -21,6 +21,7 @@ import {
 import { getData } from '../../api/api';
 import { Select } from 'antd';
 import ComHeaderManager from '../Components/ComHeaderManager/ComHeaderManager';
+import AdminHeader from '../Components/ComHeader/AdminHeader';
 export default function Dashboard() {
     const [data, setData] = useState([]);
     const [products, setProducts] = useState([]);
@@ -70,7 +71,8 @@ export default function Dashboard() {
 
     return (
         <>
-            <ComHeaderManager />
+              <AdminHeader />
+
             <div className='p-10'>
 
                 <div >

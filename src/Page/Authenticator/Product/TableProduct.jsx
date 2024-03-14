@@ -19,6 +19,7 @@ import ComTextArea from '../../Components/ComInput/ComTextArea';
 import ComHeader from '../../Components/ComHeader/ComHeader';
 import CreateProduct from './CreateProduct';
 import { useStorage } from '../../../hooks/useLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -40,7 +41,13 @@ export default function TableProduct() {
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
     const [token, setToken] = useStorage("user", {});
-
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+        if (!token?._doc?._id) {
+            return navigate('/login')
+        }
+    }, []);
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -287,7 +294,7 @@ export default function TableProduct() {
     }
     useEffect(() => {
         setTimeout(() => {
-            getData(`/product/user/${token._doc._id}`, {})
+            getData(`/product/user/${token?._doc?._id}`, {})
                 .then((data) => {
                     setProducts(data?.data?.docs)
                 })

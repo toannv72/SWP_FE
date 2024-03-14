@@ -33,6 +33,7 @@ import Art from "./Page/Authenticator/Home/Art";
 import Decorate from "./Page/Authenticator/Home/Decorate";
 import ForgotPassword from "./Page/Authenticator/Login/forgotPassword";
 import ResetPassword from "./Page/Authenticator/Login/resetPassword";
+import Dashboard from "./Page/Dashboard/Dashboard";
 
 export const routers = createBrowserRouter([
   {
@@ -114,6 +115,10 @@ export const routers = createBrowserRouter([
   {
     path: "/admin/tableFeedback",
     element: <TableFeedBack />,
+  },
+  {
+    path: "/admin/dashboard",
+    element: <Dashboard />,
   },
   {
     path: "/admin/tablereportuser",

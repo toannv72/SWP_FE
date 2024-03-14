@@ -17,7 +17,9 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useStorage } from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 const data = [
   {
     label: textApp.OrderHistory.label.status,
@@ -66,7 +68,14 @@ const data = [
 
 export default function OrderRequest() {
   const [activeTab, setActiveTab] = useState(data[0].value);
+  const [token, setToken] = useStorage("user", {});
+  const navigate = useNavigate();
 
+  useEffect(() => {
+      if (!token?._doc?._id) {
+          return navigate('/login')
+      }
+  }, []);
  
 
   return (
