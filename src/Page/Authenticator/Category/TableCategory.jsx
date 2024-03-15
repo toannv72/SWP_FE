@@ -354,7 +354,7 @@ export default function TableCategory() {
                 className="m-2"
                 onClick={() => setIsModalOpenAdd(true)}
               >
-                Thêm sản phẩm{" "}
+                Thêm thể loại
               </ComButton>
               <div className="flex px-5 justify-center">
                 <Table

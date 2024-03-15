@@ -169,16 +169,20 @@ export const routers = createBrowserRouter([
     path: "/searchUser/:search",
     element: <SearchUser />,
   },
+  // {
+  //   path: "/category/painting",
+  //   element: <Painting />,
+  // },
+  // {
+  //   path: "/category/decorate",
+  //   element: <Decorate />,
+  // },
+  // {
+  //   path: "/category/art",
+  //   element: <Art />,
+  // },
   {
-    path: "/category/painting",
+    path: "/category/:id",
     element: <Painting />,
-  },
-  {
-    path: "/category/decorate",
-    element: <Decorate />,
-  },
-  {
-    path: "/category/art",
-    element: <Art />,
   },
 ]); 

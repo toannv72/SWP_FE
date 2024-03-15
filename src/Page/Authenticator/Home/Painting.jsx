@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { getData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ComPost from "../../Components/ComPost/ComPost";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import './styles.css'
 export default function Painting() {
@@ -18,6 +18,7 @@ export default function Painting() {
     const value = decodeURIComponent(pair[1]);
     params[key] = value;
   }
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
@@ -25,10 +26,13 @@ export default function Painting() {
   const [token, setToken] = useStorage("user", {});
   const [likedProductIds, setLikedProductIds] = useState([]);
   const containerRef = useRef(null);
+  console.log('====================================');
+  console.log(id);
+  console.log('====================================');
   const fetchData = async (pageNumber) => {
     try {
       const response = await getData(
-        `/artwork?page=${pageNumber}&limit=20&cate=Tranh`
+        `/artwork?page=${pageNumber}&limit=20&cate=${id}`
       );
       const newArray =
         response.data.docs.length > 0
@@ -93,7 +97,7 @@ export default function Painting() {
       {/* {token?._doc?.hidden !== true && <ComPost />} */}
       <ComPost />
 
-      <h1 className="px-10 text-slate-900 text-2xl tracking-tight font-extrabold sm:text-3xl dark:text-white">Thể loại:Tranh </h1>
+      <h1 className="px-10 text-slate-900 text-2xl tracking-tight font-extrabold sm:text-3xl dark:text-white">Thể loại:{id} </h1>
       <InfiniteScroll
         dataLength={products.length}
         next={fetchMoreProducts}

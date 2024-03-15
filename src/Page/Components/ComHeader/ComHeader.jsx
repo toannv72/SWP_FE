@@ -21,6 +21,7 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 import { useSocket } from "../../../App";
 import axios from "axios";
 import { DownOutlined } from '@ant-design/icons';
+import { getData } from "../../../api/api";
 const navigation = {
   pages: [
     { name: textApp.Header.home, href: "/" },
@@ -28,33 +29,22 @@ const navigation = {
     { name: "Cửa hàng", href: "/product" },
   ],
 };
-const items = [
-  {
-    label: (
-      <Link rel="noopener noreferrer" to="/category/painting">
-        Tranh
-      </Link>
-    ),
-    key: '0',
-  },
-  {
-    label: (
-      <Link to="/category/decorate">
-        Trang trí
-      </Link>
-    ),
-    key: '1',
-  },
-  {
-    label: (
-      <Link to="/category/art">
-        Nghệ thuật
-      </Link>
-    ),
-    key: '3',
-  },
-  
-];
+// const items = [
+//   {
+//     label: "ád",
+//     key: '0',
+//   },
+//   {
+//     label: "ádc",
+//     key: '1',
+//   },
+//   {
+//     label:
+//       'Nghệ thuật',
+//     key: '3',
+//   },
+
+// ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -63,6 +53,37 @@ function classNames(...classes) {
 export default function ComHeader({ dataCart, updateCart }) {
   const socket = useSocket();
   const [openNotification, setOpenNotification] = useState(false);
+  const [items, setCategory] = useState([
+    {
+      label: "ád",
+      key: '0',
+    },
+    {
+      label: "ádc",
+      key: '1',
+    },
+    {
+      label:
+        'Nghệ thuật',
+      key: '3',
+    },
+
+  ]);
+
+  const link = (e) => {
+    console.log('====================================');
+    console.log(e);
+    console.log('====================================');
+  }
+  useEffect(() => {
+    getData("/category")
+      .then((data) => {
+        const categoriesWithKeys = data.data.map((category, index) => {
+          return { label: <a href={`/category/${category.label}`}> {category.label}</a>, key: index };
+        });
+        setCategory(categoriesWithKeys)
+      })
+  }, []);
   const showDrawer = () => {
     setOpenNotification(true);
   };
@@ -343,11 +364,11 @@ export default function ComHeader({ dataCart, updateCart }) {
                         </Link>
                       ))}
                       <Dropdown
-                        menu={{
-                          items,
-                        }}
+                        menu={
+                          { items }
+                        }
                       >
-                        <Link className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800" onClick={(e) => e.preventDefault()}>
+                        <Link className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800" onClick={(e) => link(e)}>
                           <Space>
                             Thể loại
                             <DownOutlined />
