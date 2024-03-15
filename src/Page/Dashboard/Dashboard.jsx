@@ -19,9 +19,13 @@ import {
     YAxis,
 } from 'recharts';
 import { getData } from '../../api/api';
-import { Select } from 'antd';
+import { Select, Layout } from "antd";
 import ComHeaderManager from '../Components/ComHeaderManager/ComHeaderManager';
 import AdminHeader from '../Components/ComHeader/AdminHeader';
+import styles from "../Authenticator/Admin2/layout.module.css";
+import Sidenav from '../Components/sidenav/sidenav';
+import Header from '../Components/ComHeader/header';
+const { Header: AntHeader, Content, Sider } = Layout;
 export default function Dashboard() {
     const [data, setData] = useState([]);
     const [products, setProducts] = useState([]);
@@ -70,44 +74,66 @@ export default function Dashboard() {
 
 
     return (
-        <>
-              <AdminHeader />
-
-            <div className='p-10'>
-
-                <div >
-                    <div className='grid grid-cols-1 gap-4  md:grid-cols-2 sm:grid-cols-1 ' >
-                        <div className='flex flex-col justify-center  items-center text-center ' >
-                            <img className='w-44' src={avatar} alt="img" />
-                            <div >
-                                <span>{user.totalUsers}</span>
-                                <p>Người dùng</p>
-                            </div>
-                        </div>
-                        <div className='flex flex-col justify-center items-center text-center' >
-                            <img className='w-44' src={product} alt="img" />
-                            <div >
-                                <span>{products?.totalProducts}</span>
-                                <p>Sản phẩm</p>
-                            </div>
-                        </div>
+      <>
+        <Layout className={styles.layoutDashboard}>
+          <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
+            onCollapse={(collapsed, type) => {
+              console.log(collapsed, type);
+            }}
+            trigger={null}
+            theme="light"
+            className={`${styles.siderPrimary} `}
+          >
+            <Sidenav />
+          </Sider>
+          <Layout>
+            <AntHeader><Header/></AntHeader>
+            <Content className={styles.contentAnt}>
+              <div className="p-10">
+                <div>
+                  <div className="grid grid-cols-1 gap-4  md:grid-cols-2 sm:grid-cols-1 ">
+                    <div className="flex flex-col justify-center  items-center text-center ">
+                      <img className="w-44" src={avatar} alt="img" />
+                      <div>
+                        <span>{user.totalUsers}</span>
+                        <p>Người dùng</p>
+                      </div>
                     </div>
+                    <div className="flex flex-col justify-center items-center text-center">
+                      <img className="w-44" src={product} alt="img" />
+                      <div>
+                        <span>{products?.totalProducts}</span>
+                        <p>Sản phẩm</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex gap-1 items-center my-4">
-
-                    <h1 className="control-label col-md-2 col-md-offset-2" htmlFor="id_accomodation">
-                        Chọn năm
-                    </h1>
-                    <Select
-                        className="form-control"
-                        onChange={(value) => setYear(value)}
-                        defaultValue={new Date().getFullYear()} // Giá trị mặc định cho Select
-                    >
-                        {Array.from({ length: new Date().getFullYear() - 1999 }, (_, index) => {
-                            const year = new Date().getFullYear() - index;
-                            return <Option key={year} value={year}>{year}</Option>;
-                        })}
-                    </Select>
+                  <h1
+                    className="control-label col-md-2 col-md-offset-2"
+                    htmlFor="id_accomodation"
+                  >
+                    Chọn năm
+                  </h1>
+                  <Select
+                    className="form-control"
+                    onChange={(value) => setYear(value)}
+                    defaultValue={new Date().getFullYear()} // Giá trị mặc định cho Select
+                  >
+                    {Array.from(
+                      { length: new Date().getFullYear() - 1999 },
+                      (_, index) => {
+                        const year = new Date().getFullYear() - index;
+                        return (
+                          <Option key={year} value={year}>
+                            {year}
+                          </Option>
+                        );
+                      }
+                    )}
+                  </Select>
                 </div>
                 {/* <div style={{ width: '100%', marginTop: 100 }}>
                     <h1>Thống kê doanh thu đơn hàng</h1>
@@ -134,8 +160,6 @@ export default function Dashboard() {
                         </AreaChart>
                     </ResponsiveContainer>
                 </div> */}
-
-
 
                 {/* <div>
                     <h1>Số đơn hàng đã thuê</h1>
@@ -164,55 +188,73 @@ export default function Dashboard() {
     
                 </div> */}
                 <div>
-                    <h1>Thống kê doanh thu đơn hàng</h1>
-                    <ResponsiveContainer width="100%" height={200}>
-                        <BarChart
-                            width={100}
-                            height={300}
-                            data={data}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 0,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="_id.month" />
-                            <YAxis />
-                            <Tooltip
-                                formatter={(value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'VND' }).format(value)}
-                            />
-                            <Legend />
-                            <Bar dataKey="totalAmount" name="Tổng thu nhập" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-                        </BarChart>
-                    </ResponsiveContainer>
+                  <h1>Thống kê doanh thu đơn hàng</h1>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart
+                      width={100}
+                      height={300}
+                      data={data}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 0,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="_id.month" />
+                      <YAxis />
+                      <Tooltip
+                        formatter={(value) =>
+                          new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "VND",
+                          }).format(value)
+                        }
+                      />
+                      <Legend />
+                      <Bar
+                        dataKey="totalAmount"
+                        name="Tổng thu nhập"
+                        fill="#8884d8"
+                        activeBar={<Rectangle fill="pink" stroke="blue" />}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
                 <div>
-                    <h1>Thống kê số lượng đã bán</h1>
-                    <ResponsiveContainer width="100%" height={200}>
-                        <BarChart
-                            width={100}
-                            height={300}
-                            data={data}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 0,
-                                bottom: 5,
-                            }}
-
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="_id.month" />
-                            <YAxis dataKey="totalQuantity" />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="totalQuantity" name="Số lượng đơn hàng đã bán" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
-                        </BarChart>
-                    </ResponsiveContainer>
+                  <h1>Thống kê số lượng đã bán</h1>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart
+                      width={100}
+                      height={300}
+                      data={data}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 0,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="_id.month" />
+                      <YAxis dataKey="totalQuantity" />
+                      <Tooltip />
+                      <Legend />
+                      <Bar
+                        dataKey="totalQuantity"
+                        name="Số lượng đơn hàng đã bán"
+                        fill="#82ca9d"
+                        activeBar={<Rectangle fill="gold" stroke="purple" />}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-            </div>
-        </>
+              </div>
+            </Content>
+          </Layout>
+        </Layout>
+        {/* <AdminHeader /> */}
+      </>
     );
 }

@@ -77,6 +77,7 @@ export default function Required() {
   });
   const createProductRequestDefault = {
     quantity: 1,
+    email: token?._doc?.email,
   };
   const methods = useForm({
     resolver: yupResolver(CreateProductMessenger),
@@ -91,7 +92,7 @@ export default function Required() {
       quantity: 1,
       shippingAddress: "",
       description: "",
-      freelancer: searchParams.get("id")
+      freelancer: searchParams.get("id"),
     },
     values: createProductRequestDefault,
   });

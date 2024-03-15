@@ -5,7 +5,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import Highlighter from 'react-highlight-words';
 import * as yup from "yup"
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Popconfirm, Radio, Space, Table, Typography, notification } from 'antd';
+import {
+  Button,
+  Input,
+  Modal,
+  Popconfirm,
+  Radio,
+  Space,
+  Table,
+  Typography,
+  notification,
+  Layout,
+  Drawer,
+} from "antd";
 import moment from 'moment/moment';
 import ComInput from '../../Components/ComInput/ComInput';
 import { textApp } from '../../../TextContent/textApp';
@@ -14,6 +26,10 @@ import ComButton from '../../Components/ComButton/ComButton';
 import ComHeader from '../../Components/ComHeader/ComHeader';
 import AdminHeader from '../../Components/ComHeader/AdminHeader';
 import swal from 'sweetalert';
+import styles from "./layout.module.css";
+import Sidenav from '../../Components/sidenav/sidenav';
+import Header from '../../Components/ComHeader/header';
+const { Header: AntHeader, Content, Sider } = Layout;
 
 
 export default function TableUser() {
@@ -416,25 +432,47 @@ export default function TableUser() {
 
     return (
       <>
+        <Layout className={styles.layoutDashboard}>
+          <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
+            onCollapse={(collapsed, type) => {
+              console.log(collapsed, type);
+            }}
+            trigger={null}
+            theme="light"
+            className={`${styles.siderPrimary} `}
+          >
+            <Sidenav />
+          </Sider>
+          <Layout>
+            <AntHeader>
+              <Header />
+            </AntHeader>
+            <Content className={styles.contentAnt}>
+              <div className="flex p-5 justify-center">
+                <Table
+                  rowKey="_id"
+                  columns={columns}
+                  dataSource={products}
+                  scroll={{
+                    x: 1520,
+                    y: "70vh",
+                  }}
+                  bordered
+                  pagination={{
+                    showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
+                    pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
+                  }}
+                />
+              </div>
+            </Content>
+          </Layout>
+        </Layout>
         {contextHolder}
-        <AdminHeader />
+        {/* <AdminHeader /> */}
         {/* <ComButton type="primary" className='mt-2' onClick={() => { showModalEdit() }} >Add Account</ComButton> */}
-        <div className="flex p-5 justify-center">
-          <Table
-            rowKey="_id"
-            columns={columns}
-            dataSource={products}
-            scroll={{
-              x: 1520,
-              y: "70vh",
-            }}
-            bordered
-            pagination={{
-              showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
-              pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
-            }}
-          />
-        </div>
+
         <Modal
           title="Thêm tài khoản"
           okType="primary text-black border-gray-700"

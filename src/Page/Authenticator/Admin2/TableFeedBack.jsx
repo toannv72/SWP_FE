@@ -16,6 +16,7 @@ import {
   Tooltip,
   Typography,
   notification,
+  Layout,
 } from "antd";
 import { textApp } from "../../../TextContent/textApp";
 import { firebaseImgs } from "../../../upImgFirebase/firebaseImgs";
@@ -32,7 +33,10 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
 import AdminHeader from "../../Components/ComHeader/AdminHeader";
-
+import styles from "./layout.module.css";
+import Sidenav from "../../Components/sidenav/sidenav";
+import Header from "../../Components/ComHeader/header";
+const { Header: AntHeader, Content, Sider } = Layout;
 export default function TableFeedBack() {
   const [disabled, setDisabled] = useState(false);
   const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
@@ -383,24 +387,43 @@ export default function TableFeedBack() {
 
   return (
     <>
+      <Layout className={styles.layoutDashboard}>
+        <Sider
+          breakpoint="lg"
+          collapsedWidth="0"
+          onCollapse={(collapsed, type) => {
+            console.log(collapsed, type);
+          }}
+          trigger={null}
+          theme="light"
+          className={`${styles.siderPrimary} `}
+        >
+          <Sidenav />
+        </Sider>
+        <Layout>
+          <AntHeader><Header/></AntHeader>
+          <Content className={styles.contentAnt}>
+            <div className="flex px-5 justify-center">
+              <Table
+                rowKey="_id"
+                columns={columns}
+                dataSource={products}
+                scroll={{
+                  x: 1520,
+                  y: "70vh",
+                }}
+                bordered
+                pagination={{
+                  showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
+                  pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
+                }}
+              />
+            </div>
+          </Content>
+        </Layout>
+      </Layout>
       {contextHolder}
       <AdminHeader />
-      <div className="flex px-5 justify-center">
-        <Table
-          rowKey="_id"
-          columns={columns}
-          dataSource={products}
-          scroll={{
-            x: 1520,
-            y: "70vh",
-          }}
-          bordered
-          pagination={{
-            showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
-            pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
-          }}
-        />
-      </div>
 
       <Modal
         title={textApp.TableProduct.title.delete}
