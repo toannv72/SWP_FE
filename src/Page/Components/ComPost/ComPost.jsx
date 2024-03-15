@@ -37,18 +37,7 @@ export default function ComPost({ }) {
     };
 
     const options = [
-        {
-            label: "Tranh",
-            value: "Tranh"
-        },
-        {
-            label: "Trang trí",
-            value: "Trang trí"
-        },
-        {
-            label: "Nghệ thuật",
-            value: "Nghệ thuật"
-        },
+      
     ];
 
     useEffect(() => {

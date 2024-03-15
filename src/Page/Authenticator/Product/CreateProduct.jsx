@@ -19,18 +19,7 @@ import { useStorage } from '../../../hooks/useLocalStorage';
 
 
 const options = [
-    {
-        label: "Tranh",
-        value: "Tranh"
-    },
-    {
-        label: "Trang trí",
-        value: "Trang trí"
-    },
-    {
-        label: "Nghệ thuật",
-        value: "Nghệ thuật"
-    },
+   
 ];
 
 export default function CreateProduct({ onCancel }) {
