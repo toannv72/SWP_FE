@@ -327,14 +327,14 @@ export default function ComHeader({ dataCart, updateCart }) {
 
                   {/* Logo */}
                   <div className="ml-4 flex lg:ml-0">
-                    {/* <ComLink to={routs["/"].link}>
+                    <ComLink to={routs["/"].link}>
                       <span className="sr-only">Your Company</span>
                       <img
                         className="h-16 w-auto "
-                        src={images.logo}
+                        src={images.logo1}
                         alt=""
                       />
-                    </ComLink> */}
+                    </ComLink>
                   </div>
 
                   {/* Flyout menus */}

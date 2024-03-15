@@ -1,6 +1,6 @@
 const images = {
     logo: require('./logo.svg').default,
-    // noImage: require('~/assets/images/no-image.png'),
+    logo1: require('./logo.png'),
     // noImage1: require('~/assets/images/anh-bia.jpeg'),
     Home: [
         // {
