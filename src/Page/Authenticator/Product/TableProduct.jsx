@@ -94,18 +94,7 @@ export default function TableProduct() {
         setIsModalOpenDelete(true);
     };
     const options = [
-        {
-            label: "Tranh",
-            value: "Tranh"
-        },
-        {
-            label: "Trang trí",
-            value: "Trang trí"
-        },
-        {
-            label: "Nghệ thuật",
-            value: "Nghệ thuật"
-        },
+  
     ];
 
     const handleCancel = () => {
@@ -409,7 +398,8 @@ export default function TableProduct() {
             title: 'Ảnh sản phẩm',
             dataIndex: 'image',
             key: 'img',
-            width: 200,
+            width: 150,
+            height: 150,
             fixed: 'left',
             render: (_, record) => (
 

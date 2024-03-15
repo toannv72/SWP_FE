@@ -72,18 +72,7 @@ export default function TableCategory() {
         setIsModalOpenDelete(true);
     };
     const options = [
-        {
-            label: "Tranh",
-            value: "Tranh"
-        },
-        {
-            label: "Trang trí",
-            value: "Trang trí"
-        },
-        {
-            label: "Nghệ thuật",
-            value: "Nghệ thuật"
-        },
+   
     ];
 
     const handleCancel = () => {
@@ -112,37 +101,40 @@ export default function TableCategory() {
         values: productRequestDefault
     })
     const { handleSubmit, register, setFocus, watch, setValue } = methods
-    function isInteger(number) {
-        return typeof number === 'number' && isFinite(number) && Math.floor(number) === number;
-    }
-    const onSubmitUp = (data) => {
-        console.log('====================================');
-        console.log(productRequestDefault);
-        console.log('====================================');
-        setDisabled(true)
 
-        putData('/category', productRequestDefault.id, {
-            "label": data.value,
-            "value": data.value
-        })
-            .then(() => {
-                api["success"]({
-                    message: textApp.TableProduct.Notification.update.message,
-                    description:
-                        "Chỉnh sửa thể loại thành công"
-                });
-                setDataRun(!dataRun)
+    const onSubmitUp = (data) => {
+
+        const isDuplicate = products.some((product, i) => product._id !== productRequestDefault.id && product.value === data.value);
+        setDisabled(true)
+        if (!isDuplicate) {
+            putData('/category', productRequestDefault.id, {
+                "label": data.value,
+                "value": data.value
             })
-            .catch((error) => {
-                api["error"]({
-                    message: textApp.TableProduct.Notification.updateFail.message,
-                    description:
-                        textApp.TableProduct.Notification.updateFail.description
+                .then(() => {
+                    api["success"]({
+                        message: textApp.TableProduct.Notification.update.message,
+                        description:
+                            "Chỉnh sửa thể loại thành công"
+                    });
+                    setDataRun(!dataRun)
+                })
+                .catch((error) => {
+                    api["error"]({
+                        message: textApp.TableProduct.Notification.updateFail.message,
+                        description:
+                            textApp.TableProduct.Notification.updateFail.description
+                    });
+                    console.error("Error fetching items:", error);
+                    setDisabled(false)
                 });
-                console.error("Error fetching items:", error);
-                setDisabled(false)
+        } else {
+            api["error"]({
+                message: textApp.TableProduct.Notification.updateFail.message,
+                description:
+                    "Đã có thể loại này rồi"
             });
-    
+        }
         setImages([]);
         setDisabled(false)
         setIsModalOpen(false);
@@ -189,14 +181,7 @@ export default function TableCategory() {
 
     }, [dataRun]);
 
-    const onChange = (data) => {
-        const selectedImages = data;
-        // Tạo một mảng chứa đối tượng 'originFileObj' của các tệp đã chọn
-        const newImages = selectedImages.map((file) => file.originFileObj);
-        // Cập nhật trạng thái 'image' bằng danh sách tệp mới
-        setImages(newImages);
 
-    }
     const getColumnSearchProps = (dataIndex, title) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -336,7 +321,7 @@ export default function TableCategory() {
         <>
             {contextHolder}
             <AdminHeader />
-            <ComButton className='m-2' onClick={() => setIsModalOpenAdd(true)} >Thêm sản phẩm </ComButton>
+            <ComButton className='m-2' onClick={() => setIsModalOpenAdd(true)} >Thêm thể loại </ComButton>
             <div className='flex px-5 justify-center'>
                 <Table
                     rowKey="_id"

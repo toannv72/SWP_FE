@@ -43,7 +43,7 @@ export default function CreateCategory({ onCancel }) {
     useEffect(() => {
         getData("/category")
             .then((data) => {
-                setCategory([...data.data, ...options])
+                setCategory(data.data)
             })
     }, []);
     console.log('====================================');
@@ -51,7 +51,6 @@ export default function CreateCategory({ onCancel }) {
     console.log('====================================');
     const CreateProductMessenger = yup.object({
         value: yup.string().required("Thể loại không được để trống"),
-
 
     })
     const createProductRequestDefault = {
@@ -72,32 +71,44 @@ export default function CreateCategory({ onCancel }) {
         return typeof number === 'number' && isFinite(number) && Math.floor(number) === number;
     }
     const onSubmit = (data) => {
-
+        // category
         setDisabled(true)
-        postData('/category', {
-            "label": data.value,
-            "value": data.value
-        }, {})
-            .then((dataS) => {
-                setDisabled(false)
-                api["success"]({
-                    message: textApp.CreateProduct.Notification.m2.message,
-                    description:
-                        "Tạo thể loại thành công"
-                });
-                onCancel()
-            })
-            .catch((error) => {
-                api["error"]({
-                    message: textApp.CreateProduct.Notification.m3.message,
-                    description:
-                        "Tạo thể loại không thành công!"
-                });
-                console.error("Error fetching items:", error);
-                setDisabled(false)
-                onCancel()
 
-            })
+        const isDuplicate = category.some((product, i) => product.value === data.value);
+        if (!isDuplicate) {
+            postData('/category', {
+                "label": data.value,
+                "value": data.value
+            }, {})
+                .then((dataS) => {
+                    setDisabled(false)
+                    api["success"]({
+                        message: textApp.CreateProduct.Notification.m2.message,
+                        description:
+                            "Tạo thể loại thành công"
+                    });
+                    onCancel()
+                })
+                .catch((error) => {
+                    api["error"]({
+                        message: textApp.CreateProduct.Notification.m3.message,
+                        description:
+                            "Tạo thể loại không thành công!"
+                    });
+                    console.error("Error fetching items:", error);
+                    setDisabled(false)
+                    onCancel()
+
+                })
+        } else {
+        setDisabled(false)
+            api["error"]({
+                message: textApp.TableProduct.Notification.updateFail.message,
+                description:
+                    "Đã có thể loại này rồi"
+            });
+        }
+
 
     }
 
