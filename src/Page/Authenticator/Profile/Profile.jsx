@@ -55,6 +55,8 @@ export default function Profile() {
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [isModalOpen3, setIsModalOpen3] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [isModalOpen4, setIsModalOpen4] = useState(false);
+  const [isModalOpen5, setIsModalOpen5] = useState(false);
   const [load, setLoad] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState();
   const loginMessenger = yup.object({
@@ -107,12 +109,30 @@ export default function Profile() {
   const showModal2 = () => {
     setIsModalOpen2(true);
   };
+    const showModal4 = () => {
+      setIsModalOpen4(true);
+    };
+      const showModal5 = () => {
+        setIsModalOpen5(true);
+      };
   const handleOk1 = () => {
     setIsModalOpen1(false);
   };
+    const handleOk4 = () => {
+      setIsModalOpen4(false);
+    };
+      const handleOk5 = () => {
+        setIsModalOpen5(false);
+      };
   const handleCancel1 = () => {
     setIsModalOpen1(false);
   };
+    const handleCancel4 = () => {
+    setIsModalOpen4(false);
+  };
+    const handleCancel5 = () => {
+      setIsModalOpen5(false);
+    };
     const handleOk3 = () => {
       setIsModalOpen3(false);
     };
@@ -531,8 +551,10 @@ export default function Profile() {
           </div>
           {!Author.hidden ? (
             <p className="text-gray-700">
-              {Author?.follow?.length} người theo dõi ·{" "}
-              {Author?.followAdd?.length} người đang theo dõi
+              {Author?.follow?.length}{" "}
+              <span onClick={showModal4}>người theo dõi</span> ·{" "}
+              {Author?.followAdd?.length}{" "}
+              <span onClick={showModal5}>người đang theo dõi</span>
             </p>
           ) : (
             "Tài khoản của bạn đã bị khóa"
@@ -663,6 +685,102 @@ export default function Profile() {
         onCancel={handleCancel3}
       >
         <ChangePassword handleCancel3={handleCancel3} />
+      </Modal>
+      <Modal
+        title="người theo dõi"
+        open={isModalOpen4}
+        onOk={handleOk4}
+        onCancel={handleCancel4}
+      >
+        <div className="text-center">
+          {Author?.follow &&
+            Author?.follow.map((user, index) => (
+              <div
+                className="rounded-xl overflow-hidden relative text-center group items-center flex flex-col max-w-sm hover:shadow-2xl transition-all duration-500 shadow-xl"
+                style={{
+                  display: "inline-table",
+                  margin: "0px 5px",
+                  width: "92%",
+                }}
+              >
+                <Link
+                  to={`/author/${user.user._id}`}
+                  className={`card px-6 py-8 sm:p-10 sm:pb-6`}
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={handleCancel4}
+                >
+                  <img
+                    className="rounded-md p-1"
+                    src={user.user.avatar}
+                    style={{
+                      borderRadius: "50%",
+                      width: "60px",
+                      height: "60px",
+                    }}
+                    alt={user.user.avatar}
+                    // onLoad={() =>
+                    //   containerRef.current.dispatchEvent(new Event("load"))
+                    // }
+                  />
+                  <div style={{ paddingLeft: "10px", textAlign: "justify" }}>
+                    <p className="text-base font-medium text-gray-700">
+                      {user.user.username}
+                    </p>
+                    <span>{user.user?.follow?.length} follow</span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+        </div>
+      </Modal>
+      <Modal
+        title="người đang theo dõi"
+        open={isModalOpen5}
+        onOk={handleOk5}
+        onCancel={handleCancel5}
+      >
+        <div className="text-center">
+          {Author?.followAdd &&
+            Author?.followAdd.map((user, index) => (
+              <div
+                className="rounded-xl overflow-hidden relative text-center group items-center flex flex-col max-w-sm hover:shadow-2xl transition-all duration-500 shadow-xl"
+                style={{
+                  display: "inline-table",
+                  margin: "0px 5px",
+                  width: "92%",
+                }}
+              >
+                <Link
+                  to={`/author/${user.user._id}`}
+                  className={`card px-6 py-8 sm:p-10 sm:pb-6`}
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={handleCancel5}
+                >
+                  <img
+                    className="rounded-md p-1"
+                    src={user.user.avatar}
+                    style={{
+                      borderRadius: "50%",
+                      width: "60px",
+                      height: "60px",
+                    }}
+                    alt={user.user.avatar}
+                    // onLoad={() =>
+                    //   containerRef.current.dispatchEvent(new Event("load"))
+                    // }
+                  />
+                  <div style={{ paddingLeft: "10px", textAlign: "justify" }}>
+                    <p className="text-base font-medium text-gray-700">
+                      {user.user.username}
+                    </p>
+                    <span>{user.user?.follow?.length} follow</span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+        </div>
       </Modal>
       <ComFooter />
     </>

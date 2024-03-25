@@ -4,7 +4,7 @@ import ComHeader from '../../Components/ComHeader/ComHeader'
 import { getData, postData } from '../../../api/api'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-import { Button, Image, notification } from 'antd'
+import { Button, Image, Modal, notification } from 'antd'
 import PageNotFound from '../404/PageNotFound'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { CalendarDays } from 'lucide-react'
@@ -25,6 +25,8 @@ export default function Author() {
   const [api, contextHolder] = notification.useNotification();
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]);
+   const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [follow, setFollow] = useState(false);
   const [page, setPage] = useState(1);
@@ -40,7 +42,7 @@ export default function Author() {
     setFollow(!follow);
     postData(`/user/followUser/${id}/${token?._doc?._id}`, {})
       .then((e) => {
-        console.log(e);
+        console.log( e);
       })
       .catch(err => {
         console.log(err);
@@ -170,7 +172,24 @@ export default function Author() {
       });
 
   };
-
+    const handleOk = () => {
+      setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
+    const handleOk1 = () => {
+      setIsModalOpen1(false);
+    };
+    const handleCancel1 = () => {
+      setIsModalOpen1(false);
+    };
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const showModal1 = () => {
+    setIsModalOpen1(true);
+  };
   useEffect(() => {
     if (!token?._doc?._id) {
       return navigate('/login')
@@ -259,8 +278,10 @@ export default function Author() {
                 </span>
               </div>
               <p className="text-gray-700">
-                {Author?.follow?.length} người theo dõi ·{" "}
-                {Author?.followAdd?.length} người đang theo dõi
+                {Author?.follow?.length}{" "}
+                <span onClick={showModal}>người theo dõi</span> ·{" "}
+                {Author?.followAdd?.length}{" "}
+                <span onClick={showModal1}>người đang theo dõi</span>
               </p>
               {parseInt(Author?.follow?.length) > 4 && (
                 <button
@@ -433,6 +454,102 @@ export default function Author() {
           </div>
         </InfiniteScroll>
       </div>
+      <Modal
+        title="người theo dõi"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div className="text-center">
+          {Author?.follow &&
+            Author?.follow.map((user, index) => (
+              <div
+                className="rounded-xl overflow-hidden relative text-center group items-center flex flex-col max-w-sm hover:shadow-2xl transition-all duration-500 shadow-xl"
+                style={{
+                  display: "inline-table",
+                  margin: "0px 5px",
+                  width: "92%",
+                }}
+              >
+                <Link
+                  to={`/author/${user.user._id}`}
+                  className={`card px-6 py-8 sm:p-10 sm:pb-6`}
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={handleCancel}
+                >
+                  <img
+                    className="rounded-md p-1"
+                    src={user.user.avatar}
+                    style={{
+                      borderRadius: "50%",
+                      width: "60px",
+                      height: "60px",
+                    }}
+                    alt={user.user.avatar}
+                    // onLoad={() =>
+                    //   containerRef.current.dispatchEvent(new Event("load"))
+                    // }
+                  />
+                  <div style={{ paddingLeft: "10px", textAlign: "justify" }}>
+                    <p className="text-base font-medium text-gray-700">
+                      {user.user.username}
+                    </p>
+                    <span>{user.user?.follow?.length} follow</span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+        </div>
+      </Modal>
+      <Modal
+        title="người đang theo dõi"
+        open={isModalOpen1}
+        onOk={handleOk1}
+        onCancel={handleCancel1}
+      >
+        <div className="text-center">
+          {Author?.followAdd &&
+            Author?.followAdd.map((user, index) => (
+              <div
+                className="rounded-xl overflow-hidden relative text-center group items-center flex flex-col max-w-sm hover:shadow-2xl transition-all duration-500 shadow-xl"
+                style={{
+                  display: "inline-table",
+                  margin: "0px 5px",
+                  width: "92%",
+                }}
+              >
+                <Link
+                  to={`/author/${user.user._id}`}
+                  className={`card px-6 py-8 sm:p-10 sm:pb-6`}
+                  key={index}
+                  style={{ display: "flex", alignItems: "center" }}
+                  onClick={handleCancel1}
+                >
+                  <img
+                    className="rounded-md p-1"
+                    src={user.user.avatar}
+                    style={{
+                      borderRadius: "50%",
+                      width: "60px",
+                      height: "60px",
+                    }}
+                    alt={user.user.avatar}
+                    // onLoad={() =>
+                    //   containerRef.current.dispatchEvent(new Event("load"))
+                    // }
+                  />
+                  <div style={{ paddingLeft: "10px", textAlign: "justify" }}>
+                    <p className="text-base font-medium text-gray-700">
+                      {user.user.username}
+                    </p>
+                    <span>{user.user?.follow?.length} follow</span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+        </div>
+      </Modal>
       <ComFooter />
     </>
   );
