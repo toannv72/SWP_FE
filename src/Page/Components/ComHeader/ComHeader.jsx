@@ -95,6 +95,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   const [countNoti, setCountNoti] = useState(false);
   const [open, setOpen] = useState(false);
   const [shoppingCart, setShoppingCart] = useState(false);
+    const [follow, setFollow] = useState(false);
   const [sttLogin, setSttLogin] = useState(
     JSON.parse(localStorage.getItem("user")) || []
   );
@@ -122,7 +123,18 @@ export default function ComHeader({ dataCart, updateCart }) {
       search: "",
     },
   });
-
+  useEffect(() => {
+    if (!token?._doc?._id) {
+      return navigate("/login");
+    }
+    getData(`/user/${token?._doc?._id}`)
+      .then((user) => {
+        setFollow(user?.data?.follow);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   useEffect(() => {
     setSttLogin(JSON.parse(localStorage.getItem("user")) || []);
 
@@ -329,11 +341,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                   <div className="ml-4 flex lg:ml-0">
                     <ComLink to={routs["/"].link}>
                       <span className="sr-only">Your Company</span>
-                      <img
-                        className="h-16 w-auto "
-                        src={images.logo1}
-                        alt=""
-                      />
+                      <img className="h-16 w-auto " src={images.logo1} alt="" />
                     </ComLink>
                   </div>
 
@@ -351,10 +359,10 @@ export default function ComHeader({ dataCart, updateCart }) {
                             style={
                               location.pathname === page.href
                                 ? {
-                                  padding: "5px",
-                                  background: "#d3e7ff",
-                                  borderRadius: "10px",
-                                }
+                                    padding: "5px",
+                                    background: "#d3e7ff",
+                                    borderRadius: "10px",
+                                  }
                                 : { padding: "5px" }
                             }
                           >
@@ -363,12 +371,11 @@ export default function ComHeader({ dataCart, updateCart }) {
                           </div>
                         </Link>
                       ))}
-                      <Dropdown
-                        menu={
-                          { items }
-                        }
-                      >
-                        <Link className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800" onClick={(e) => link(e)}>
+                      <Dropdown menu={{ items }}>
+                        <Link
+                          className="flex items-center text-base font-medium text-gray-700 hover:text-gray-800"
+                          onClick={(e) => link(e)}
+                        >
                           <Space>
                             Thể loại
                             <DownOutlined />
@@ -527,19 +534,21 @@ export default function ComHeader({ dataCart, updateCart }) {
                                   </ComLink>
                                 )}
                               </Menu.Item>
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <ComLink
-                                    to={"/my/order"}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                  >
-                                    Đơn bán hàng
-                                  </ComLink>
-                                )}
-                              </Menu.Item>
+                              {follow?.length > 4 && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <ComLink
+                                      to={"/my/order"}
+                                      className={classNames(
+                                        active ? "bg-gray-100" : "",
+                                        "block px-4 py-2 text-sm text-gray-700"
+                                      )}
+                                    >
+                                      Đơn bán hàng
+                                    </ComLink>
+                                  )}
+                                </Menu.Item>
+                              )}
                               <Menu.Item>
                                 {({ active }) => (
                                   <ComLink
@@ -553,19 +562,21 @@ export default function ComHeader({ dataCart, updateCart }) {
                                   </ComLink>
                                 )}
                               </Menu.Item>
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <ComLink
-                                    to={"/orderRequest"}
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                  >
-                                    Đơn hàng theo yêu cầu
-                                  </ComLink>
-                                )}
-                              </Menu.Item>
+                              {follow?.length > 4 && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <ComLink
+                                      to={"/orderRequest"}
+                                      className={classNames(
+                                        active ? "bg-gray-100" : "",
+                                        "block px-4 py-2 text-sm text-gray-700"
+                                      )}
+                                    >
+                                      Đơn hàng theo yêu cầu
+                                    </ComLink>
+                                  )}
+                                </Menu.Item>
+                              )}
                               <Menu.Item>
                                 {({ active }) => (
                                   <ComLink

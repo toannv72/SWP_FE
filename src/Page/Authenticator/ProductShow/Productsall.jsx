@@ -6,11 +6,12 @@ import images from "../../../img";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import ComFooter from "../../Components/ComFooter/ComFooter";
 import { InputNumber, Pagination, Select } from "antd";
+import { useStorage } from "../../../hooks/useLocalStorage";
 
 
 
 export default function ProductBest() {
-
+const [token, setToken] = useStorage("user", {});
     const [products, setProducts] = useState([])
     const [page, setPage] = useState(1)
     const [sortPrice, setSortPrice] = useState(0)
@@ -64,13 +65,14 @@ export default function ProductBest() {
     }
 
     return (
-        <>
-   
-            <div className="bg-white p-4">
-                <div className=" mx-auto  max-w-2xl px-4 py-4 sm:px-6 sm:py-4  lg:max-w-7xl lg:px-2">
-                <h2 className="bg-cyan-400 h-12 flex items-center p-2 text-2xl font-bold tracking-tight text-white mb-4">Sản phẩm bán chạy nhất </h2>
+      <>
+        <div className="bg-white p-4">
+          <div className=" mx-auto  max-w-2xl px-4 py-4 sm:px-6 sm:py-4  lg:max-w-7xl lg:px-2">
+            <h2 className="bg-cyan-400 h-12 flex items-center p-2 text-2xl font-bold tracking-tight text-white mb-4">
+              Sản phẩm bán chạy nhất{" "}
+            </h2>
 
-                {/* <div className="flex gap-2 mb-2">
+            {/* <div className="flex gap-2 mb-2">
                         Giá dao động
                         <InputNumber
                             style={{
@@ -110,50 +112,81 @@ export default function ProductBest() {
                             ]}
                         />
                     </div> */}
-                    <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                        {products?.docs?.map((product, index) => (
-                            index !== 8 ? <ComLink key={index} to={`/product/${product._id}`} className="shadow-md  border-solid border-2 border-white hover:border-zinc-400">
-                                <div className="relative  h-80 overflow-hidden bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 border-solid border-2 border-stone-100">
-                                    <img
-                                        src={product.image}
-                                        alt={product.imageAlt}
-                                        className="w-full h-full object-cover object-center lg:h-full lg:w-full  absolute "
-                                    />
-                            
-                                </div>
-                                <h3 className="mt-4 text-base h-12 ml-2 mr-2 text-gray-700 line-clamp-2">{product.name}</h3>
-                                <div className="">
-                                    {/* <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p> */}
-                                    <div className="flex justify-between">
-                                        <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">{formatCurrency(product.price)}</p>
-                                        <p className="mt-1 mr-2  text-sm font-medium ">Đã bán: {(product.sold)}</p>
-                                    </div>
-                                </div>
-                            </ComLink> :
-                            <ComLink key={index} to={`/product/${product._id}`} className="shadow-md  border-solid border-2 border-white hover:border-zinc-400">
-                                <div className="relative  h-80 overflow-hidden bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 border-solid border-2 border-stone-100">
-                                    <img
-                                        src={product.image}
-                                        alt={product.imageAlt}
-                                        className="w-full h-full object-cover object-center lg:h-full lg:w-full  absolute "
-                                    />
-                            
-                                </div>
-                                <h3 className="mt-4 text-base h-12 ml-2 mr-2 text-gray-700 line-clamp-2">{product.name}</h3>
-                                <div className="">
-                                    {/* <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p> */}
-                                    <div className="flex justify-between">
-                                        <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">{formatCurrency(product.price)}</p>
-                                        <p className="mt-1 mr-2  text-sm font-medium ">Đã bán: {(product.sold)}</p>
-                                    </div>
-                                </div>
-                            </ComLink>
-                        ))}
-                    </div>
-                 <div className="flex justify-end p-4"><Pagination current={page} total={products.totalDocs}  showSizeChanger={false} defaultPageSize={9} onChange={onChange}/></div>
-                </div>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+              {products?.docs
+                ?.filter((e) => token?._doc?._id !== e?.user)
+                .map((product, index) =>
+                  index !== 8 ? (
+                    <ComLink
+                      key={index}
+                      to={`/product/${product._id}`}
+                      className="shadow-md  border-solid border-2 border-white hover:border-zinc-400"
+                    >
+                      <div className="relative  h-80 overflow-hidden bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 border-solid border-2 border-stone-100">
+                        <img
+                          src={product.image}
+                          alt={product.imageAlt}
+                          className="w-full h-full object-cover object-center lg:h-full lg:w-full  absolute "
+                        />
+                      </div>
+                      <h3 className="mt-4 text-base h-12 ml-2 mr-2 text-gray-700 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <div className="">
+                        {/* <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p> */}
+                        <div className="flex justify-between">
+                          <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">
+                            {formatCurrency(product.price)}
+                          </p>
+                          <p className="mt-1 mr-2  text-sm font-medium ">
+                            Đã bán: {product.sold}
+                          </p>
+                        </div>
+                      </div>
+                    </ComLink>
+                  ) : (
+                    <ComLink
+                      key={index}
+                      to={`/product/${product._id}`}
+                      className="shadow-md  border-solid border-2 border-white hover:border-zinc-400"
+                    >
+                      <div className="relative  h-80 overflow-hidden bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 border-solid border-2 border-stone-100">
+                        <img
+                          src={product.image}
+                          alt={product.imageAlt}
+                          className="w-full h-full object-cover object-center lg:h-full lg:w-full  absolute "
+                        />
+                      </div>
+                      <h3 className="mt-4 text-base h-12 ml-2 mr-2 text-gray-700 line-clamp-2">
+                        {product.name}
+                      </h3>
+                      <div className="">
+                        {/* <p className="mt-1 ml-2  text-sm font-medium line-through text-slate-500">{formatCurrency(product.price)}</p> */}
+                        <div className="flex justify-between">
+                          <p className="ml-2 pb-4 text-2xl font-medium  text-red-600">
+                            {formatCurrency(product.price)}
+                          </p>
+                          <p className="mt-1 mr-2  text-sm font-medium ">
+                            Đã bán: {product.sold}
+                          </p>
+                        </div>
+                      </div>
+                    </ComLink>
+                  )
+                )}
             </div>
-            <ComFooter />
-        </>
-    )
+            <div className="flex justify-end p-4">
+              <Pagination
+                current={page}
+                total={products.totalDocs}
+                showSizeChanger={false}
+                defaultPageSize={9}
+                onChange={onChange}
+              />
+            </div>
+          </div>
+        </div>
+        <ComFooter />
+      </>
+    );
 }

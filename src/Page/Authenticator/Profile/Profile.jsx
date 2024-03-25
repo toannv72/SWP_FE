@@ -29,6 +29,7 @@ import ComTextArea from '../../Components/ComInput/ComTextArea'
 import ComSelect from '../../Components/ComInput/ComSelect'
 import Card from './card'
 import ChangePassword from './changePassword'
+import ComFooter from '../../Components/ComFooter/ComFooter'
 export default function Profile() {
   const [Author, setAuthor] = useState([])
   const { id } = useParams();
@@ -663,6 +664,7 @@ export default function Profile() {
       >
         <ChangePassword handleCancel3={handleCancel3} />
       </Modal>
+      <ComFooter />
     </>
   );
 }

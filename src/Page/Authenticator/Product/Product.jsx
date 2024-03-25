@@ -15,6 +15,7 @@ import { useStorage } from "../../../hooks/useLocalStorage";
 
 export default function Product() {
   const [Product, setProduct] = useState([]);
+  console.log("🚀 ~ Product ~ Product:", Product)
   const [image, setImage] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const { slug } = useParams();

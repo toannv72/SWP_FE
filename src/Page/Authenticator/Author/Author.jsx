@@ -17,6 +17,7 @@ import { useStorage } from '../../../hooks/useLocalStorage'
 import { useSocket } from '../../../App'
 import ReportModal from './ReportModal'
 import axios from 'axios'
+import ComFooter from '../../Components/ComFooter/ComFooter'
 export default function Author() {
   const socket = useSocket()
   const [Author, setAuthor] = useState([])
@@ -240,10 +241,7 @@ export default function Author() {
               />
               <div className="flex items-center space-x-2 mt-2">
                 <p className="text-2xl">{Author?.name}</p>
-                <span
-                  className="bg-blue-500 rounded-full p-1"
-                  title="Verified"
-                >
+                <span className="bg-blue-500 rounded-full p-1" title="Verified">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="text-gray-100 h-2.5 w-2.5"
@@ -273,12 +271,14 @@ export default function Author() {
                 </button>
               )}
               <br />
-              <button
-                onClick={() => setOpenModal(true)}
-                className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-              >
-                Report user
-              </button>
+              {Author?.role !== "admin" && (
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                >
+                  Report user
+                </button>
+              )}
               <ReportModal
                 isModalOpen={openModal}
                 setIsModalOpen={setOpenModal}
@@ -314,7 +314,6 @@ export default function Author() {
           dataLength={products.length}
           next={fetchMoreProducts}
           hasMore={hasMore}
-
         >
           <div className="grid gap-4 justify-center ">
             {products.map((artwork, index) => (
@@ -335,10 +334,7 @@ export default function Author() {
                       </Link>{" "}
                     </HoverCardTrigger>
                     <HoverCardTrigger>
-                      <Link
-                        to={`/author/${artwork.user}`}
-                        className="text-2xl"
-                      >
+                      <Link to={`/author/${artwork.user}`} className="text-2xl">
                         {getUserById(allUser, artwork.user)?.name}
                       </Link>
                     </HoverCardTrigger>
@@ -406,8 +402,9 @@ export default function Author() {
                 </div>
                 <div className="flex justify-around mb-1 p-1 gap-2">
                   <button
-                    className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${likedProducts[index] ? "text-[#08c]" : ""
-                      }`}
+                    className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${
+                      likedProducts[index] ? "text-[#08c]" : ""
+                    }`}
                     onClick={() => {
                       !likedProducts[index]
                         ? handleLike(index, artwork._id, token?._doc?._id)
@@ -436,6 +433,7 @@ export default function Author() {
           </div>
         </InfiniteScroll>
       </div>
+      <ComFooter />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { getData } from "../../../api/api";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useNavigate } from "react-router-dom";
 import { useStorage } from "../../../hooks/useLocalStorage";
+import ComFooter from "../../Components/ComFooter/ComFooter";
 
 // import './styles.css'
 export default function Follow() {
@@ -118,6 +119,7 @@ export default function Follow() {
           dataLength={products.length}
           next={fetchMoreProducts}
           hasMore={hasMore}
+          style={{ width: "50px" }}
         >
           <div className="pon_container" ref={containerRef}>
             <InfiniteScroll dataLength={users.length} hasMore={hasMore}>

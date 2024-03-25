@@ -3,10 +3,10 @@
 @tailwind utilities;
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
-.infinite-scroll-component {
+/* .infinite-scroll-component {
       width: 270px;
       padding: 5px;
-}
+} */
 .product .image-gallery-image{
     max-height: 400px!important;
 }

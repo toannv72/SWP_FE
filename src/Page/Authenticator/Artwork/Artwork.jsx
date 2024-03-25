@@ -298,7 +298,8 @@ export default function Artwork() {
                 </div>
 
                 <p>
-                  <pre
+                  <p
+                    className="text-base font-medium text-gray-700"
                     style={{
                       whiteSpace: "pre-wrap",
                       wordWrap: "break-word",
@@ -307,10 +308,20 @@ export default function Artwork() {
                   >
                     Category:{" "}
                     {artwork?.genre?.map((item) => (
-                      <>{item} |</>
+                      <span
+                        style={{
+                          padding: "5px",
+                          background: "#d3e7ff",
+                          borderRadius: "10px",
+                          margin:"0 3px"
+                        }}
+                      >
+                        {item} 
+                      </span>
                     ))}
-                  </pre>
-                  <pre
+                  </p>
+                  <p
+                    className="text-base font-medium text-gray-700"
                     style={{
                       whiteSpace: "pre-wrap",
                       wordWrap: "break-word",
@@ -318,7 +329,7 @@ export default function Artwork() {
                     }}
                   >
                     Content: {artwork?.content}
-                  </pre>
+                  </p>
                 </p>
                 <div className="h-64 overflow-auto">
                   {artwork?.comments
