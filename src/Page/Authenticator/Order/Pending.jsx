@@ -54,7 +54,7 @@ export default function Pending({ activeTab }) {
   };
 
   const handleOk = () => {
-    putData(`/order/user/put`, selectedOrderId)
+    putData(`/order/user/Canceled/${selectedOrderId.id}/Canceled `, selectedOrderId)
       .then((response) => {
         api["success"]({
           message: textApp.CreateProduct.Notification.m2.message,
