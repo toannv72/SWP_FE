@@ -114,43 +114,61 @@ export default function Follow() {
     return (
       <>
         <ComHeader />
-        <InfiniteScroll dataLength={users.length} hasMore={hasMore}>
-          <h4
-            className="bg-cyan-500 h-12 flex items-center p-2 text-2xl font-bold tracking-tight text-white mb-4"
-            style={{ margin: "20px 70px 0 70px" }}
-          >
-            User Follow
-          </h4>
-          <div className="pin_container" ref={containerRef}>
-            {users.map((user, index) => (
-              <div>
-                <Link
-                  to={`/author/${user._id}`}
-                  className={`card`}
-                  key={index}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <img
-                    className="rounded-md p-1"
-                    src={user.avatar}
-                    style={{ borderRadius: "50%", width: "60px" }}
-                    alt={user.avatar}
-                    onLoad={() =>
-                      containerRef.current.dispatchEvent(new Event("load"))
-                    }
-                  />
-                  <span>{user.username}</span>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </InfiniteScroll>
         <InfiniteScroll
           dataLength={products.length}
           next={fetchMoreProducts}
           hasMore={hasMore}
         >
           <div className="pon_container" ref={containerRef}>
+            <InfiniteScroll dataLength={users.length} hasMore={hasMore}>
+              <h4
+                className="font-medium text-gray-700 h-12 flex items-center p-2 text-2xl font-bold tracking-tight mb-4"
+                // style={{ margin: "20px 70px 0 70px" }}
+              >
+                User Follow
+              </h4>
+              <div ref={containerRef}>
+                {users.map((user, index) => (
+                  <div
+                    className="rounded-xl overflow-hidden relative text-center group items-center flex flex-col max-w-sm hover:shadow-2xl transition-all duration-500 shadow-xl"
+                    style={{
+                      display: "inline-table",
+                      margin: "0px 5px",
+                      width: "92%",
+                    }}
+                  >
+                    <Link
+                      to={`/author/${user._id}`}
+                      className={`card px-6 py-8 sm:p-10 sm:pb-6`}
+                      key={index}
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img
+                        className="rounded-md p-1"
+                        src={user.avatar}
+                        style={{
+                          borderRadius: "50%",
+                          width: "60px",
+                          height: "60px",
+                        }}
+                        alt={user.avatar}
+                        onLoad={() =>
+                          containerRef.current.dispatchEvent(new Event("load"))
+                        }
+                      />
+                      <div
+                        style={{ paddingLeft: "10px", textAlign: "justify" }}
+                      >
+                        <p className="text-base font-medium text-gray-700">
+                          {user.username}
+                        </p>
+                        <span>{user?.follow?.length} follow</span>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </InfiniteScroll>
             {products.map((artwork, index) => (
               <Link
                 to={`/artwork/${artwork._id}`}

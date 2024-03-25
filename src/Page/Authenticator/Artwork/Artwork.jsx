@@ -244,113 +244,202 @@ export default function Artwork() {
     };
     console.log("token",token)
     return (
-        <>
-            {contextHolder}
-            <ComHeader />
-            <ReportModal isModalOpen={openModal} setIsModalOpen={setOpenModal} artwork={artwork} user={user} />
-            <div className='flex justify-center'>
-                <div className=' lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2'>
-                    <div className=''>
-                        <img className='rounded-l-[2.5rem]  max-xl:rounded-r-[2.5rem] lg:rounded-l-[2.5rem] sm:rounded-l-[2.5rem] w-full' src={artwork?.image} alt='' />
-                    </div>
-                    <div className='p-2 grid content-between'>
-                        <div>
-
-
-                            <div className='flex justify-between'>
-                                <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                    <Link to={`/author/${artwork.user}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, artwork.user)?.avatar} alt="" /></Link>
-                                    <Link to={`/author/${artwork.user}`} className="text-2xl">{getUserById(allUser, artwork.user)?.name}</Link>
-                                </div>
-                                {/* <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
+      <>
+        {contextHolder}
+        <ComHeader />
+        <ReportModal
+          isModalOpen={openModal}
+          setIsModalOpen={setOpenModal}
+          artwork={artwork}
+          user={user}
+        />
+        <div className="flex justify-center">
+          <div className=" lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2">
+            <div className="">
+              <img
+                className="rounded-l-[2.5rem]  max-xl:rounded-r-[2.5rem] lg:rounded-l-[2.5rem] sm:rounded-l-[2.5rem] w-full"
+                src={artwork?.image}
+                alt=""
+              />
+            </div>
+            <div className="p-2 grid content-between">
+              <div>
+                <div className="flex justify-between">
+                  <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                    <Link to={`/author/${artwork.user}`}>
+                      <img
+                        className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white"
+                        src={getUserById(allUser, artwork.user)?.avatar}
+                        alt=""
+                      />
+                    </Link>
+                    <Link to={`/author/${artwork.user}`} className="text-2xl">
+                      {getUserById(allUser, artwork.user)?.name}
+                    </Link>
+                  </div>
+                  {/* <button className='rounded-full m-4 p-3 bg-[#efefef] hover:bg-[#e2e2e2] text-xl' >
                                     Theo dõi
                                 </button> */}
-                                <Dropdown trigger={['click']} menu={menuProps} >
-                                    <button className='rounded-full m-4 p-3 hover:bg-slate-200' >
-                                        <svg class="gUZ R19 U9O kVc" height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path></svg>
-                                    </button>
-                                </Dropdown>
-                            </div>
+                  <Dropdown trigger={["click"]} menu={menuProps}>
+                    <button className="rounded-full m-4 p-3 hover:bg-slate-200">
+                      <svg
+                        class="gUZ R19 U9O kVc"
+                        height="20"
+                        width="20"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        aria-label=""
+                        role="img"
+                      >
+                        <path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3M3 9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm18 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"></path>
+                      </svg>
+                    </button>
+                  </Dropdown>
+                </div>
 
-                            <p>
-                                <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '6px' }}>
-                                    {artwork?.content}
-                                </pre>
-                            </p>
-                            <div className='h-64 overflow-auto'>
-                                {artwork?.comments?.slice().reverse().map((comment, i) => (
-                                    <div key={i} className=' m-2 rounded-lg flex items-start '>
-                                        {/* <div className="px-2 py-1 flex items-center gap-2">
+                <p>
+                  <pre
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      wordWrap: "break-word",
+                      padding: "6px",
+                    }}
+                  >
+                    Category:{" "}
+                    {artwork?.genre?.map((item) => (
+                      <>{item} |</>
+                    ))}
+                  </pre>
+                  <pre
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      wordWrap: "break-word",
+                      padding: "6px",
+                    }}
+                  >
+                    Content: {artwork?.content}
+                  </pre>
+                </p>
+                <div className="h-64 overflow-auto">
+                  {artwork?.comments
+                    ?.slice()
+                    .reverse()
+                    .map((comment, i) => (
+                      <div
+                        key={i}
+                        className=" m-2 rounded-lg flex items-start "
+                      >
+                        {/* <div className="px-2 py-1 flex items-center gap-2">
                                                 <img className="inline-block h-8 w-8 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /> <p className="text-xl">{getUserById(allUser, comment?.user)?.name}</p>
                                             </div> */}
 
-                                        <div className="px-2 py-1 flex items-center gap-2 w-auto">
-                                            <Link to={`/author/${getUserById(allUser, comment?.user)?._id}`}><img className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white" src={getUserById(allUser, comment?.user)?.avatar} alt="" /></Link>
-                                            <Link to={`/author/${getUserById(allUser, comment?.user)?._id}`} className=" font-semibold">{getUserById(allUser, comment?.user)?.name}</Link>
-                                        </div>
-
-                                        <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", padding: '11px', }}>
-                                            {comment.content}
-                                        </pre>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="px-2 py-1 flex items-center gap-2 w-auto">
+                          <Link
+                            to={`/author/${
+                              getUserById(allUser, comment?.user)?._id
+                            }`}
+                          >
+                            <img
+                              className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white"
+                              src={getUserById(allUser, comment?.user)?.avatar}
+                              alt=""
+                            />
+                          </Link>
+                          <Link
+                            to={`/author/${
+                              getUserById(allUser, comment?.user)?._id
+                            }`}
+                            className=" font-semibold"
+                          >
+                            {getUserById(allUser, comment?.user)?.name}
+                          </Link>
                         </div>
-                        <div>
-                            <div className='flex justify-between items-center px-6 '>
-                                <div className=' font-semibold text-2xl '>
 
-                                    <p>{artwork?.comments?.length ? `${artwork?.comments?.length} Nhận xét ` : `Bạn nghĩ gì?`} </p>
-                                </div>
-                                <div className='flex gap-4 '>
-                                    <div className='flex gap-1'><HeartFilled style={{ fontSize: '20px', color: 'red' }} /> <div className='flex items-center'>{artwork?.likes?.length}</div></div>
-                                    {
-                                        <button
-                                            onClick={() => { !like ? handleLike(artwork._id, token?._doc?._id) : handleUnLike(artwork._id, token?._doc?._id) }}
-                                            className={`flex gap-2 p-2 rounded-full  items-center  justify-center  hover:bg-[#f1f0f0] ${like ? 'text-[#cc0700]' : ''}`}
-                                        >
-                                            {like ? <HeartFilled style={{ fontSize: '40px' }} /> : <HeartOutlined style={{ fontSize: '40px', }} />}
-                                        </button>
-                                    }
-                                </div>
-                            </div>
-                            <FormProvider {...methods} >
-                                <form className="" onSubmit={handleSubmit(onSubmit)}>
-                                    <div className='p-6 flex justify-between items-start'>
-                                        <ComTextArea
-                                            // readOnly={token?._doc?.hidden=== true ? true : false}
-                                            placeholder="Thêm nhận xét"
-                                            autoSize={{
-                                                minRows: 1,
-                                                maxRows: 3,
-                                            }}
-                                            ref={textAreaRef}
-                                            style={{
-                                                resize: 'none',
-                                            }}
-
-                                            className="w-full"
-                                            watch={onChange}
-                                            size='large'
-                                            {...register("content")}
-
-                                        />
-                                        {
-                                            // token?._doc?.hidden!== true &&
-                                            <>
-                                                {disabled || <button className='p-2' type='submit'>
-                                                    <SendOutlined style={{ fontSize: '30px', }} />
-                                                </button>}
-                                            </>
-                                        }
-                                    </div>
-                                </form>
-                            </FormProvider>
-                        </div>
-                    </div>
+                        <pre
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                            padding: "11px",
+                          }}
+                        >
+                          {comment.content}
+                        </pre>
+                      </div>
+                    ))}
                 </div>
+              </div>
+              <div>
+                <div className="flex justify-between items-center px-6 ">
+                  <div className=" font-semibold text-2xl ">
+                    <p>
+                      {artwork?.comments?.length
+                        ? `${artwork?.comments?.length} Nhận xét `
+                        : `Bạn nghĩ gì?`}{" "}
+                    </p>
+                  </div>
+                  <div className="flex gap-4 ">
+                    <div className="flex gap-1">
+                      <HeartFilled style={{ fontSize: "20px", color: "red" }} />{" "}
+                      <div className="flex items-center">
+                        {artwork?.likes?.length}
+                      </div>
+                    </div>
+                    {
+                      <button
+                        onClick={() => {
+                          !like
+                            ? handleLike(artwork._id, token?._doc?._id)
+                            : handleUnLike(artwork._id, token?._doc?._id);
+                        }}
+                        className={`flex gap-2 p-2 rounded-full  items-center  justify-center  hover:bg-[#f1f0f0] ${
+                          like ? "text-[#cc0700]" : ""
+                        }`}
+                      >
+                        {like ? (
+                          <HeartFilled style={{ fontSize: "40px" }} />
+                        ) : (
+                          <HeartOutlined style={{ fontSize: "40px" }} />
+                        )}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <FormProvider {...methods}>
+                  <form className="" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="p-6 flex justify-between items-start">
+                      <ComTextArea
+                        // readOnly={token?._doc?.hidden=== true ? true : false}
+                        placeholder="Thêm nhận xét"
+                        autoSize={{
+                          minRows: 1,
+                          maxRows: 3,
+                        }}
+                        ref={textAreaRef}
+                        style={{
+                          resize: "none",
+                        }}
+                        className="w-full"
+                        watch={onChange}
+                        size="large"
+                        {...register("content")}
+                      />
+                      {
+                        // token?._doc?.hidden!== true &&
+                        <>
+                          {disabled || (
+                            <button className="p-2" type="submit">
+                              <SendOutlined style={{ fontSize: "30px" }} />
+                            </button>
+                          )}
+                        </>
+                      }
+                    </div>
+                  </form>
+                </FormProvider>
+              </div>
             </div>
-
-        </>
-    )
+          </div>
+        </div>
+      </>
+    );
 }

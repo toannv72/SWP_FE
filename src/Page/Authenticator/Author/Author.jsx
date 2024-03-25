@@ -264,7 +264,7 @@ export default function Author() {
                 {Author?.follow?.length} người theo dõi ·{" "}
                 {Author?.followAdd?.length} người đang theo dõi
               </p>
-              {parseInt(Author?.follow?.length) > 0 && (
+              {parseInt(Author?.follow?.length) > 4 && (
                 <button
                   onClick={handleRequest}
                   className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
