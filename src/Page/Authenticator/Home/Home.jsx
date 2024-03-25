@@ -34,6 +34,7 @@ export default function Home() {
         response.data.docs.length > 0
           ? response.data.docs.filter((item) => item.hidden !== true)
           : [];
+          console.log(newArray)
       return newArray;
     } catch (error) {
       console.log(error);
@@ -57,7 +58,7 @@ export default function Home() {
       setProducts([...products, ...initialProducts]);
     };
     loadInitialData();
-  }, [params["cate"], page]); // Run only once on component mount
+  }, [params["cate"]]); // Run only once on component mount
 
   useEffect(() => {
     const handleImageLoad = () => {
