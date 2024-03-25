@@ -19,6 +19,7 @@ import {
   ReconciliationFilled,
   DatabaseFilled,
   FileExclamationFilled,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import styles from "./header.module.css";
@@ -34,22 +35,27 @@ const Menu = () => {
       dataSource={[
         {
           title: "Log out",
-          path: "login",
+          path: "logout",
           avatar: <PoweroffOutlined />,
           // onclick:dispatch(actLogout());
         },
+        {
+          title: "Back to home",
+          path: "",
+          avatar: <HomeOutlined />,
+        },
       ]}
       renderItem={(item) => (
-        <List.Item>
-          <Link
-            to="/logout"
-          >
-            <List.Item.Meta
-              avatar={<Avatar shape="square" src={item.avatar} />}
-              title={item.title}
-            />
-          </Link>
-        </List.Item>
+        <>
+          <List.Item>
+            <Link to={`/${item.path}`}>
+              <List.Item.Meta
+                avatar={<Avatar shape="square" src={item.avatar} />}
+                title={item.title}
+              />
+            </Link>
+          </List.Item>
+        </>
       )}
     />
   );
