@@ -125,7 +125,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   });
   useEffect(() => {
     if (!token?._doc?._id) {
-      return navigate("/login");
+      // return navigate("/login");
     }
     getData(`/user/${token?._doc?._id}`)
       .then((user) => {

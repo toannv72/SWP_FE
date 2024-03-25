@@ -45,11 +45,7 @@ export default function Required() {
   const [token, setToken] = useStorage("user", {});
 
 
-  useEffect(() => {
-      if (!token?._doc?._id) {
-          return navigate('/login')
-      }
-  }, []);
+
   const CreateProductMessenger = yup.object({
     name: yup.string().required(textApp.Payment.information.message.name),
     bird: yup.string().required(textApp.Payment.information.message.name),
