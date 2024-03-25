@@ -32,7 +32,7 @@ export default function OrderShipped({ activeTab }) {
     const [orderDetail, setOrderDetail] = useState({});
     const [orderModalDetail, setModalOrderDetail] = useState(false);
     const [products, setProducts] = useState([]);
-    
+
     const getProductById = (productId) => {
         // Tìm sản phẩm theo ID trong danh sách sản phẩm
         console.log(products?.docs);
@@ -119,7 +119,7 @@ export default function OrderShipped({ activeTab }) {
     }
 
     const sttCanceled = () => {
-        putData('/order/admin/put', 'Returned', { orders: [orderRequestDefault.id] })
+        putData(`/order/user/Canceled/${orderRequestDefault.id}/Returned`, '', {})
             .then((e) => {
 
                 setDataRun(!dataRun);
@@ -169,7 +169,7 @@ export default function OrderShipped({ activeTab }) {
                     console.error("Error fetching items:", error);
                 });
         }, 100);
-    }, [dataRun,activeTab]);
+    }, [dataRun, activeTab]);
 
 
     const getColumnSearchProps = (dataIndex, title) => ({
@@ -400,14 +400,14 @@ export default function OrderShipped({ activeTab }) {
                 >
                     Chấp nhận
                 </Button>
-                <Button
+                {/* <Button
                     disabled={disabled}
                     type="primary"
                     onClick={() => setIsModalOpenCanceledS(true)}
                     className={`flex  items-center justify-center rounded-md border border-transparent text-base font-medium text-white ${disabled ? " bg-slate-700" : "hover:to-red-700 hover:from-red-800 bg-gradient-to-b from-red-600 to-red-700"}  `}
                 >
                     Trả hàng
-                </Button>
+                </Button> */}
             </div>
             <div className='flex p-2 justify-center'>
                 <Table
@@ -535,7 +535,7 @@ export default function OrderShipped({ activeTab }) {
                 onCancel={closeModalDetail}>
                 <div className=" flex items-center justify-center">
                     <div className="p-4 md:p-8 lg:p-12 rounded-lg  w-full">
-                     
+
                         <div className="mb-4">
                             <h2 className="text-lg font-semibold mb-2">Thông tin sản phẩm:</h2>
                             {orderDetail?.detail?.products?.map((product, index) => {

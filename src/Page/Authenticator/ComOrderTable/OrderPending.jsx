@@ -117,14 +117,14 @@ export default function OrderPending({ activeTab }) {
     }
 
     const sttCanceled = () => {
-        putData('/order/admin/put', 'Canceled', { orders: [orderRequestDefault.id] })
-            .then((e) => {
+        putData(`/order/user/Canceled/${orderRequestDefault.id}/Canceled`, '', {})
+        .then((e) => {
 
-                setDataRun(!dataRun);
-            })
-            .catch(err => console.log(err))
-        setDataRun(!dataRun);
-        handleCancelCanceled()
+            setDataRun(!dataRun);
+        })
+        .catch(err => console.log(err))
+    setDataRun(!dataRun);
+    handleCancelCanceled()
     }
 
     const processingS = () => {
@@ -399,14 +399,14 @@ export default function OrderPending({ activeTab }) {
                 >
                     Chấp nhận
                 </Button>
-                <Button
+                {/* <Button
                     disabled={disabled}
                     type="primary"
                     onClick={() => setIsModalOpenCanceledS(true)}
                     className={`flex  items-center justify-center rounded-md border border-transparent text-base font-medium text-white ${disabled ? " bg-slate-700" : "hover:to-red-700 hover:from-red-800 bg-gradient-to-b from-red-600 to-red-700"}  `}
                 >
                     Từ chối
-                </Button>
+                </Button> */}
             </div>
             <div className='flex p-2 justify-center'>
                 <Table
