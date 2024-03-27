@@ -148,7 +148,7 @@ export default function Product() {
               return;
             }
 
-            updatedCart[existingProductIndex].data = 1;
+            updatedCart[existingProductIndex].data = data.quantity;
             setCart(updatedCart);
             api["success"]({
               message: textApp.Product.Notification.m2.message,
@@ -156,7 +156,7 @@ export default function Product() {
             });
           }
           if (existingProductIndex === -1) {
-            const updatedCart = [...cart, { ...Product, data: 1 }];
+            const updatedCart = [...cart, { ...Product, data: data.quantity }];
             setCart(updatedCart);
             api["success"]({
               message: textApp.Product.Notification.m1.message,
@@ -249,7 +249,7 @@ export default function Product() {
                       </div>
                       <Button
                         type="button"
-                        onClick={addToCart}
+                        onClick={handleSubmit(addToCart)}
                         disabled={token?._doc?._id === Product?.user?._id}
                         className={`flex h-10 items-center justify-center rounded-md border border-transparent  px-4 py-2 text-base font-medium text-white  focus:outline-none 
                                                  hover:to-orange-500 hover:from-orange-600 bg-gradient-to-b from-orange-400 to-orange-500 

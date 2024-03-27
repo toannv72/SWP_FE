@@ -54,7 +54,7 @@ export default function Pending({ activeTab }) {
   };
 
   const handleOk = () => {
-    putData(`/order/user/Canceled/${selectedOrderId}/Canceled `, '', {})
+    putData(`/order/user/Canceled/${selectedOrderId}/Canceled`, '', {})
       .then((response) => {
         api["success"]({
           message: textApp.CreateProduct.Notification.m2.message,
@@ -151,11 +151,18 @@ export default function Pending({ activeTab }) {
                         </button>
                       )}
                       <Link
+                        to={`/payment/bill/${orderData._id}`}
+                        className="bg-cyan-500 text-white rounded-md px-2 py-1"
+                      >
+                        Chi tiết
+                      </Link>
+                      <Link
                         to={`/author/${orderData.seller}`}
                         className="text-gray-900 font-semibold rounded-md"
                       >
                         {textApp.OrderHistory.button.contact}
                       </Link>
+
                     </div>
                   </div>
                 </div>

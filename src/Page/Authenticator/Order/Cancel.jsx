@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
+import { Link } from "react-router-dom";
 
 export default function Cancel({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -22,7 +23,7 @@ export default function Cancel({activeTab}) {
       console.error("Error fetching products:", error);
     });
 
-      getData('/order/user/canceled', {})
+      getData('/order/user/Canceled', {})
         .then((orderData) => {
           setOrder(orderData?.data?.docs);
     
@@ -101,9 +102,18 @@ export default function Cancel({activeTab}) {
                 <div className="col-span-3 mt-4 md:mt-0">
                   <div className="flex flex-col items-end mb-4">
                     <div className="flex items-center space-x-2">
-                      <button className="text-gray-900 font-semibold rounded-md">
+                    <Link
+                        to={`/payment/bill/${orderData._id}`}
+                        className="bg-cyan-500 text-white rounded-md px-2 py-1"
+                      >
+                        Chi tiết
+                      </Link>
+                      <Link
+                        to={`/author/${orderData.seller}`}
+                        className="text-gray-900 font-semibold rounded-md"
+                      >
                         {textApp.OrderHistory.button.contact}
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

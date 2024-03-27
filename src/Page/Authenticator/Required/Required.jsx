@@ -65,7 +65,7 @@ export default function Required() {
       .typeError("Số lượng không được để trống")
       .min(1, textApp.CreateProduct.message.quantityMin)
       .required("Số lượng không được để trống"),
-    material: yup.array().required(textApp.CreateProduct.message.material),
+    material: yup.array().required("Vui lòng nhập thể loại"),
     shippingAddress: yup.string().required("Vui lòng nhập địa chỉ giao hàng"),
     description: yup
       .string()
