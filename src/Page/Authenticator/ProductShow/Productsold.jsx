@@ -234,7 +234,7 @@ export default function ProductSold() {
             </div>
           </div>
         </div>
-        <ProductBest />
+        {/* <ProductBest /> */}
       </>
     );
 }

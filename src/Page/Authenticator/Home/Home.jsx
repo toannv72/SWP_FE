@@ -23,7 +23,8 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [likedProducts, setLikedProducts] = useState([]);
   const [token, setToken] = useStorage("user", {});
-  const [likedProductIds, setLikedProductIds] = useState([]);
+  const [allUser, setAllUser] = useState([]);
+
   const containerRef = useRef(null);
   const fetchData = async (pageNumber) => {
     try {
@@ -34,6 +35,7 @@ export default function Home() {
         response.data.docs.length > 0
           ? response.data.docs.filter((item) => item.hidden !== true)
           : [];
+      console.log(newArray)
       return newArray;
     } catch (error) {
       console.log(error);
@@ -57,9 +59,16 @@ export default function Home() {
       setProducts([...products, ...initialProducts]);
     };
     loadInitialData();
-  }, [params["cate"], page]); // Run only once on component mount
+  }, [params["cate"]]); // Run only once on component mount
 
   useEffect(() => {
+    getData('/user', {})
+      .then((data) => {
+        setAllUser(data?.data?.docs)
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+      });
     const handleImageLoad = () => {
       const cards = containerRef.current.querySelectorAll(".card");
 
@@ -86,6 +95,11 @@ export default function Home() {
   }, [products]);
 
   // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
+  const getUserById = (array, userId) => {
+    // Sử dụng find để tìm user với _id tương ứng
+    const user = array.find(item => item._id === userId);
+    return user;
+  };
 
   return (
     <>
@@ -112,6 +126,16 @@ export default function Home() {
                   }
                 />
                 <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex gap-1">
+                    <img
+                      className="inline-block h-10 w-10 object-cover rounded-full ring-2 ring-white"
+                      src={getUserById(allUser, artwork.user)?.avatar}
+                      alt=""
+                    />
+                    <div  className=" text-white text-2xl">
+                      {getUserById(allUser, artwork.user)?.name}
+                    </div>
+                  </div>
                   <p className="text-white text-2xl"> Thể Loại:</p>
                   {artwork?.genre.map((genre, index) => (
                     <p

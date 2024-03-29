@@ -134,7 +134,7 @@ export default function Payment(props) {
 console.log(dataProduct)
     // Lặp qua từng sản phẩm để tính tổng tiền
     dataProduct?.forEach(product => {
-        const userId = product.user;
+        const userId = product?.user?._id;
         const totalPrice = product.price * product.data;
 
         // Thêm vào đối tượng userTotals

@@ -196,7 +196,8 @@ export default function Author() {
     getData(`/user/${id}`)
       .then((user) => {
         setAuthor(user.data)
-        const userFollowAdd = (user?.data?.follow || []).some(Follow => Follow.user === token?._doc?._id);
+        const userFollowAdd = (user?.data?.follow || []).some(Follow => Follow?.user?._id === token?._doc?._id);
+        
         setFollow(userFollowAdd)
       })
       .catch((error) => {
