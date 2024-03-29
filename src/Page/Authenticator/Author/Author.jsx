@@ -153,7 +153,6 @@ export default function Author() {
       .catch(err => {
         console.log(err);
       });
-
   };
 
   const handleUnLike = (index, id_artwork, id_user) => {
