@@ -2143,6 +2143,28 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@paypal/paypal-js@^8.0.4":
+  version "8.0.4"
+  resolved "https://registry.npmjs.org/@paypal/paypal-js/-/paypal-js-8.0.4.tgz"
+  integrity sha512-91g5fhRBHGEBoikDzQT6uBn3PzlJQ75g0c3MvqVJqN0XRm5kHa9wz+6+Uaq8QQuxRzz5C2x55Zg057CW6EuwpQ==
+  dependencies:
+    promise-polyfill "^8.3.0"
+
+"@paypal/react-paypal-js@^8.2.0":
+  version "8.2.0"
+  resolved "https://registry.npmjs.org/@paypal/react-paypal-js/-/react-paypal-js-8.2.0.tgz"
+  integrity sha512-SworUfu0BNNcqoh0O53Ke4MFpx2m3qJRu3hayXvlluEEXJpKqGSV5aaSGFhbsZqi8hnbsx/hZR7BQbmqsggiGQ==
+  dependencies:
+    "@paypal/paypal-js" "^8.0.4"
+    "@paypal/sdk-constants" "^1.0.122"
+
+"@paypal/sdk-constants@^1.0.122":
+  version "1.0.145"
+  resolved "https://registry.npmjs.org/@paypal/sdk-constants/-/sdk-constants-1.0.145.tgz"
+  integrity sha512-2tclrVX3L44YRJ09H4kkqma/UeAjRJarwH5SyPip10O5S+2ByE1HiyspAJ6hIWSjMngFVqjNyUCnrGcuQA3ldg==
+  dependencies:
+    hi-base32 "^0.5.0"
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.11"
   resolved "https://registry.npmjs.org/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.11.tgz"
@@ -6315,6 +6337,11 @@ hey-listen@^1.0.8:
   resolved "https://registry.npmjs.org/hey-listen/-/hey-listen-1.0.8.tgz"
   integrity sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==
 
+hi-base32@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.npmjs.org/hi-base32/-/hi-base32-0.5.1.tgz"
+  integrity sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==
+
 highlight-words-core@^1.2.0:
   version "1.2.2"
   resolved "https://registry.npmjs.org/highlight-words-core/-/highlight-words-core-1.2.2.tgz"
@@ -9210,6 +9237,11 @@ promise-polyfill@^6.0.2:
   resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-6.1.0.tgz"
   integrity sha512-g0LWaH0gFsxovsU7R5LrrhHhWAWiHRnh1GPrhXnPgYsDkIqjRYUYSZEsej/wtleDrz5xVSIDbeKfidztp2XHFQ==
 
+promise-polyfill@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.3.0.tgz"
+  integrity sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==
+
 promise@^8.1.0:
   version "8.3.0"
   resolved "https://registry.npmjs.org/promise/-/promise-8.3.0.tgz"
@@ -9819,6 +9851,14 @@ react-modal@^3.16.1:
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.0"
     warning "^4.0.3"
+
+react-paypal-button-v2@^2.6.3:
+  version "2.6.3"
+  resolved "https://registry.npmjs.org/react-paypal-button-v2/-/react-paypal-button-v2-2.6.3.tgz"
+  integrity sha512-Kt0QxWjZn+RnIbbFPHDfH8iHwMqe/jG5+SkKElEJ0Fg+CM9yeK37y8zQW97l5C9P9D1yPacW5YNAnuxmI9uS9w==
+  dependencies:
+    prop-types "^15.7.2"
+    rimraf "^3.0.0"
 
 react-phone-input-2@^2.15.1:
   version "2.15.1"
