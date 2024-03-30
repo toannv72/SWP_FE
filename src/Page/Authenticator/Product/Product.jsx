@@ -149,11 +149,11 @@ export default function Product() {
             }
 
             updatedCart[existingProductIndex].data = data.quantity;
-            setCart(updatedCart);
-            api["success"]({
-              message: textApp.Product.Notification.m2.message,
-              description: textApp.Product.Notification.m2.description,
+            api["warning"]({
+              message: textApp.Product.Notification.m3.message,
+              description: textApp.Product.Notification.m3.description,
             });
+            return;
           }
           if (existingProductIndex === -1) {
             const updatedCart = [...cart, { ...Product, data: data.quantity }];
