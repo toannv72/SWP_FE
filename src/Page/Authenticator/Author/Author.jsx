@@ -1,32 +1,32 @@
+import { useEffect, useState } from "react";
+import ComHeader from "../../Components/ComHeader/ComHeader";
+import { getData, postData } from "../../../api/api";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { useEffect, useState } from 'react'
-import ComHeader from '../../Components/ComHeader/ComHeader'
-import { getData, postData } from '../../../api/api'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-
-import { Button, Image, Modal, notification } from 'antd'
-import PageNotFound from '../404/PageNotFound'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@radix-ui/react-hover-card'
-import { CalendarDays } from 'lucide-react'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import { Button, Image, Modal, notification } from "antd";
+import PageNotFound from "../404/PageNotFound";
 import {
-  LikeOutlined,
-  CommentOutlined
-} from '@ant-design/icons';
-import { useStorage } from '../../../hooks/useLocalStorage'
-import { useSocket } from '../../../App'
-import ReportModal from './ReportModal'
-import axios from 'axios'
-import ComFooter from '../../Components/ComFooter/ComFooter'
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
+import { CalendarDays } from "lucide-react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { LikeOutlined, CommentOutlined } from "@ant-design/icons";
+import { useStorage } from "../../../hooks/useLocalStorage";
+import { useSocket } from "../../../App";
+import ReportModal from "./ReportModal";
+import axios from "axios";
+import ComFooter from "../../Components/ComFooter/ComFooter";
 export default function Author() {
-  const socket = useSocket()
-  const [Author, setAuthor] = useState([])
+  const socket = useSocket();
+  const [Author, setAuthor] = useState([]);
   const { id } = useParams();
   const [api, contextHolder] = notification.useNotification();
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]);
-   const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [follow, setFollow] = useState(false);
   const [page, setPage] = useState(1);
@@ -34,50 +34,60 @@ export default function Author() {
   const [allUser, setAllUser] = useState([]);
   const navigate = useNavigate();
   const [token, setToken] = useStorage("user", {});
-  const [likedProductIds, setLikedProductIds] = useState([])
-  const [openModal, setOpenModal] = useState(false)
-
+  const [likedProductIds, setLikedProductIds] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const handFollow = () => {
     setFollow(!follow);
     postData(`/user/followUser/${id}/${token?._doc?._id}`, {})
       .then((e) => {
-        console.log( e);
+        console.log(e);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-    sendNotification("", 2)
-  }
+    sendNotification("", 2);
+  };
   const handUndFollow = () => {
     setFollow(!follow);
     postData(`/user/undFollowUser/${id}/${token?._doc?._id}`, {})
       .then((e) => {
         console.log(e);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
 
   const handleRequest = () => {
-    navigate("/require?id=" + Author?._id)
-  }
+    navigate("/require?id=" + Author?._id);
+  };
 
   const sendNotification = async (textType, type) => {
-    socket.emit("push_notification", { pusher: token._doc, author: Author?._id, textType, type, link: window.location.href })
+    socket.emit("push_notification", {
+      pusher: token._doc,
+      author: Author?._id,
+      textType,
+      type,
+      link: window.location.href,
+    });
     const res = await axios({
       url: "http://localhost:5000/api/notification",
       method: "post",
       data: {
-        pusher: token._doc, author: Author?._id, textType, type, link: window.location.href
-      }
-    })
-  }
+        pusher: token._doc,
+        author: Author?._id,
+        textType,
+        type,
+        link: window.location.href,
+      },
+    });
+  };
   const fetchData = async (pageNumber) => {
     try {
-      const response = await getData(`/artwork/user/${id}?page=${pageNumber}&limit=10`);
+      const response = await getData(
+        `/artwork/user/${id}?page=${pageNumber}&limit=10`
+      );
       const newArray =
         response.data.docs.length > 0
           ? response.data.docs.filter((item) => item.hidden !== true)
@@ -93,41 +103,48 @@ export default function Author() {
       setHasMore(false); // No more data to load
     } else {
       setProducts([...products, ...newProducts]);
-      const userLikesArray = newProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
+      const userLikesArray = newProducts.map((product) =>
+        product.likes.some((like) => like.user === token?._doc?._id)
+      );
 
-      const likesCountArray = newProducts.map(product => product.likes.length);
-      setLikedProducts([...likedProducts, ...userLikesArray])
-      setLikedProductIds([...likedProductIds, ...likesCountArray])
+      const likesCountArray = newProducts.map(
+        (product) => product.likes.length
+      );
+      setLikedProducts([...likedProducts, ...userLikesArray]);
+      setLikedProductIds([...likedProductIds, ...likesCountArray]);
       setPage(page + 1);
     }
   };
 
   useEffect(() => {
     if (token?._doc?._id === id) {
-      navigate('/profile')
+      navigate("/profile");
     }
     const loadInitialData = async () => {
       const initialProducts = await fetchData(page);
       setProducts(initialProducts);
-      const userLikesArray = initialProducts.map(product => product.likes.some(like => like.user === token?._doc?._id));
-      const likesCountArray = initialProducts.map(product => product.likes.length);
-      setLikedProductIds(likesCountArray)
-      setLikedProducts(userLikesArray)
+      const userLikesArray = initialProducts.map((product) =>
+        product.likes.some((like) => like.user === token?._doc?._id)
+      );
+      const likesCountArray = initialProducts.map(
+        (product) => product.likes.length
+      );
+      setLikedProductIds(likesCountArray);
+      setLikedProducts(userLikesArray);
     };
     loadInitialData();
   }, []); // Run only once on component mount
 
   const getUserById = (array, userId) => {
     // Sử dụng find để tìm user với _id tương ứng
-    const user = array.find(item => item._id === userId);
+    const user = array.find((item) => item._id === userId);
     return user;
   };
 
-
   useEffect(() => {
-    getData('/user', {})
+    getData("/user", {})
       .then((data) => {
-        setAllUser(data?.data?.docs)
+        setAllUser(data?.data?.docs);
       })
       .catch((error) => {
         console.error("Error fetching items:", error);
@@ -137,9 +154,7 @@ export default function Author() {
 
   // useEffect để thiết lập mảng likedProducts có độ dài bằng độ dài của mảng products và mỗi phần tử có giá trị ban đầu là false
 
-
   const handleLike = (index, id_artwork, id_user) => {
-
     const updatedLikedProducts = [...likedProducts];
     updatedLikedProducts[index] = !updatedLikedProducts[index];
     setLikedProducts(updatedLikedProducts);
@@ -148,9 +163,8 @@ export default function Author() {
     updatedLikedProductIds[index] = updatedLikedProductIds[index] + 1;
     setLikedProductIds(updatedLikedProductIds);
     postData(`/artwork/likeArtwork/${id_artwork}/${id_user}`, {})
-      .then((e) => {
-      })
-      .catch(err => {
+      .then((e) => {})
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -164,25 +178,23 @@ export default function Author() {
     updatedLikedProductIds[index] = updatedLikedProductIds[index] - 1;
     setLikedProductIds(updatedLikedProductIds);
     postData(`/artwork/unlikeArtwork/${id_artwork}/${id_user}`, {})
-      .then((e) => {
-      })
-      .catch(err => {
+      .then((e) => {})
+      .catch((err) => {
         console.log(err);
       });
-
   };
-    const handleOk = () => {
-      setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-      setIsModalOpen(false);
-    };
-    const handleOk1 = () => {
-      setIsModalOpen1(false);
-    };
-    const handleCancel1 = () => {
-      setIsModalOpen1(false);
-    };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleOk1 = () => {
+    setIsModalOpen1(false);
+  };
+  const handleCancel1 = () => {
+    setIsModalOpen1(false);
+  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -191,20 +203,21 @@ export default function Author() {
   };
   useEffect(() => {
     if (!token?._doc?._id) {
-      return navigate('/login')
+      return navigate("/login");
     }
     getData(`/user/${id}`)
       .then((user) => {
-        setAuthor(user.data)
-        const userFollowAdd = (user?.data?.follow || []).some(Follow => Follow?.user?._id === token?._doc?._id);
-        
-        setFollow(userFollowAdd)
+        setAuthor(user.data);
+        const userFollowAdd = (user?.data?.follow || []).some(
+          (Follow) => Follow?.user?._id === token?._doc?._id
+        );
+
+        setFollow(userFollowAdd);
       })
       .catch((error) => {
-        setError(true)
+        setError(true);
         console.log(error);
-      })
-
+      });
   }, [id, follow]);
 
   if (error) {
@@ -212,7 +225,7 @@ export default function Author() {
   }
   console.log(Author);
   if (Author.hidden) {
-    return <PageNotFound />
+    return <PageNotFound />;
   }
   return (
     <>
@@ -260,22 +273,27 @@ export default function Author() {
               />
               <div className="flex items-center space-x-2 mt-2">
                 <p className="text-2xl">{Author?.name}</p>
-                <span className="bg-blue-500 rounded-full p-1" title="Verified">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-gray-100 h-2.5 w-2.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                {Author?.role === "creator" && (
+                  <span
+                    className="bg-blue-500 rounded-full p-1"
+                    title="Verified"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="4"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="text-gray-100 h-2.5 w-2.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="4"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                  </span>
+                )}
               </div>
               <p className="text-gray-700">
                 {Author?.follow?.length}{" "}
@@ -283,7 +301,7 @@ export default function Author() {
                 {Author?.followAdd?.length}{" "}
                 <span onClick={showModal1}>người đang theo dõi</span>
               </p>
-              {parseInt(Author?.follow?.length) > 4 && (
+              {Author?.role === "creator" && (
                 <button
                   onClick={handleRequest}
                   className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"

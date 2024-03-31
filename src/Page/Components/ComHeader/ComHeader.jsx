@@ -95,7 +95,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   const [countNoti, setCountNoti] = useState(false);
   const [open, setOpen] = useState(false);
   const [shoppingCart, setShoppingCart] = useState(false);
-    const [follow, setFollow] = useState(false);
+  const [follow, setFollow] = useState(false);
   const [sttLogin, setSttLogin] = useState(
     JSON.parse(localStorage.getItem("user")) || []
   );
@@ -129,12 +129,12 @@ export default function ComHeader({ dataCart, updateCart }) {
     }
     getData(`/user/${token?._doc?._id}`)
       .then((user) => {
-        setFollow(user?.data?.follow);
+        setFollow(user?.data?.role);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [token?._doc?._id]);
   useEffect(() => {
     setSttLogin(JSON.parse(localStorage.getItem("user")) || []);
 
@@ -534,7 +534,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                                   </ComLink>
                                 )}
                               </Menu.Item>
-                              {follow?.length > 4 && (
+                              {follow === "creator" && (
                                 <Menu.Item>
                                   {({ active }) => (
                                     <ComLink
@@ -549,7 +549,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                                   )}
                                 </Menu.Item>
                               )}
-                              {follow?.length > 4 && (
+                              {follow === "creator" && (
                                 <Menu.Item>
                                   {({ active }) => (
                                     <ComLink
@@ -565,7 +565,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                                 </Menu.Item>
                               )}
 
-                              {follow?.length > 4 && (
+                              {follow === "creator" && (
                                 <Menu.Item>
                                   {({ active }) => (
                                     <ComLink
