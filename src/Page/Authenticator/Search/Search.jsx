@@ -131,11 +131,11 @@ console.log(4);
                 Từ khóa
               </p>
             </Radio>
-            <Radio value={2}>
+            {/* <Radio value={2}>
               <p className="text-sm font-semibold leading-6 text-slate-900">
                 Thể loại
               </p>
-            </Radio>
+            </Radio> */}
             <Radio value={3}>
               <p className="text-sm font-semibold leading-6 text-slate-900">
                 Hồ sơ

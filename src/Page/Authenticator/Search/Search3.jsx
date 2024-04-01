@@ -97,7 +97,7 @@ export default function SearchUser() {
                     <p className="text-xl font-bold text-slate-900 mb-4"> Bộ lọc</p>
                     <Radio.Group onChange={onChange} value={checked} className="grid ">
                         <Radio value={1}><p className="text-sm font-semibold leading-6 text-slate-900">Từ khóa</p></Radio>
-                        <Radio value={2}><p className="text-sm font-semibold leading-6 text-slate-900">Thể loại</p></Radio>
+                        {/* <Radio value={2}><p className="text-sm font-semibold leading-6 text-slate-900">Thể loại</p></Radio> */}
                         <Radio value={3}><p className="text-sm font-semibold leading-6 text-slate-900">Hồ sơ</p></Radio>
                     </Radio.Group>
                 </div>
@@ -114,12 +114,12 @@ export default function SearchUser() {
                                         style={{ display: "flex", alignItems: "center" }}
                                     >
                                         <img
-                                            className="rounded-md p-1"
+                                            className="rounded-md p-1 object-cover"
                                             src={user.avatar}
-                                            style={{ borderRadius: "50%", width: "60px" }}
+                                            style={{ borderRadius: "50%", width: "60px",height: "60px" }}
                                             alt={user.avatar}
                                         />
-                                        <span>{user.username}</span>
+                                        <span>{user.name}</span>
                                     </Link>
                                 </div>
                             ))}
