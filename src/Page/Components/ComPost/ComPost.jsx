@@ -151,7 +151,7 @@ export default function ComPost({ }) {
                                     placeholder="Thể loại"
                                     onChangeValue={handleChange}
                                     value={selectedMaterials}
-                                    mode="tags"
+                                    // mode="tags"
                                     options={category}
                                     {...register("genre")}
 
