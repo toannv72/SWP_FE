@@ -300,7 +300,7 @@ export const textApp = {
     },
     product: {
       quantity: "Số lượng: ",
-      price: "Thành tiền: ",
+      price: "Đơn giá: ",
       amount: "Tổng tiền",
     },
     title: "Danh sách đơn hàng",
