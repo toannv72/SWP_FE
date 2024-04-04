@@ -16,6 +16,7 @@ import {
   notification,
   Layout,
   Drawer,
+  Select,
 } from "antd";
 import moment from "moment/moment";
 import ComInput from "../../Components/ComInput/ComInput";
@@ -36,6 +37,7 @@ import swal from "sweetalert";
 import styles from "./layout.module.css";
 import Sidenav from "../../Components/sidenav/sidenav";
 import Header from "../../Components/ComHeader/header";
+import ComSelect from "../../Components/ComInput/ComSelect";
 const { Header: AntHeader, Content, Sider } = Layout;
 
 export default function TableUser() {
@@ -55,6 +57,10 @@ export default function TableUser() {
   const searchInput = useRef(null);
   const [error, setError] = useState("");
   const [valueSelect, setValueSelect] = useState("manager");
+  const [selectedMaterials, setSelectedMaterials] = useState({
+    value: "user",
+    label: "User",
+  });
   const [productUpdate, setProductUpdate] = useState({
     name: "",
     phone: "",
@@ -264,6 +270,9 @@ export default function TableUser() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+    if (productUpdate.role === "user") {
+      data.role = selectedMaterials.value;
+    }
     setError("");
     putData(`/user`, productUpdate?._id, data)
       .then((data) => {
@@ -281,6 +290,7 @@ export default function TableUser() {
             message: "Thành công",
             description: "Thông tin thay đổi thành công",
           });
+          setSelectedMaterials({ value: "user", label: "User" });
         }
       })
       .catch((error) => {
@@ -295,6 +305,10 @@ export default function TableUser() {
         console.error("Error fetching items:", error);
       });
   };
+      const handleChange = (e, value) => {
+        console.log(value);
+        setSelectedMaterials(value);
+      };
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -762,6 +776,25 @@ export default function TableUser() {
               {...register("email")}
               required
             />
+            {productUpdate.role !== "creator" && (
+              <>
+              <label className="font-bold">Tài khoản</label>
+                <Select
+                  defaultValue="user"
+                  onChange={handleChange}
+                  options={[
+                    {
+                      value: "user",
+                      label: "User",
+                    },
+                    {
+                      value: "creator",
+                      label: "Creator",
+                    },
+                  ]}
+                />
+              </>
+            )}
             <h1 className="text-red-500">{error1}</h1>
             <ComButton htmlType="submit" type="primary">
               Thay đổi

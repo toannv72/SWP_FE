@@ -254,6 +254,25 @@ export default function Artwork() {
           user={user}
         />
         <div className="flex justify-center">
+          <Link to="/"
+            className="h-24 cursor-pointer duration-200 hover:scale-125 active:scale-100"
+            title="Go Back"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50px"
+              height="50px"
+              viewBox="0 0 24 24"
+              class="stroke-blue-300"
+            >
+              <path
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M11 6L5 12M5 12L11 18M5 12H19"
+              ></path>
+            </svg>
+          </Link>
           <div className=" lg:grid  xl:grid-cols-2  lg:grid-rows-[auto,auto,1fr] shadow-lg  rounded-[2.5rem]  w-2/3 m-2">
             <div className="">
               <img
@@ -313,10 +332,10 @@ export default function Artwork() {
                           padding: "5px",
                           background: "#d3e7ff",
                           borderRadius: "10px",
-                          margin:"0 3px"
+                          margin: "0 3px",
                         }}
                       >
-                        {item} 
+                        {item}
                       </span>
                     ))}
                   </p>

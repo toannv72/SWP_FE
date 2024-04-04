@@ -43,24 +43,25 @@ export default function Required() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams]= useSearchParams()
   const [token, setToken] = useStorage("user", {});
-  const [items, setCategory] = useState([
-    {
-      label:
-        'Nghệ thuật',
-      key: '3',
-    },
+  const [items, setCategory] = useState([]);
+   const [selectedMaterials, setSelectedMaterials] = useState();
+ console.log("🚀 ~ Required ~ items:", items)
+  // useEffect(() => {
+  //   getData("/category")
+  //     .then((data) => {
+  //       const categoriesWithKeys = data.data.map((category, index) => {
+  //         return { label: category.label, key: index };
+  //       });
+  //       setCategory(categoriesWithKeys)
+  //     })
+  // }, []);
+      const options = [];
 
-  ]);
-
-  useEffect(() => {
-    getData("/category")
-      .then((data) => {
-        const categoriesWithKeys = data.data.map((category, index) => {
-          return { label: <a href={`/category/${category.label}`}> {category.label}</a>, key: index };
+      useEffect(() => {
+        getData("/category").then((data) => {
+          setCategory([...data.data, ...options]);
         });
-        setCategory(categoriesWithKeys)
-      })
-  }, []);
+      }, []);
   const CreateProductMessenger = yup.object({
     name: yup.string().required(textApp.Payment.information.message.name),
     bird: yup.string().required(textApp.Payment.information.message.name),
@@ -201,6 +202,7 @@ export default function Required() {
   };
 
   const handleValueChangeSelect = (e, value) => {
+    setSelectedMaterials(value);
     if (value.length === 0) {
       setValue("material", null, { shouldValidate: true });
     } else {
@@ -213,8 +215,7 @@ export default function Required() {
       <ComHeader />
       <div className="flex justify-center flex-col py-5 text-center">
         {/* bird */}
-        <div className="flex justify-center">
-        </div>
+        <div className="flex justify-center"></div>
         <h1 className="text-4xl">{"Đặt hàng theo yêu cầu"}</h1>
       </div>
       <div className="isolate bg-white px-6 py-10 sm:py-10 lg:px-8">
@@ -311,6 +312,7 @@ export default function Required() {
                   placeholder={textApp.CreateProduct.placeholder.material}
                   required
                   onChangeValue={handleValueChangeSelect}
+                  value={selectedMaterials}
                   options={items}
                   {...register("material")}
                 />

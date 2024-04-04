@@ -141,15 +141,17 @@ export default function Pending({ activeTab }) {
                     >
                       Chấp nhận
                     </Button>
-                    <span style={{ padding: "2px" }}></span>
-                    <Button
-                      danger
-                      onClick={() => updateStatus(orderData._id, "Canceled")}
-                    >
-                      Từ chối
-                    </Button>
                   </td>
                 )}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span style={{ padding: "2px" }}></span>
+                  <Button
+                    danger
+                    onClick={() => updateStatus(orderData._id, "Canceled")}
+                  >
+                    Từ chối
+                  </Button>
+                </td>
                 <td>
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
                     <svg

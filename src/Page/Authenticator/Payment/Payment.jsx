@@ -21,7 +21,7 @@ import {
 export default function Payment(props) {
   const paypalScriptOptions = {
     "client-id":
-      "AaUpVv8WDVM5uezwsQo79K6YBKmqm3EeLSOx5TFTX4RM2_ephwW68aJ4_ASXYPjbI8OyuXchwgkQ7bRl",
+      "AXm5NzODxCM3-sg1YzE285jSf_UT_axOBLMDjAnGmTxWEKrP2ZJK0BHP-YzvXOa3wbTkLdMZaH60bP2_",
     currency: "USD",
   };
   const [disabled, setDisabled] = useState(false);

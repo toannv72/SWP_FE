@@ -70,6 +70,9 @@ export default function Login() {
                 if (data._doc.role==='user') {
                     return navigate('/')
                 }
+                if (data._doc.role==='creator') {
+                    return navigate('/')
+                }
                 if (data._doc.role==='staff') {
                     return navigate('/staff/product/table')
                 }
