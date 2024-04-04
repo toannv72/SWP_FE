@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { textApp } from '../../../TextContent/textApp'
 import { CalendarDaysIcon, HandRaisedIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
+import { getData } from '../../../api/api';
 const ComFooter = () => {
+  const [items, setCategory] = useState([]);
+
+  useEffect(() => {
+    getData("/category")
+      .then((data) => {
+
+        setCategory(data?.data)
+      })
+  }, []);
   return (
     <div className="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -44,9 +54,14 @@ const ComFooter = () => {
               <dd className="mt-2 leading-7 text-gray-400">
                 <Link to={'/follow'}>Theo dõi</Link><br />
                 <Link to={'/product'}>{textApp.Footer.aboutUs.info1}</Link><br />
-                <Link to={"/category/painting"}> Tranh</Link><br />
-                <Link to={"/category/decorate"}> Trang trí</Link><br />
-                <Link to={"/category/art"}> Nghệ thuật</Link><br />
+                <dt className="mt-4 font-semibold text-white">Thể loại</dt>
+                {
+                  items.map((data, index) => (
+                    <div key={index}>
+                      <Link to={`/category/${data.value}`}> {data.value}</Link><br />
+                    </div>
+                  ))
+                }
               </dd>
             </div>
             <div className="flex flex-col items-start">
@@ -55,10 +70,10 @@ const ComFooter = () => {
               </div>
               <dt className="mt-4 font-semibold text-white">Thông tin sản phẩm</dt>
               <dd className="mt-2 leading-7 text-gray-400">
-              <Link to={'/order'}>Đơn hàng</Link><br />
-              <Link to={'/my/order'}>Đơn bán hàng</Link><br />
-              <Link to={'/my/product/table'}>Sản phẩm của tôi</Link><br />
-              <Link to={'/orderRequest'}>Đơn hàng theo yêu cầu</Link><br />
+                <Link to={'/order'}>Đơn hàng</Link><br />
+                <Link to={'/my/order'}>Đơn bán hàng</Link><br />
+                <Link to={'/my/product/table'}>Sản phẩm của tôi</Link><br />
+                <Link to={'/orderRequest'}>Đơn hàng theo yêu cầu</Link><br />
 
               </dd>
             </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { postData } from "../../../api/api";
+import { getData, postData } from "../../../api/api";
 import { textApp } from "../../../TextContent/textApp";
 import ComInput from "../../Components/ComInput/ComInput";
 import { FormProvider, useForm } from "react-hook-form";
@@ -43,9 +43,24 @@ export default function Required() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams]= useSearchParams()
   const [token, setToken] = useStorage("user", {});
+  const [items, setCategory] = useState([
+    {
+      label:
+        'Nghệ thuật',
+      key: '3',
+    },
 
+  ]);
 
-
+  useEffect(() => {
+    getData("/category")
+      .then((data) => {
+        const categoriesWithKeys = data.data.map((category, index) => {
+          return { label: <a href={`/category/${category.label}`}> {category.label}</a>, key: index };
+        });
+        setCategory(categoriesWithKeys)
+      })
+  }, []);
   const CreateProductMessenger = yup.object({
     name: yup.string().required(textApp.Payment.information.message.name),
     bird: yup.string().required(textApp.Payment.information.message.name),
@@ -74,6 +89,7 @@ export default function Required() {
   const createProductRequestDefault = {
     quantity: 1,
     email: token?._doc?.email,
+    phone: token?._doc?.phone,
   };
   const methods = useForm({
     resolver: yupResolver(CreateProductMessenger),
@@ -295,7 +311,7 @@ export default function Required() {
                   placeholder={textApp.CreateProduct.placeholder.material}
                   required
                   onChangeValue={handleValueChangeSelect}
-                  options={options}
+                  options={items}
                   {...register("material")}
                 />
               </div>

@@ -46,7 +46,9 @@ const InvoicePage = () => {
   if (!order) {
     return <div>Loading...</div>;
   }
-
+  console.log('====================================');
+  console.log(order);
+  console.log('====================================');
   return (
     <>
       <ComHeader />
@@ -58,6 +60,17 @@ const InvoicePage = () => {
           <p className="text-gray-600 mb-2">{textApp.Invoice.status}</p>
           <p className="text-gray-600 mb-6">{textApp.Invoice.thankyou}</p>
           <div className="mb-4">
+            <h2 className="text-lg font-semibold mb-2">
+              Thông tin đặt hàng:
+            </h2>
+            <p>Tên người đặt: {order.name}</p>
+            <p>Email: {order.email}</p>
+            <p>Số điện thoai: {order.phone}</p>
+            <p>Địa chỉ giao hàng: {order.shippingAddress}</p>
+            <p>Thông tin lưu ý của khách hàng: {order.description}</p>
+            
+
+
             <h2 className="text-lg font-semibold mb-2">
               {textApp.Invoice.info}
             </h2>

@@ -19,6 +19,8 @@ import OrderAll from "./OrderAll";
 import ComHeader from "../../Components/ComHeader/ComHeader";
 import { useStorage } from "../../../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import { getData } from "../../../api/api";
+import PageNotFound from "../404/PageNotFound";
 const data = [
     {
         label: textApp.OrderHistory.label.status,
@@ -63,12 +65,30 @@ export default function TableOrder() {
     const [activeTab, setActiveTab] = useState(data[0].value);
     const [token, setToken] = useStorage("user", {});
     const navigate = useNavigate();
-  
+    const [follow, setFollow] = useState(false);
+
+
+    useEffect(() => {
+
+        getData(`/user/${token?._doc?._id}`)
+            .then((user) => {
+                setFollow(user?.data?.role);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [token?._doc?._id]);
     useEffect(() => {
         if (!token?._doc?._id) {
             return navigate('/login')
         }
     }, []);
+    if (follow === "user") {
+        return(
+
+            <PageNotFound />
+        )
+    }
     return (
         <>
             <ComHeader/>

@@ -55,14 +55,6 @@ export default function ComHeader({ dataCart, updateCart }) {
   const [openNotification, setOpenNotification] = useState(false);
   const [items, setCategory] = useState([
     {
-      label: "ád",
-      key: '0',
-    },
-    {
-      label: "ádc",
-      key: '1',
-    },
-    {
       label:
         'Nghệ thuật',
       key: '3',
@@ -565,7 +557,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                                 </Menu.Item>
                               )}
 
-                              {follow === "creator" && (
+                              {/* {follow === "creator" && ( */}
                                 <Menu.Item>
                                   {({ active }) => (
                                     <ComLink
@@ -579,7 +571,7 @@ export default function ComHeader({ dataCart, updateCart }) {
                                     </ComLink>
                                   )}
                                 </Menu.Item>
-                              )}
+                              {/* )} */}
                               <Menu.Item>
                                 {({ active }) => (
                                   <ComLink
