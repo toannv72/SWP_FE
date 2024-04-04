@@ -54,9 +54,9 @@ export default function TableProduct() {
         getData(`/user/${token?._doc?._id}`)
             .then((user) => {
                 setFollow(user?.data?.role);
+                setBlock(user?.data?.hidden);
                 if (user?.data?.paypalAccount !== "") {
                     setPaypalAccount(user?.data?.paypalAccount);
-                    setBlock(user?.data?.hidden);
                 }
             })
             .catch((error) => {
