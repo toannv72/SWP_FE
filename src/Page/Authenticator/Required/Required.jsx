@@ -45,7 +45,7 @@ export default function Required() {
   const [token, setToken] = useStorage("user", {});
   const [items, setCategory] = useState([]);
    const [selectedMaterials, setSelectedMaterials] = useState();
- console.log("🚀 ~ Required ~ items:", items)
+
   // useEffect(() => {
   //   getData("/category")
   //     .then((data) => {
@@ -141,10 +141,10 @@ export default function Required() {
     setDisabled(true);
     firebaseImgs(image)
       .then((dataImg) => {
-        console.log("ảnh nè : ", dataImg);
+        // console.log("ảnh nè : ", dataImg);
         const updatedData = {
           ...data, freelancer: searchParams.get("id"), // Giữ lại các trường dữ liệu hiện có trong data
-          image: "" + dataImg,
+          image: dataImg,
         };
         console.log("updatedData: ", updatedData);
         postData("/customOrder/user", updatedData, {})
@@ -161,7 +161,7 @@ export default function Required() {
           .catch((error) => {
             api["error"]({
               message: textApp.CreateProduct.Notification.m3.message,
-              description: textApp.CreateProduct.Notification.m3.description,
+              description: "Tạo đơn yêu cầu không thành công!",
             });
             console.error("Error fetching items:", error);
             setDisabled(false);
@@ -348,7 +348,7 @@ export default function Required() {
                     *
                   </span>
                 </label>
-                <ComUpImg numberImg={1} onChange={onChange} multiple={false} />
+                <ComUpImg numberImg={5} onChange={onChange} multiple={false} />
               </div>
             </div>
             <div className="mt-10">

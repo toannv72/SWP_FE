@@ -54,7 +54,16 @@ const ComFooter = () => {
               <dd className="mt-2 leading-7 text-gray-400">
                 <Link to={'/follow'}>Theo dõi</Link><br />
                 <Link to={'/product'}>{textApp.Footer.aboutUs.info1}</Link><br />
-                <dt className="mt-4 font-semibold text-white">Thể loại</dt>
+              
+              </dd>
+            </div>
+            <div className="flex flex-col items-start">
+              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
+                <HandRaisedIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              {/* <dt className="mt-4 font-semibold text-white">Thông tin sản phẩm</dt> */}
+              <dt className="mt-4 font-semibold text-white">Thể loại</dt>
+              <dd className="mt-2 leading-7 text-gray-400">
                 {
                   items.map((data, index) => (
                     <div key={index}>
@@ -62,19 +71,6 @@ const ComFooter = () => {
                     </div>
                   ))
                 }
-              </dd>
-            </div>
-            <div className="flex flex-col items-start">
-              <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                <HandRaisedIcon className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <dt className="mt-4 font-semibold text-white">Thông tin sản phẩm</dt>
-              <dd className="mt-2 leading-7 text-gray-400">
-                <Link to={'/order'}>Đơn hàng</Link><br />
-                <Link to={'/my/order'}>Đơn bán hàng</Link><br />
-                <Link to={'/my/product/table'}>Sản phẩm của tôi</Link><br />
-                <Link to={'/orderRequest'}>Đơn hàng theo yêu cầu</Link><br />
-
               </dd>
             </div>
           </dl>
