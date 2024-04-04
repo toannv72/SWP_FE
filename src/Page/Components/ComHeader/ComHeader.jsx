@@ -99,7 +99,7 @@ export default function ComHeader({ dataCart, updateCart }) {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }, []);
   const updateShoppingCartStatus = (newStatus) => {
     setShoppingCart(newStatus);

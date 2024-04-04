@@ -99,8 +99,8 @@ export default function ChangePassword({ handleCancel3 }) {
             required
           />
           <ComInput
-            placeholder="nhập mật khẩu củ"
-            label="mật khẩu củ"
+            placeholder="nhập mật khẩu cũ"
+            label="mật khẩu cũ"
             type="password"
             maxLength={16}
             {...register("oldPassword")}

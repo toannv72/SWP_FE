@@ -9,7 +9,7 @@ import { Image } from "antd";
 const RequiredSuccess = () => {
   const location = useLocation();
   const [orderDetails, setOrderDetails] = useState(null);
-const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
     const orderIdFromPath = location.pathname.split("/").pop();
 
@@ -65,12 +65,19 @@ const [visible, setVisible] = useState(false);
           <h2 className="text-lg font-semibold mb-2">{textApp.Invoice.info}</h2>
           <div className="mb-4 flex items-center">
             {/* Hiển thị hình ảnh */}
-            <img
-              src={orderDetails.image}
-              alt="Product"
-              className="w-24 h-24 object-cover rounded-lg"
-              onClick={() => setVisible(true)}
-            />
+
+            <div className="w-24 h-24 object-cover rounded-lg flex items-center" >
+              <Image.PreviewGroup
+                items={orderDetails.image}
+
+              >
+                <Image
+                  maskClassName="w-full h-full object-cover object-center lg:h-full lg:w-full "
+                  src={orderDetails.image}
+                  alt={orderDetails.image}
+                />
+              </Image.PreviewGroup>
+            </div>
             <div className="ml-4">
               <p className="text-lg font-semibold">
                 Tên sản phẩm: {orderDetails.bird}
@@ -82,7 +89,12 @@ const [visible, setVisible] = useState(false);
                 Thể loại: {orderDetails.material.join(", ")}
               </p>
             </div>
-            <Image
+
+
+            <div className="w-40">
+
+            </div>
+            {/* <Image
               width={200}
               style={{
                 display: "none",
@@ -95,7 +107,7 @@ const [visible, setVisible] = useState(false);
                   setVisible(value);
                 },
               }}
-            />
+            /> */}
           </div>
           <p className="text-gray-600 mb-2">
             Mô tả: {orderDetails.description}
