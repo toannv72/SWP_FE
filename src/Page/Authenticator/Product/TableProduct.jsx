@@ -19,7 +19,7 @@ import ComTextArea from '../../Components/ComInput/ComTextArea';
 import ComHeader from '../../Components/ComHeader/ComHeader';
 import CreateProduct from './CreateProduct';
 import { useStorage } from '../../../hooks/useLocalStorage';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PageNotFound from '../404/PageNotFound';
 
 
@@ -45,6 +45,8 @@ export default function TableProduct() {
     const navigate = useNavigate();
     const [category, setCategory] = useState([]);
     const [follow, setFollow] = useState(false);
+    const [paypalAccount, setPaypalAccount] = useState(false);
+    const [block, setBlock] = useState(false);
 
 
     useEffect(() => {
@@ -52,6 +54,10 @@ export default function TableProduct() {
         getData(`/user/${token?._doc?._id}`)
             .then((user) => {
                 setFollow(user?.data?.role);
+                if (user?.data?.paypalAccount !== "") {
+                    setPaypalAccount(user?.data?.paypalAccount);
+                    setBlock(user?.data?.hidden);
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -589,179 +595,204 @@ export default function TableProduct() {
         )
     }
     return (
-        <>
-            {contextHolder}
-            <ComHeader />
-            <ComButton className='m-2' onClick={() => setIsModalOpenAdd(true)} >Thêm sản phẩm </ComButton>
-            <div className='flex px-5 justify-center'>
-                <Table
-                    rowKey="_id"
-                    columns={columns}
-                    dataSource={products}
-                    scroll={{
-                        x: 1520,
-                        y: "70vh",
-                    }}
-                    bordered
-                    pagination={{
-                        showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
-                        pageSizeOptions: ['10', '20', '50', '100'], // Các tùy chọn số lượng dữ liệu
-                    }}
-                />
+      <>
+        {contextHolder}
+        <ComHeader />
+        {block ? (
+          <ComButton
+            className="m-4"
+            onClick={() => navigate("/")}
+          >
+            tài khoản bị khóa
+          </ComButton>
+        ) : (
+          <>
+            {!paypalAccount ? (
+              <ComButton
+                className="m-4"
+                onClick={() => navigate("/profile?paypalAccount=true")}
+              >
+                Thêm tài khoản Paypal
+              </ComButton>
+            ) : (
+              <ComButton
+                className="m-4"
+                onClick={() => setIsModalOpenAdd(true)}
+              >
+                Thêm sản phẩm
+              </ComButton>
+            )}
+            <div className="flex px-5 justify-center">
+              <Table
+                rowKey="_id"
+                columns={columns}
+                dataSource={products}
+                scroll={{
+                  x: 1520,
+                  y: "70vh",
+                }}
+                bordered
+                pagination={{
+                  showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
+                  pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
+                }}
+              />
             </div>
-            <Modal title={textApp.TableProduct.title.change}
-                okType="primary text-black border-gray-700"
-                open={isModalOpen}
+          </>
+        )}
 
-                width={800}
-                style={{ top: 20 }}
+        <Modal
+          title={textApp.TableProduct.title.change}
+          okType="primary text-black border-gray-700"
+          open={isModalOpen}
+          width={800}
+          style={{ top: 20 }}
+          onCancel={handleCancel}
+        >
+          <FormProvider {...methods}>
+            <form
+              onSubmit={handleSubmit(onSubmitUp)}
+              className="mx-auto mt-4 max-w-xl sm:mt-8"
+            >
+              <div className=" overflow-y-auto p-4">
+                <div
+                  className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2"
+                  style={{ height: "65vh" }}
+                >
+                  <div className="sm:col-span-2">
+                    <div className="mt-2.5">
+                      <ComInput
+                        type="text"
+                        label={textApp.CreateProduct.label.name}
+                        placeholder={textApp.CreateProduct.placeholder.name}
+                        {...register("name")}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <ComNumber
+                      label={textApp.CreateProduct.label.price}
+                      placeholder={textApp.CreateProduct.placeholder.price}
+                      // type="money"
+                      value={productPrice}
+                      defaultValue={productRequestDefault.price}
+                      min={1000}
+                      money
+                      onChangeValue={handleValueChange}
+                      {...register("price1")}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <ComNumber
+                      label={textApp.CreateProduct.label.quantity}
+                      placeholder={textApp.CreateProduct.placeholder.quantity}
+                      min={0}
+                      value={productQuantity}
+                      onChangeValue={handleValueChangeQuantity}
+                      {...register("quantity")}
+                      required
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <ComSelect
+                      size={"large"}
+                      style={{
+                        width: "100%",
+                      }}
+                      label="Thể loại"
+                      placeholder="Thể loại"
+                      required
+                      onChangeValue={handleChange}
+                      value={selectedMaterials}
+                      mode="tags"
+                      options={category}
+                      {...register("genre")}
+                    />
+                  </div>
 
-                onCancel={handleCancel}>
-                <FormProvider {...methods} >
-                    <form onSubmit={handleSubmit(onSubmitUp)} className="mx-auto mt-4 max-w-xl sm:mt-8">
-                        <div className=' overflow-y-auto p-4'>
-                            <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2"
-                                style={{ height: "65vh" }}>
-                                <div className="sm:col-span-2">
-                                    <div className="mt-2.5">
-                                        <ComInput
-                                            type="text"
-                                            label={textApp.CreateProduct.label.name}
-                                            placeholder={textApp.CreateProduct.placeholder.name}
-                                            {...register("name")}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <ComNumber
-                                        label={textApp.CreateProduct.label.price}
-                                        placeholder={textApp.CreateProduct.placeholder.price}
-                                        // type="money"
-                                        value={productPrice}
-                                        defaultValue={productRequestDefault.price}
-                                        min={1000}
-                                        money
-                                        onChangeValue={handleValueChange}
-                                        {...register("price1")}
-                                        required
-                                    />
-
-                                </div>
-                                <div>
-                                    <ComNumber
-                                        label={textApp.CreateProduct.label.quantity}
-                                        placeholder={textApp.CreateProduct.placeholder.quantity}
-                                        min={0}
-                                        value={productQuantity}
-                                        onChangeValue={handleValueChangeQuantity}
-                                        {...register("quantity")}
-                                        required
-                                    />
-
-                                </div>
-                                <div className="sm:col-span-2">
-                                    <ComSelect
-                                        size={"large"}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        label="Thể loại"
-                                        placeholder="Thể loại"
-                                        required
-                                        onChangeValue={handleChange}
-                                        value={selectedMaterials}
-                                        mode="tags"
-                                        options={category}
-                                        {...register("genre")}
-
-                                    />
-                                </div>
-
-
-                                <div className="sm:col-span-2">
-
-                                    <div className="mt-2.5">
-
-                                        <ComTextArea
-                                            label={textApp.CreateProduct.label.description}
-                                            placeholder={textApp.CreateProduct.placeholder.description}
-                                            rows={4}
-                                            defaultValue={''}
-                                            required
-                                            maxLength={1000}
-                                            {...register("description")}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-2">
-                                    <label className="text-paragraph font-bold">
-                                        Hình ảnh
-                                        <span className="text-paragraph font-bold text-error-7 text-red-500">
-                                            *
-                                        </span>
-
-                                    </label>
-                                    <ComUpImg onChange={onChange} />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-10">
-                            <ComButton
-
-                                disabled={disabled}
-                                htmlType="submit"
-                                type="primary"
-
-                                className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                Chỉnh sửa
-                            </ComButton>
-                        </div>
-                    </form>
-                </FormProvider>
-
-            </Modal>
-
-            <Modal title="Thêm sản phẩm "
-                okType="primary text-black border-gray-700"
-                open={isModalOpenAdd}
-
-                width={800}
-                style={{ top: 20 }}
-
-                onCancel={handleCancelAdd}>
-                <CreateProduct onCancel={handleCancelAdd} />
-
-            </Modal>
-
-
-            <Modal title={textApp.TableProduct.title.delete}
-                okType="primary text-black border-gray-700"
-                open={isModalOpenDelete}
-                width={500}
-                // style={{ top: 20 }}
-                onCancel={handleCancelDelete}>
-                <div className='text-lg p-6'>Bạn có chắc chắn muốn xóa sản phẩm đã chọn này không?</div>
-
-                <div className='flex'>
-                    <ComButton
-                        disabled={disabled}
-                        type="primary"
-                        danger
-                        onClick={deleteById}
-                    >
-                        {textApp.TableProduct.modal.submitDelete}
-                    </ComButton>
-                    <ComButton
-                        type="primary"
-                        disabled={disabled}
-                        onClick={handleCancelDelete}
-                    >
-                        {textApp.TableProduct.modal.cancel}
-                    </ComButton>
+                  <div className="sm:col-span-2">
+                    <div className="mt-2.5">
+                      <ComTextArea
+                        label={textApp.CreateProduct.label.description}
+                        placeholder={
+                          textApp.CreateProduct.placeholder.description
+                        }
+                        rows={4}
+                        defaultValue={""}
+                        required
+                        maxLength={1000}
+                        {...register("description")}
+                      />
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-paragraph font-bold">
+                      Hình ảnh
+                      <span className="text-paragraph font-bold text-error-7 text-red-500">
+                        *
+                      </span>
+                    </label>
+                    <ComUpImg onChange={onChange} />
+                  </div>
                 </div>
-            </Modal>
-        </>
-    )
+              </div>
+              <div className="mt-10">
+                <ComButton
+                  disabled={disabled}
+                  htmlType="submit"
+                  type="primary"
+                  className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Chỉnh sửa
+                </ComButton>
+              </div>
+            </form>
+          </FormProvider>
+        </Modal>
+
+        <Modal
+          title="Thêm sản phẩm "
+          okType="primary text-black border-gray-700"
+          open={isModalOpenAdd}
+          width={800}
+          style={{ top: 20 }}
+          onCancel={handleCancelAdd}
+        >
+          <CreateProduct onCancel={handleCancelAdd} />
+        </Modal>
+
+        <Modal
+          title={textApp.TableProduct.title.delete}
+          okType="primary text-black border-gray-700"
+          open={isModalOpenDelete}
+          width={500}
+          // style={{ top: 20 }}
+          onCancel={handleCancelDelete}
+        >
+          <div className="text-lg p-6">
+            Bạn có chắc chắn muốn xóa sản phẩm đã chọn này không?
+          </div>
+
+          <div className="flex">
+            <ComButton
+              disabled={disabled}
+              type="primary"
+              danger
+              onClick={deleteById}
+            >
+              {textApp.TableProduct.modal.submitDelete}
+            </ComButton>
+            <ComButton
+              type="primary"
+              disabled={disabled}
+              onClick={handleCancelDelete}
+            >
+              {textApp.TableProduct.modal.cancel}
+            </ComButton>
+          </div>
+        </Modal>
+      </>
+    );
 }

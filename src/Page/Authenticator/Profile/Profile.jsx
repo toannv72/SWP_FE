@@ -59,6 +59,9 @@ export default function Profile() {
   const [isModalOpen5, setIsModalOpen5] = useState(false);
   const [load, setLoad] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState();
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const paypalAccount = queryParams.get('paypalAccount');
   const loginMessenger = yup.object({
 
     // code: yup.string().required(textApp.Login.message.username).min(5, "Username must be at least 5 characters"),
@@ -268,7 +271,6 @@ export default function Profile() {
     getData(`/user/${token?._doc?._id}`)
       .then((user) => {
         setAuthor(user.data)
-
       })
       .catch((error) => {
         setError(true)
@@ -481,7 +483,6 @@ export default function Profile() {
     <>
       {contextHolder}
       <ComHeader />
-
       <div className="bg-white rounded-lg shadow-xl pb-8">
         <div
           x-data="{ openSettings: false }"
@@ -594,7 +595,7 @@ export default function Profile() {
           Lưu
         </ComButton>
       </Modal>
-
+      paypalAccount
       <Modal
         title="Đổi thông tin tài khoản"
         open={isModalOpen1}
@@ -633,9 +634,49 @@ export default function Profile() {
               {...register("email")}
               required
             />
+            {Author.role === "creator" && (
+              <ComInput
+                label={"Tài khoản paypal"}
+                placeholder={"Vui lòng nhập tài khoản paypal"}
+                type="text"
+                onchange={() => {
+                  setError("");
+                }}
+                {...register("paypalAccount")}
+                required
+              />
+            )}
             <h1 className="text-red-500">{error1}</h1>
             <ComButton htmlType="submit" type="primary">
               Thay đổi
+            </ComButton>
+          </form>
+        </FormProvider>
+      </Modal>
+      <Modal
+        title="Thêm tài khoản Paypal"
+        open={paypalAccount === "true"}
+        onOk={() => navigate("/profile")}
+        onCancel={() => navigate("/profile")}
+      >
+        <FormProvider {...methods}>
+          <form
+            className="flex flex-col gap-6"
+            onSubmit={handleSubmit(onSubmit1)}
+          >
+            <ComInput
+              label={"Tài khoản paypal"}
+              placeholder={"Vui lòng nhập tài khoản paypal"}
+              type="text"
+              onchange={() => {
+                setError("");
+              }}
+              {...register("paypalAccount")}
+              required
+            />
+            <h1 className="text-red-500">{error1}</h1>
+            <ComButton htmlType="submit" type="primary">
+              cập nhật
             </ComButton>
           </form>
         </FormProvider>

@@ -19,11 +19,6 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 export default function Payment(props) {
-  const paypalScriptOptions = {
-    "client-id":
-      "AXm5NzODxCM3-sg1YzE285jSf_UT_axOBLMDjAnGmTxWEKrP2ZJK0BHP-YzvXOa3wbTkLdMZaH60bP2_",
-    currency: "USD",
-  };
   const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -236,6 +231,7 @@ export default function Payment(props) {
 
   // Chuyển đối tượng thành mảng cuối cùng
   const finalResult = Object.values(userTotals);
+  console.log("🚀 ~ Payment ~ finalResult:", finalResult)
 
   const calculateTotalToPay = () => {
     let totalToPay = 0;
@@ -400,7 +396,12 @@ export default function Payment(props) {
                 </div>
               ) : (
                 <div>
-                  <PayPalScriptProvider options={paypalScriptOptions}>
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": dataProduct[0].user.paypalAccount,
+                      currency: "USD",
+                    }}
+                  >
                     <ButtonPayment />
                   </PayPalScriptProvider>
                 </div>

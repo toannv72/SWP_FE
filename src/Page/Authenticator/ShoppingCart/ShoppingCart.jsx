@@ -15,8 +15,11 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
   const [open, setOpen] = useState(show)
   const [disabled, setDisabled] = useState(false);
   const [check, setCheck] = useState(false);
+  const [test, setTest] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
+  console.log("🚀 ~ ShoppingCart ~ checkedList:", checkedList)
   const [cart, setCart] = useStorage('cart', []);
+  console.log("🚀 ~ ShoppingCart ~ cart:", cart)
   const [totalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
   const nonDisabledProducts = cart.filter(product => product.quantity > 0);
@@ -98,7 +101,18 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
         setCheckedList([])
         // updateShoppingCart(true);
       }
-      setCart(JSON.parse(localStorage.getItem('cart')))
+        const groupedData = new Map();
+        JSON.parse(localStorage.getItem("cart")).forEach((item) => {
+          const userId = item.user?._id;
+          if (!groupedData.has(userId)) {
+            groupedData.set(userId, []);
+          }
+          groupedData.get(userId).push(item);
+        });
+        const result = Array.from(groupedData.values());
+        console.log("🚀 ~ ShoppingCart ~ result:", result)
+      setCart(JSON.parse(localStorage.getItem("cart")));
+      setTest(result);
     }, [show]);
   const handleCartClose = () => {
     // Gọi hàm callback để cập nhật giá trị shoppingCart thành false
@@ -161,9 +175,17 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
     }
     return total;
   };
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => { setOpen(false); handleCartClose(); }}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => {
+          setOpen(false);
+          handleCartClose();
+        }}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -192,12 +214,17 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                   <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-lg font-medium text-gray-900">{textApp.ShoppingCart.tile}</Dialog.Title>
+                        <Dialog.Title className="text-lg font-medium text-gray-900">
+                          {textApp.ShoppingCart.tile}
+                        </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
                             className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => { setOpen(false); handleCartClose(); }}
+                            onClick={() => {
+                              setOpen(false);
+                              handleCartClose();
+                            }}
                           >
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
@@ -205,9 +232,9 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                           </button>
                         </div>
                       </div>
-                      <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                      {/* <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
                         {textApp.ShoppingCart.checkbox}
-                      </Checkbox>
+                      </Checkbox> */}
 
                       {disabled ? null : ( // Hiển thị nút "Xóa tất cả" nếu không bị vô hiệu hóa
                         <Button
@@ -220,56 +247,109 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                       )}
                       <div className="mt-8">
                         <div className="flow-root">
-                          <div role="list" className="-my-6 divide-y divide-gray-200">
-                            <Checkbox.Group style={{ width: '100%' }} value={checkedList} onChange={onChange}>
-                              {cart.slice().reverse().map((product, index) => (
-                                <div className='flex gap-2' key={index}>
-                                  <Checkbox value={product} disabled={product.quantity === 0 ? true : false} />
-                                  <li key={product.id} className="flex py-4">
-                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                      <img
-                                        src={product.image}
-                                        alt={product.image}
-                                        className="h-full w-full object-cover object-center"
-                                      />
-                                    </div>
-
-                                    <div className="ml-4 flex flex-1 flex-col">
-                                      <div>
-                                        <div className="flex justify-between text-base font-medium text-gray-900">
-                                          <h3 className='w-44'>
-                                            <Link onClick={() => { setOpen(false); handleCartClose(); }} to={`/product/${product._id}`}
-                                            >{product.name}</Link>
-                                          </h3>
-                                          <p className="ml-4">{formatCurrency(product?.price)}</p>
-                                        </div>
-                                        <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                                      </div>
-                                      <div className="flex flex-1 items-end justify-between text-sm">
-                                        <div className="flex items-center gap-2 text-gray-500">
-                                          <InputNumber
-                                            className="w-14 text-sm"
-                                            min={1}
-                                            onChange={(newQuantity) => handleQuantityChange(product._id, newQuantity)}
-                                            value={product?.data}
-                                            max={product.quantity}
-                                          />
-                                          {product.quantity} Sản phẩm
-                                        </div>
-
-                                        <div className="flex">
-                                          <button
-                                            onClick={() => removeProduct(product._id)}
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                          <div
+                            role="list"
+                            className="-my-6 divide-y divide-gray-200"
+                          >
+                            <Checkbox.Group
+                              style={{ width: "100%" }}
+                              value={checkedList}
+                              onChange={onChange}
+                            >
+                              {test &&
+                                test.map((cartItem, index) => (
+                                  <div key={index}>
+                                    <span className="font-bold">{cartItem[0].user.name}</span>
+                                    {cartItem
+                                      .slice()
+                                      .reverse()
+                                      .map((product, index) => (
+                                        <div className="flex gap-2" key={index}>
+                                          {checkedList[0]?.user ? (
+                                            <Checkbox
+                                              value={product}
+                                              disabled={
+                                                product.quantity === 0 ||
+                                                checkedList[0]?.user._id !==
+                                                  product.user._id
+                                              }
+                                            />
+                                          ) : (
+                                            <Checkbox
+                                              value={product}
+                                              disabled={product.quantity === 0}
+                                            />
+                                          )}
+                                          <li
+                                            key={product.id}
+                                            className="flex py-4"
                                           >
-                                            Xóa
-                                          </button>
+                                            <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                              <img
+                                                src={product.image}
+                                                alt={product.image}
+                                                className="h-full w-full object-cover object-center"
+                                              />
+                                            </div>
+
+                                            <div className="ml-4 flex flex-1 flex-col">
+                                              <div>
+                                                <div className="flex justify-between text-base font-medium text-gray-900">
+                                                  <h3 className="w-44">
+                                                    <Link
+                                                      onClick={() => {
+                                                        setOpen(false);
+                                                        handleCartClose();
+                                                      }}
+                                                      to={`/product/${product._id}`}
+                                                    >
+                                                      {product.name}
+                                                    </Link>
+                                                  </h3>
+                                                  <p className="ml-4">
+                                                    {formatCurrency(
+                                                      product?.price
+                                                    )}
+                                                  </p>
+                                                </div>
+                                                <p className="mt-1 text-sm text-gray-500">
+                                                  {product.color}
+                                                </p>
+                                              </div>
+                                              <div className="flex flex-1 items-end justify-between text-sm">
+                                                <div className="flex items-center gap-2 text-gray-500">
+                                                  <InputNumber
+                                                    className="w-14 text-sm"
+                                                    min={1}
+                                                    onChange={(newQuantity) =>
+                                                      handleQuantityChange(
+                                                        product._id,
+                                                        newQuantity
+                                                      )
+                                                    }
+                                                    value={product?.data}
+                                                    max={product.quantity}
+                                                  />
+                                                  {product.quantity} Sản phẩm
+                                                </div>
+
+                                                <div className="flex">
+                                                  <button
+                                                    onClick={() =>
+                                                      removeProduct(product._id)
+                                                    }
+                                                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                  >
+                                                    Xóa
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </li>
                                         </div>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </div>
-                              ))}
+                                      ))}
+                                  </div>
+                                ))}
                             </Checkbox.Group>
                           </div>
                         </div>
@@ -284,7 +364,9 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                       {/* <p className="mt-0.5 text-sm text-gray-500">Vận chuyển và thuế được tính khi thanh toán.</p> */}
                       <div className="mt-6">
                         <Button
-                          onClick={() => { onSubmit() }}
+                          onClick={() => {
+                            onSubmit();
+                          }}
                           disabled={disabled}
                           className="flex h-12 items-center w-full justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
@@ -297,7 +379,10 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                           <button
                             type="primary"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => { setOpen(false); handleCartClose(); }}
+                            onClick={() => {
+                              setOpen(false);
+                              handleCartClose();
+                            }}
                           >
                             Tiếp tục mua sắm
                             <span aria-hidden="true"> &rarr;</span>
@@ -313,5 +398,5 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 }

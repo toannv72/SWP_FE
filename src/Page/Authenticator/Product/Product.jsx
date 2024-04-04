@@ -30,11 +30,19 @@ export default function Product() {
   );
   const [error, setError] = useState(false);
   const [allUser, setAllUser] = useState([]);
-
+    const [block, setBlock] = useState(false);
   const location = useLocation();
 
   const navigate = useNavigate();
-
+    useEffect(() => {
+      getData(`/user/${token?._doc?._id}`)
+        .then((user) => {
+           setBlock(user?.data?.hidden);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, [token?._doc?._id]);
   const productQuantity = yup.object({
     quantity: yup
       .number()
@@ -247,41 +255,69 @@ export default function Product() {
                       <div className="">
                         {Product?.quantity} sản phẩm có sẵn
                       </div>
-                      <Button
-                        type="button"
-                        onClick={handleSubmit(addToCart)}
-                        disabled={token?._doc?._id === Product?.user?._id}
-                        className={`flex h-10 items-center justify-center rounded-md border border-transparent  px-4 py-2 text-base font-medium text-white  focus:outline-none 
+                      {!block && (
+                        <Button
+                          type="button"
+                          onClick={handleSubmit(addToCart)}
+                          disabled={token?._doc?._id === Product?.user?._id}
+                          className={`flex h-10 items-center justify-center rounded-md border border-transparent  px-4 py-2 text-base font-medium text-white  focus:outline-none 
                                                  hover:to-orange-500 hover:from-orange-600 bg-gradient-to-b from-orange-400 to-orange-500 
-                                                 ${token?._doc?._id === Product?.user?._id
-                            ? " hidden"
-                            : ""
-                          } 
-                          ${!token?._doc?._id
-                            ? " hidden"
-                            : ""
-                          }
+                                                 ${
+                                                   token?._doc?._id ===
+                                                   Product?.user?._id
+                                                     ? " hidden"
+                                                     : ""
+                                                 } 
+                          ${!token?._doc?._id ? " hidden" : ""}
                           
                           `}
-                      >
-                        {textApp.Product.button.add}
-                      </Button>
+                        >
+                          {textApp.Product.button.add}
+                        </Button>
+                      )}
                     </div>
                   </div>
-                  {token?._doc?._id !== Product?.user?._id ? <></> : <p className="text-red-600 ">Bạn không thể mua sản phẩm của chính mình</p>}
-                  <Button
-                    disabled={
-                      disabled || token?._doc?._id === Product?.user?._id
-                    }
-                    htmlType="submit"
-                    type="primary"
-                    className={`mt-10 flex w-full h-12 items-center justify-center rounded-md border border-transparent  px-8 py-3 text-base font-medium text-white ${disabled
-                      ? " bg-slate-700"
-                      : "hover:to-sky-700 hover:from-sky-800 bg-gradient-to-b from-sky-600 to-sky-700"
+                  {token?._doc?._id !== Product?.user?._id ? (
+                    <></>
+                  ) : (
+                    <p className="text-red-600 ">
+                      Bạn không thể mua sản phẩm của chính mình
+                    </p>
+                  )}
+                  {!block ? (
+                    <></>
+                  ) : (
+                    <p className="text-red-600 ">tài khoản đã bị khóa</p>
+                  )}
+                  {block ? (
+                    <Button
+                      disabled={true}
+                      htmlType="submit"
+                      type="primary"
+                      className={`mt-10 flex w-full h-12 items-center justify-center rounded-md border border-transparent  px-8 py-3 text-base font-medium text-white ${
+                        true
+                          ? " bg-slate-700"
+                          : "hover:to-sky-700 hover:from-sky-800 bg-gradient-to-b from-sky-600 to-sky-700"
                       }  `}
-                  >
-                    {textApp.Product.button.pay}
-                  </Button>
+                    >
+                      {textApp.Product.button.pay}
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled={
+                        disabled || token?._doc?._id === Product?.user?._id
+                      }
+                      htmlType="submit"
+                      type="primary"
+                      className={`mt-10 flex w-full h-12 items-center justify-center rounded-md border border-transparent  px-8 py-3 text-base font-medium text-white ${
+                        disabled
+                          ? " bg-slate-700"
+                          : "hover:to-sky-700 hover:from-sky-800 bg-gradient-to-b from-sky-600 to-sky-700"
+                      }  `}
+                    >
+                      {textApp.Product.button.pay}
+                    </Button>
+                  )}
                 </form>
               </FormProvider>
             </div>
