@@ -106,53 +106,96 @@ function getStatusText(status) {
 }
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-4">{textApp.OrderHistory.title}</h1>
+      <h1 className="text-2xl font-semibold mb-4">
+        {textApp.OrderHistory.title}
+      </h1>
       {order?.length === 0 ? (
         <div class="flex items-center justify-center">
-          <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95" alt="" />
+          <img
+            src="https://scontent.xx.fbcdn.net/v/t1.15752-9/387617289_1488249585293161_8412229123543921784_n.png?stp=dst-png_p206x206&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_ohc=hHxANJqwuwkAX_sXNHt&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQeoEZATHmwgJLQhLl8DtJKleoOXNx0srTVU-mC4LAZeQ&oe=65636A95"
+            alt=""
+          />
         </div>
       ) : order?.error ? (
         <p>Error: {order?.error.message}</p>
       ) : (
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên Đơn Hàng</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên Người Đặt</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số Điện Thoại</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Địa Chỉ</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ngày Đặt Hàng</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số Lượng</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Số Tiền </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trạng Thái</th>
-            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hành Động</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {order?.map((orderData) => (
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Tên Người làm
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Tên Đơn Hàng
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Tên Người Đặt
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Số Điện Thoại
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Địa Chỉ
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Ngày Đặt Hàng
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Số Lượng
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Số Tiền{" "}
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Trạng Thái
+              </th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hành Động</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {order?.map((orderData) => (
               <tr key={orderData.index}>
-              <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <Link to={`/author/${orderData.freelancer._id}`}>
+                    {orderData.freelancer.name}
+                  </Link>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
                     {orderData.bird}
                   </Link>
                 </td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.phone}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.shippingAddress}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.createdAt}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{orderData.quantity}</td>
-              <td className="px-6 py-4 whitespace-nowrap">Thỏa thuận</td>
-              <td className="px-6 py-4 whitespace-nowrap">
-              <div className="col-span-1 mt-4 md:mt-0">
-                  <div className="flex flex-col items-end mb-4">
-                  <div className={`flex-none text-white rounded-full px-3 py-1 mb-2 ${getStatusClass(orderData?.status)}`}>
-                  {getStatusText(orderData?.status)}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orderData.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orderData.phone}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orderData.shippingAddress}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orderData.createdAt}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {orderData.quantity}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">Thỏa thuận</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="col-span-1 mt-4 md:mt-0">
+                    <div className="flex flex-col items-end mb-4">
+                      <div
+                        className={`flex-none text-white rounded-full px-3 py-1 mb-2 ${getStatusClass(
+                          orderData?.status
+                        )}`}
+                      >
+                        {getStatusText(orderData?.status)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

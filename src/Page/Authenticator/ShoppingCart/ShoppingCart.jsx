@@ -94,7 +94,16 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
       const selectedProductIds = checkedList.map((product) => product._id);
       // Lọc ra các sản phẩm không nằm trong danh sách đã chọn
       const updatedCart = cart.filter((product) => !selectedProductIds.includes(product._id));
-  
+          const groupedData = new Map();
+          updatedCart.forEach((item) => {
+            const userId = item.user?._id;
+            if (!groupedData.has(userId)) {
+              groupedData.set(userId, []);
+            }
+            groupedData.get(userId).push(item);
+          });
+          const result = Array.from(groupedData.values());
+          setTest(result);
       setCart(updatedCart);
       setCheckedList([]); // Bỏ chọn tất cả sau khi xóa
       localStorage.setItem('cart', JSON.stringify(updatedCart)); // Cập nhật dữ liệu trong localStorage
@@ -254,10 +263,9 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                         {textApp.ShoppingCart.checkbox}
                       </Checkbox> */}
 
-                      {disabled ? null : ( // Hiển thị nút "Xóa tất cả" nếu không bị vô hiệu hóa
+                      {cart.length > 0 && ( // Hiển thị nút "Xóa tất cả" nếu không bị vô hiệu hóa
                         <Button
                           onClick={removeAllSelectedProducts}
-                          disabled={disabled}
                           className="font-medium text-indigo-600 hover:text-indigo-500 border-none"
                         >
                           Xóa các sản phẩm đã chọn

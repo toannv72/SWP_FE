@@ -5,6 +5,7 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 export default function Pending({ activeTab }) {
   const [order, setOrder] = useState([]);
+  console.log("🚀 ~ Pending ~ order:", order)
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -73,6 +74,9 @@ export default function Pending({ activeTab }) {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Tên Người làm
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Tên Đơn Hàng
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -104,6 +108,11 @@ export default function Pending({ activeTab }) {
           <tbody>
             {order?.map((orderData) => (
               <tr key={orderData.index}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <Link to={`/author/${orderData.freelancer._id}`}>
+                    {orderData.freelancer.name}
+                  </Link>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
                     {orderData.bird}
