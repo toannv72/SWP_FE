@@ -407,10 +407,10 @@ export default function OrderAll({ activeTab }) {
 
 
     return (
-        <>
-            {contextHolder}
-            <div className='flex gap-2'>
-                {/* <Button
+      <>
+        {contextHolder}
+        <div className="flex gap-2">
+          {/* <Button
                     disabled={disabled}
                     type="primary"
                     onClick={() => setIsModalOpenProcessingS(true)}
@@ -418,7 +418,7 @@ export default function OrderAll({ activeTab }) {
                 >
                     Xác nhận
                 </Button> */}
-                {/* <Button
+          {/* <Button
                     disabled={disabled}
                     type="primary"
                     onClick={() => setIsModalOpenCanceledS(true)}
@@ -426,54 +426,50 @@ export default function OrderAll({ activeTab }) {
                 >
                     Từ chối
                 </Button> */}
-            </div>
-            <div className='flex p-2 justify-center'>
-                <Table
-                    // rowSelection={{
-                    //     type: "checkbox",
-                    //     ...rowSelection,
-                    // }}
-                    rowKey="_id"
-                    columns={columns}
-                    dataSource={order}
-                    scroll={{
-                        x: 1520,
-                        y: "55vh",
-                    }}
-                    bordered
-                    pagination={{
-                        showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
-                        pageSizeOptions: ['10', '20', '50', '100'], // Các tùy chọn số lượng dữ liệu
-                    }}
-                />
-            </div>
+        </div>
+        <div className="flex p-2 justify-center">
+          <Table
+            // rowSelection={{
+            //     type: "checkbox",
+            //     ...rowSelection,
+            // }}
+            rowKey="_id"
+            columns={columns}
+            dataSource={order}
+            scroll={{
+              x: 1520,
+              y: "55vh",
+            }}
+            bordered
+            pagination={{
+              showSizeChanger: true, // Hiển thị dropdown cho phép chọn số lượng dữ liệu
+              pageSizeOptions: ["10", "20", "50", "100"], // Các tùy chọn số lượng dữ liệu
+            }}
+          />
+        </div>
 
+        <Modal
+          title="Chấp nhận đơn hàng này"
+          okType="primary text-black border-gray-700"
+          open={isModalOpenProcessing}
+          width={500}
+          // style={{ top: 20 }}
+          onCancel={handleCancelProcessing}
+        >
+          <div className="text-lg p-6">
+            Bạn có chắc chắn muốn chuyển qua đã vận chuyển không?
+          </div>
 
-            <Modal title="Chấp nhận đơn hàng này"
-                okType="primary text-black border-gray-700"
-                open={isModalOpenProcessing}
-                width={500}
-                // style={{ top: 20 }}
-                onCancel={handleCancelProcessing}>
-                <div className='text-lg p-6'>Bạn có chắc chắn muốn chuyển qua đã vận chuyển không?</div>
-
-                <div className='flex'>
-                    <ComButton
-                        type="primary"
-                        danger
-                        onClick={shipped}
-                    >
-                        xác nhận
-                    </ComButton>
-                    <ComButton
-                        type="primary"
-                        onClick={handleCancelProcessing}
-                    >
-                        hủy
-                    </ComButton>
-                </div>
-            </Modal>
-            {/* <Modal title="hủy đơn hàng này"
+          <div className="flex">
+            <ComButton type="primary" danger onClick={shipped}>
+              xác nhận
+            </ComButton>
+            <ComButton type="primary" onClick={handleCancelProcessing}>
+              hủy
+            </ComButton>
+          </div>
+        </Modal>
+        {/* <Modal title="hủy đơn hàng này"
                 okType="primary text-black border-gray-700"
                 open={isModalOpenCanceled}
                 width={500}
@@ -497,31 +493,28 @@ export default function OrderAll({ activeTab }) {
                 </div>
             </Modal> */}
 
-            <Modal title="Chấp nhận đơn hàng"
-                okType="primary text-black border-gray-700"
-                open={isModalOpenProcessingS}
-                width={500}
-                // style={{ top: 20 }}
-                onCancel={handleCancelProcessingS}>
-                <div className='text-lg p-6'>Bạn có chắc chắn muốn chuyển qua đã vận chuyển không?</div>
+        <Modal
+          title="Chấp nhận đơn hàng"
+          okType="primary text-black border-gray-700"
+          open={isModalOpenProcessingS}
+          width={500}
+          // style={{ top: 20 }}
+          onCancel={handleCancelProcessingS}
+        >
+          <div className="text-lg p-6">
+            Bạn có chắc chắn muốn chuyển qua đã vận chuyển không?
+          </div>
 
-                <div className='flex'>
-                    <ComButton
-                        type="primary"
-                        danger
-                        onClick={shippedS}
-                    >
-                        xác nhận
-                    </ComButton>
-                    <ComButton
-                        type="primary"
-                        onClick={handleCancelProcessingS}
-                    >
-                        hủy
-                    </ComButton>
-                </div>
-            </Modal>
-            {/* <Modal title="Xác nhận hủy đơn hàng"
+          <div className="flex">
+            <ComButton type="primary" danger onClick={shippedS}>
+              xác nhận
+            </ComButton>
+            <ComButton type="primary" onClick={handleCancelProcessingS}>
+              hủy
+            </ComButton>
+          </div>
+        </Modal>
+        {/* <Modal title="Xác nhận hủy đơn hàng"
                 okType="primary text-black border-gray-700"
                 open={isModalOpenCanceledS}
                 width={500}
@@ -545,67 +538,81 @@ export default function OrderAll({ activeTab }) {
                     </ComButton>
                 </div>
             </Modal> */}
-            <Modal title="Chi tiết đơn hàng"
-                okType="primary text-black border-gray-700"
-                open={orderModalDetail}
-                width={500}
-                // style={{ top: 20 }}
-                onCancel={closeModalDetail}>
-                <div className=" flex items-center justify-center">
-                    <div className="p-4 md:p-8 lg:p-12 rounded-lg  w-full">
-                     
-                        <div className="mb-4">
-                            <h2 className="text-lg font-semibold mb-2">Thông tin sản phẩm:</h2>
-                            {orderDetail?.detail?.products?.map((product, index) => {
-                                // Sử dụng getProductById để lấy thông tin sản phẩm đầy đủ
-                                const fullProduct = getProductById(product.product);
-                                const materials = fullProduct?.material?.join(', ');
-                                console.log(product.product)
-                                return (
-                                    <div key={index} className="mb-4 flex items-center">
-                                        <img src={fullProduct?.image} alt={fullProduct?.name} className="w-24 h-24 object-cover rounded-lg" />
-                                        <div className="ml-4">
-                                            <p className="text-lg font-semibold">{fullProduct?.name}</p>
-                                            <p>
-                                                {textApp.OrderHistory.product.quantity} {product?.quantity}
-                                            </p>
-                                            <p>
-                                                {textApp.OrderHistory.product.price} {product?.price?.toLocaleString("en-US", { style: "currency", currency: "VND" })}
-                                            </p>
-                                            <p>
-                                                {textApp.Product.page.material}{materials}
-                                            </p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <p className="text-gray-600 mb-2">
-                            {textApp.Invoice.orderDate}:{" "}
-                            {new Date(orderDetail?.detail?.createdAt).toLocaleDateString("en-US")}
+        <Modal
+          title="Chi tiết đơn hàng"
+          okType="primary text-black border-gray-700"
+          open={orderModalDetail}
+          width={500}
+          // style={{ top: 20 }}
+          onCancel={closeModalDetail}
+        >
+          <div className=" flex items-center justify-center">
+            <div className="p-4 md:p-8 lg:p-12 rounded-lg  w-full">
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold mb-2">
+                  Thông tin sản phẩm:
+                </h2>
+                {orderDetail?.detail?.products?.map((product, index) => {
+                  // Sử dụng getProductById để lấy thông tin sản phẩm đầy đủ
+                  const fullProduct = getProductById(product.product);
+                  const materials = fullProduct?.material?.join(", ");
+                  console.log(product.product);
+                  return (
+                    <div key={index} className="mb-4 flex items-center">
+                      <img
+                        src={fullProduct?.image}
+                        alt={fullProduct?.name}
+                        className="w-24 h-24 object-cover rounded-lg"
+                      />
+                      <div className="ml-4">
+                        <p className="text-lg font-semibold">
+                          {fullProduct?.name}
                         </p>
-                        <p className="text-gray-600 mb-2">
-                            {textApp.Invoice.paymentMethod}
+                        <p>
+                          {textApp.OrderHistory.product.quantity}{" "}
+                          {product?.quantity}
                         </p>
-                        <p className="text-gray-600 mb-6">
-                            {textApp.OrderHistory.product.amount}:{" "}
-                            {orderDetail?.detail?.totalAmount?.toLocaleString("en-US", {
-                                style: "currency",
-                                currency: "VND",
-                            })}
+                        <p>
+                          {textApp.OrderHistory.product.price}{" "}
+                          {product?.price?.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                         </p>
-
+                        <p>
+                          {textApp.Product.page.material}
+                          {materials}
+                        </p>
+                      </div>
                     </div>
-                </div>
-                <div className='flex'>
-                    <ComButton
-                        type="primary"
-                        onClick={closeModalDetail}
-                    >
-                        Đóng
-                    </ComButton>
-                </div>
-            </Modal>
-        </>
-    )
+                  );
+                })}
+              </div>
+              <p className="text-gray-600 mb-2">
+                {textApp.Invoice.orderDate}:{" "}
+                {new Date(orderDetail?.detail?.createdAt).toLocaleDateString(
+                  "en-US"
+                )}
+              </p>
+              <p className="text-gray-600 mb-2">
+                payPalMethod
+                {textApp.Invoice.paymentMethod}
+              </p>
+              <p className="text-gray-600 mb-6">
+                {textApp.OrderHistory.product.amount}:{" "}
+                {orderDetail?.detail?.totalAmount?.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="flex">
+            <ComButton type="primary" onClick={closeModalDetail}>
+              Đóng
+            </ComButton>
+          </div>
+        </Modal>
+      </>
+    );
 }
