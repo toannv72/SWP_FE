@@ -76,8 +76,17 @@ export default function Profile() {
       name: token?._doc?.name,
       phone: token?._doc?.phone,
       email: token?._doc?.email,
+      paypalAccount: Author?.paypalAccount || "",
     },
-  })
+  });
+    useEffect(() => {
+      methods.reset({
+        name: token?._doc?.name,
+        phone: token?._doc?.phone,
+        email: token?._doc?.email,
+        paypalAccount: Author?.paypalAccount,
+      });
+    }, [Author?.paypalAccount, methods, token?._doc?.email, token?._doc?.name, token?._doc?.phone]);
   const methodPost = useForm();
   useEffect(() => {
     if (productUpdate) {
@@ -595,7 +604,6 @@ export default function Profile() {
           Lưu
         </ComButton>
       </Modal>
-      paypalAccount
       <Modal
         title="Đổi thông tin tài khoản"
         open={isModalOpen1}

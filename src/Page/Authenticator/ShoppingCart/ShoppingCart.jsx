@@ -31,8 +31,17 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
     if (confirmDelete) {
       const removedProduct = cart.find(item => item._id === productId);
       const updatedCart = cart.filter(item => item._id !== productId);
+      const groupedData = new Map();
+        updatedCart.forEach((item) => {
+          const userId = item.user?._id;
+          if (!groupedData.has(userId)) {
+            groupedData.set(userId, []);
+          }
+          groupedData.get(userId).push(item);
+        });
+        const result = Array.from(groupedData.values());
+      setTest(result);
       setCart(updatedCart);
-    
     }
   };
   const onChange = (list) => {
@@ -110,7 +119,6 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
           groupedData.get(userId).push(item);
         });
         const result = Array.from(groupedData.values());
-        console.log("🚀 ~ ShoppingCart ~ result:", result)
       setCart(JSON.parse(localStorage.getItem("cart")));
       setTest(result);
     }, [show]);
@@ -158,6 +166,16 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
       }
       return product;
     });
+        const groupedData = new Map();
+        updatedCart.forEach((item) => {
+          const userId = item.user?._id;
+          if (!groupedData.has(userId)) {
+            groupedData.set(userId, []);
+          }
+          groupedData.get(userId).push(item);
+        });
+        const result = Array.from(groupedData.values());
+    setTest(result);
     setCart(updatedCart);
   };
   function formatCurrency(number) {
