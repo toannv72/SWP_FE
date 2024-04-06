@@ -36,7 +36,7 @@ export default function Author() {
   const [token, setToken] = useStorage("user", {});
   const [likedProductIds, setLikedProductIds] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-
+const [block, setBlock] = useState(false);
   const handFollow = () => {
     setFollow(!follow);
     postData(`/user/followUser/${id}/${token?._doc?._id}`, {})
@@ -219,7 +219,15 @@ export default function Author() {
         console.log(error);
       });
   }, [id, follow]);
-
+    useEffect(() => {
+      getData(`/user/${token?._doc?._id}`)
+        .then((user) => {
+          setBlock(user?.data?.hidden);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, [token?._doc?._id]);
   if (error) {
     return <PageNotFound />;
   }
@@ -301,48 +309,54 @@ export default function Author() {
                 {Author?.followAdd?.length}{" "}
                 <span onClick={showModal1}>người đang theo dõi</span>
               </p>
-              {Author?.role === "creator" && (
-                <button
-                  onClick={handleRequest}
-                  className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-                >
-                  Yêu cầu
-                </button>
-              )}
-              <br />
-              {Author?.role !== "admin" && (
-                <button
-                  onClick={() => setOpenModal(true)}
-                  className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-                >
-                  Report user
-                </button>
-              )}
-              <ReportModal
-                isModalOpen={openModal}
-                setIsModalOpen={setOpenModal}
-                accuse={Author}
-                user={token}
-              />
-              <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
-                <div className="flex items-center space-x-4 mt-2">
-                  {!follow ? (
+              {!block ? (
+                <>
+                  {Author?.role === "creator" && (
                     <button
-                      onClick={handFollow}
+                      onClick={handleRequest}
                       className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
                     >
-                      <span>Theo dõi</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handUndFollow}
-                      className="flex items-center bg-slate-500 hover:bg-slate-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
-                    >
-                      <span>Hủy theo dõi</span>
+                      Yêu cầu
                     </button>
                   )}
-                </div>
-              </div>
+                  <br />
+                  {Author?.role !== "admin" && (
+                    <button
+                      onClick={() => setOpenModal(true)}
+                      className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                    >
+                      Report user
+                    </button>
+                  )}
+                  <ReportModal
+                    isModalOpen={openModal}
+                    setIsModalOpen={setOpenModal}
+                    accuse={Author}
+                    user={token}
+                  />
+                  <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2 mb-8">
+                    <div className="flex items-center space-x-4 mt-2">
+                      {!follow ? (
+                        <button
+                          onClick={handFollow}
+                          className="flex items-center bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                        >
+                          <span>Theo dõi</span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handUndFollow}
+                          className="flex items-center bg-slate-500 hover:bg-slate-700 text-gray-100 px-4 py-2 rounded text-sm space-x-2 transition duration-100"
+                        >
+                          <span>Hủy theo dõi</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                "tài khoản bạn đã bị khóa"
+              )}
             </div>
           ) : (
             "tài khoản này đã bị khóa"
@@ -440,32 +454,44 @@ export default function Author() {
                   <div className=" w-11/12 h-[1px] bg-[#999998] my-2"></div>
                 </div>
                 <div className="flex justify-around mb-1 p-1 gap-2">
-                  <button
-                    className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${
-                      likedProducts[index] ? "text-[#08c]" : ""
-                    }`}
-                    onClick={() => {
-                      !likedProducts[index]
-                        ? handleLike(index, artwork._id, token?._doc?._id)
-                        : handleUnLike(index, artwork._id, token?._doc?._id);
-                    }}
-                  >
-                    {likedProducts[index] ? (
-                      <LikeOutlined style={{ fontSize: "20px" }} />
-                    ) : (
-                      <LikeOutlined style={{ fontSize: "20px" }} />
-                    )}
-                    <p style={likedProducts[index] ? { color: "#08c" } : {}}>
-                      {likedProducts[index] ? "Đã thích" : "Thích"}
-                    </p>
-                  </button>
-                  <button
-                    onClick={() => navigate(`/artwork/${artwork._id}`)}
-                    className="flex gap-2 w-1/2 items-center h-8  justify-center rounded-lg hover:bg-[#f1f0f0]"
-                  >
-                    <CommentOutlined style={{ fontSize: "20px" }} />
-                    Bình luận
-                  </button>
+                  {!block ? (
+                    <>
+                      <button
+                        className={`flex gap-2 w-1/2  items-center  h-8  justify-center rounded-lg hover:bg-[#f1f0f0] ${
+                          likedProducts[index] ? "text-[#08c]" : ""
+                        }`}
+                        onClick={() => {
+                          !likedProducts[index]
+                            ? handleLike(index, artwork._id, token?._doc?._id)
+                            : handleUnLike(
+                                index,
+                                artwork._id,
+                                token?._doc?._id
+                              );
+                        }}
+                      >
+                        {likedProducts[index] ? (
+                          <LikeOutlined style={{ fontSize: "20px" }} />
+                        ) : (
+                          <LikeOutlined style={{ fontSize: "20px" }} />
+                        )}
+                        <p
+                          style={likedProducts[index] ? { color: "#08c" } : {}}
+                        >
+                          {likedProducts[index] ? "Đã thích" : "Thích"}
+                        </p>
+                      </button>
+                      <button
+                        onClick={() => navigate(`/artwork/${artwork._id}`)}
+                        className="flex gap-2 w-1/2 items-center h-8  justify-center rounded-lg hover:bg-[#f1f0f0]"
+                      >
+                        <CommentOutlined style={{ fontSize: "20px" }} />
+                        Bình luận
+                      </button>
+                    </>
+                  ) : (
+                    "tài khoản bạn đã bị khóa"
+                  )}
                 </div>
               </div>
             ))}

@@ -123,7 +123,7 @@ export default function Transporting({ activeTab }) {
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.name}
+                  <Link to={`/author/${orderData.user}`}>{orderData.name}</Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.phone}

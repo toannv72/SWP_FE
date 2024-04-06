@@ -263,7 +263,7 @@ export default function ShoppingCart({ show, updateShoppingCart }) {
                         {textApp.ShoppingCart.checkbox}
                       </Checkbox> */}
 
-                      {cart.length > 0 && ( // Hiển thị nút "Xóa tất cả" nếu không bị vô hiệu hóa
+                      {checkedList.length >0 && cart.length > 0 && ( // Hiển thị nút "Xóa tất cả" nếu không bị vô hiệu hóa
                         <Button
                           onClick={removeAllSelectedProducts}
                           className="font-medium text-indigo-600 hover:text-indigo-500 border-none"
