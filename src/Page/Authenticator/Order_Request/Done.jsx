@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function Done({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -54,6 +55,12 @@ export default function Done({activeTab}) {
       });
     }
 }
+    function shortenString(str, maxLength) {
+      if (str.length > maxLength) {
+        return str.substring(0, maxLength) + "...";
+      }
+      return str;
+    }
   const getProductById = (productId) => {
     // Tìm sản phẩm theo ID trong danh sách sản phẩm
     return products?.docs?.find(product => product._id === productId);
@@ -115,7 +122,7 @@ export default function Done({activeTab}) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    {orderData.bird}
+                    {shortenString(orderData.bird, 10)}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -128,7 +135,7 @@ export default function Done({activeTab}) {
                   {orderData.shippingAddress}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.createdAt}
+                  {moment(orderData.createdAt).format("DD/MM/YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.quantity}

@@ -3,6 +3,7 @@ import { textApp } from "../../../TextContent/textApp";
 import { getData, putData } from "../../../api/api";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import moment from "moment";
 export default function Transporting({ activeTab }) {
   const [order, setOrder] = useState([]);
   const [products, setProducts] = useState([]);
@@ -49,7 +50,12 @@ export default function Transporting({ activeTab }) {
   const getProductById = (productId) => {
     // Tìm sản phẩm theo ID trong danh sách sản phẩm
     return products?.docs?.find((product) => product._id === productId);
-  };
+  };    function shortenString(str, maxLength) {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + "...";
+    }
+    return str;
+  }
   const updateStatus = (id, status) => {
     putData("customOrder/user/processing", id, { status })
       .then((data) => {
@@ -119,7 +125,7 @@ export default function Transporting({ activeTab }) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    {orderData.bird}
+                    {shortenString(orderData.bird, 10)}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -132,7 +138,7 @@ export default function Transporting({ activeTab }) {
                   {orderData.shippingAddress}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.createdAt}
+                  {moment(orderData.createdAt).format("DD/MM/YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.quantity}

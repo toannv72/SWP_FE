@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function All({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -63,6 +64,12 @@ export default function All({activeTab}) {
       });
     }
 }
+    function shortenString(str, maxLength) {
+      if (str.length > maxLength) {
+        return str.substring(0, maxLength) + "...";
+      }
+      return str;
+    }
 function getStatusClass(status) {
   switch (status) {
     case 'Pending':
@@ -162,7 +169,7 @@ function getStatusText(status) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    {orderData.bird}
+                    {shortenString(orderData.bird, 10)}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -175,7 +182,7 @@ function getStatusText(status) {
                   {orderData.shippingAddress}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.createdAt}
+                  {moment(orderData.createdAt).format("DD/MM/YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.quantity}

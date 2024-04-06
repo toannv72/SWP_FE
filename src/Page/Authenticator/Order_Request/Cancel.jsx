@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { textApp } from "../../../TextContent/textApp";
 import { getData } from '../../../api/api';
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function Cancel({activeTab}) {
   const [order, setOrder] = useState([]);
@@ -59,6 +60,12 @@ export default function Cancel({activeTab}) {
       });
     }
 }
+    function shortenString(str, maxLength) {
+      if (str.length > maxLength) {
+        return str.substring(0, maxLength) + "...";
+      }
+      return str;
+    }
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-semibold mb-4">
@@ -119,7 +126,7 @@ export default function Cancel({activeTab}) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    {orderData.bird}
+                    {shortenString(orderData.bird, 10)}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -132,7 +139,7 @@ export default function Cancel({activeTab}) {
                   {orderData.shippingAddress}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.createdAt}
+                  {moment(orderData.createdAt).format("DD/MM/YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.quantity}

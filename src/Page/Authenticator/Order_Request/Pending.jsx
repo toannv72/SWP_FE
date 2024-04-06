@@ -3,6 +3,7 @@ import { textApp } from "../../../TextContent/textApp";
 import { getData, putData } from "../../../api/api";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import moment from "moment";
 export default function Pending({ activeTab }) {
   const [order, setOrder] = useState([]);
   console.log("🚀 ~ Pending ~ order:", order)
@@ -45,6 +46,12 @@ export default function Pending({ activeTab }) {
       });
     }
   }
+    function shortenString(str, maxLength) {
+          if (str.length > maxLength) {
+            return str.substring(0, maxLength) + "...";
+          }
+          return str;
+    }
   const updateStatus = (id,status) => {
       putData("customOrder/user/processing", id, { status })
         .then((data) => {
@@ -115,7 +122,7 @@ export default function Pending({ activeTab }) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link to={`/required/bill/${orderData._id}?view=true`}>
-                    {orderData.bird}
+                    {shortenString(orderData.bird, 10)}
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -128,7 +135,8 @@ export default function Pending({ activeTab }) {
                   {orderData.shippingAddress}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {orderData.createdAt}
+                  {/* {moment(orderData.createdAt).toDate()} */}
+                  {moment(orderData.createdAt).format("DD/MM/YYYY")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {orderData.quantity}
